@@ -1,0 +1,241 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    گزارش درسی
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">گزارش درسی هر سمستر</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="#">گزارشات درسی</a></li>
+                    <li class="breadcrumb-item active">گزارش درسی هر سمستر</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+
+<div class="row">
+    
+    <div class="col-xl-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-3">سمستر {{student.semester}}</h4>
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="font-size-16">#</th>
+                            <th class="font-size-16">نام کورس</th>
+                            <th class="font-size-16">مضمون</th>
+                            <th class="font-size-16">نمره کارخانگی</th>
+                            <th class="font-size-16">نمره فعالیت</th>
+                            <th class="font-size-16">نمره پروژه</th>
+                            <th class="font-size-16">نمره بیست فیصد</th>
+                            <th class="font-size-16">نمره فاینل</th>
+                            <th class="font-size-16">مجموع</th>
+                            <th class="font-size-16">وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                            {% if result.subject.semester == result.student.semester %}
+                                <tr>
+                                    <td class="font-size-15">{{forloop.counter}}</td>
+                                    <td class="font-size-15">{{result.subject.course_set.last.title}}</td>
+                                    <td class="font-size-15">{{result.subject}}</td>
+                                    <td class="font-size-15">{{result.assignment}}</td>
+                                    <td class="font-size-15">{{result.class_activity}}</td>
+                                    <td class="font-size-15">{{result.project}}</td>
+                                    <td class="font-size-15">{{result.mid_term}}</td>
+                                    <td class="font-size-15">{{result.final}}</td>
+                                    <td class="font-size-15">{{result.total_score}}</td>
+                                    <td class="font-size-15">
+                                        {% if result.is_pass %}
+                                            <span class="badge badge-primary font-size-15">کامیاب</span>
+                                        {% else %}
+                                            <span class="badge badge-danger font-size-15">ناکام</span>
+                                        {% endif %}
+                                        
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            {% empty %}
+                            <p class="alert alert-info text-center font-size-17">
+                                شما تا هنوز  نمره در کدام کورس نگرفته اید.
+                            </p>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card box">
+            <div class="card-body">
+                <div class="ribbon ribbon-top-left">
+                    {% if status == "چانس" %}
+                        <span class="bg-warning">
+                            {{status}}
+                        </span>
+                    {% elif status == "ناکام" %}
+                        <span class="bg-danger">
+                            {{status}}
+                        </span>
+                    {% else %}
+                        <span class="bg-primary">
+                            {{status}}
+                        </span>
+                    {% endif %}
+                </div>
+                <h4 class="card-title mb-3">نتیجه سمستر {{student.semester}}</h4>
+
+                <div class="col-lg-12 align-self-center">
+                    <div class="text-lg-center mt-4 mt-lg-0">
+                        <div class="row">
+                            <div class="col-3">
+                                <div>
+                                    <p class="text-muted text-truncate mb-2">مجموع نمرات</p>
+                                    <h5 class="mb-0">{{scores}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div>
+                                    <p class="text-muted text-truncate mb-2">فیصدی</p>
+                                    <h5 class="mb-0"> % {{percentage|floatformat:"2"}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div>
+                                    <p class="text-muted text-truncate mb-2">مجموع کریدیت</p>
+                                    <h5 class="mb-0">{{total_credits}}</h5>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div>
+                                    <p class="text-muted text-truncate mb-2">کریدیت پاس شده</p>
+                                    <h5 class="mb-0">{{passed_credits}}</h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-lg-center">
+                            <div class="align-items-center my-4">
+                                <div class="avatar-lg m-auto">
+                                    <span class="avatar-title rounded-circle {% if grade == 'A' %} bg-success {% endif %} {% if grade == 'B' %} bg-primary {% endif %} {% if grade == 'C' %} bg-info {% endif %} {% if grade == 'D' %} bg-warning {% endif %} {% if grade == 'F' %} bg-danger {% endif %} " style="font-size: 40px;">
+                                        <span class="text-white">{{grade}}</span>
+                                    </span>
+                                </div>
+                               
+                            </div>
+                        </div>
+
+                        <div class="custom-badge bg-primary text-white font-size-18 mb-5">
+                            {{student.status}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'general-report' student.pk %}" class="btn btn-outline-dark btn-lg btn-block">ترانسکریپ نمرات</a>
+        {% for group in request.user.groups.all %}
+            {% if group.name == "managers" %}
+                <a href="{% url 'student-score-all' student.pk %}" class="btn btn-outline-primary btn-lg btn-block">جدول نتایج</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-8">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">نمایش گرافیکی نمرات اخذ شده در این سمستر</h4>
+                <canvas id="result"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+<script>
+
+    var config = {
+      type: 'line',
+      data: {
+        datasets: [{
+          data: {{ score|safe }},
+          lineTension : 0.3,
+          label : "courses",
+          backgroundColor : "rgba(78, 115, 223, 0.05)",
+          borderColor : "rgba(78, 115, 223, 1)",
+          pointRadius : 3,
+          pointBackgroundColor : "rgba(78, 115, 223, 1)",
+          pointBorderColor : "rgba(78, 115, 223, 1)",
+          pointHaverRadius : 3,
+          pointHoverBackgroundColor : "rgba(78, 115, 223, 1)",
+          pointHOverBorderColor : "rgba(78, 115, 223, 1)",
+          pointHitRadius : 10,
+          pointBorderWidth : 2,
+        }],
+        labels: {{ courses|safe }}
+      },
+      options: {
+        layout: {
+      padding: {
+        left: 10,
+        right: 25,
+        top: 25,
+        bottom: 0
+      }
+    },
+        responsive: true,
+        scales: {
+                    xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Courses'
+                            },
+                            gridLines: {
+          color: "rgb(234, 236, 244)",
+          zeroLineColor: "rgb(234, 236, 244)",
+          drawBorder: false,
+          borderDash: [2],
+          zeroLineBorderDash: [2]
+        }
+                        }],
+                    yAxes: [{
+                            display: true,
+                            ticks: {
+                                beginAtZero: true,
+                                steps: 10,
+                                stepValue: 5,
+                                max: 100
+                            }
+                        }]
+                },
+      }
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('result').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+
+  </script>
+{% endblock content %}

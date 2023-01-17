@@ -1,0 +1,324 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+{{group.name}}
+{% endblock title %}
+
+{% block page_title %}
+
+<style>
+    .hidden {
+      position: absolute;
+      visibility: hidden;
+      opacity: 0;
+    }
+    
+    input[type=checkbox]+label {
+        border: 1px solid #222;
+        width : 200px;
+        padding: 0.4rem;
+        border-radius: 4px;
+        font-size: 1.2rem;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+    input[type=checkbox]:checked+label {
+        border: 1px solid #222;
+        width : 200px;
+        padding: 0.4rem;
+        border-radius: 4px;
+        font-size: 1.2rem;
+        background-color: #222;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+</style>
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">جزییات گروپ {{group.name}}</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'admin-dashboard' %}">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'all-groups' %}">گروپ ها</a></li>
+                    <li class="breadcrumb-item active">جزییات گروپ {{group.name}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<!-- remove modal start -->
+<div class="modal fade" id="remove-from-group" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="group-update-header">لغو عضویت</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="group-update-body">
+                <form action="{% url 'group-detail' group.pk %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="hidden" name="id" id="member-id">
+                        <p class="alert alert-warning text-center font-size-16">
+                            آیا واقعا میخواهید عضویت این کاربر را از این گروپ بگیرید؟ این عمل بعضی از صلاحیت های خاص را از کاربر میگیرید.
+                        </p>
+                    </div>
+                    <button class="btn btn-danger btn-lg mt-1">بلی لغو عضویت</button>
+                    <button class="btn btn-primary btn-lg mt-1" type="button" data-dismiss="modal">نخیر</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- remove modal end -->
+
+
+<!--the permission data dialog -->
+<link rel="stylesheet" href="{% static 'assets/css/permission.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/login.css' %}">
+
+
+    <!--  Modal content for the above example -->
+    <div class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0" id="myExtraLargeModalLabel">صلاحیت ها</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'create-permission' group.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="">
+                           
+                            <div class="">
+                                <div class="">
+                                    <h3 class="text-muted">صلاحیت های انتخاب شده</h3>
+                                    <div class="row" >
+                                        
+                                        {% for permission in custom_permissions.selected %}
+
+                                        <div  id="" class="col-lg-3">
+                                            <input type="checkbox" class="hidden checkbox" value={{permission.id}} name="permission" id="{{permission.id}}" checked>
+                                            <label for={{permission.id}}>{{permission.name}}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <br>
+                                    <hr>
+                                    <h3 class="text-muted">صلاحیت های موجود</h3>
+                                    <div class="row">
+                                        {% for per in custom_permissions.others %}
+                                        <div  id="" class="col-lg-3">
+                                            <input type="checkbox" class="hidden checkbox" value={{per.id}} name="permission" id="{{per.id}}">
+                                            <label for={{per.id}}>{{per.name}}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     <button class="btn btn-primary" type="submit">ذخیره کردن</button>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+</div> 
+
+
+<!-- add member to group start -->
+<div class="modal fade" id="add-member" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myLargeModalLabel">
+                    اضافه کردن عضو جدید
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'add-member-to-group' %}" method="POST">
+                    <input type="hidden" value="{{group.pk}}" name="group_id">
+                    <input type="hidden" value="" name="user_id" id="group-user-id">
+                    {% csrf_token %}
+                    <table id="group-datatable" class="table table-bordered dt-responsive nowrap"
+                                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th class="font-size-17">شماره</th>
+                                <th class="font-size-17">نام کامل</th>
+                                <th class="font-size-17">نام پدر</th>
+                                <th class="font-size-17">موقعیت</th>
+                                <th class="font-size-17">عملیات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <td class="font-size-16">{{forloop.counter}}</td>
+                                    <td class="font-size-16">
+                                        {% if user.is_student %}
+                                            {{user.student.f_name}} {{user.student.l_name}}
+                                        {% else %}
+                                            {{user.employee.f_name}} {{user.employee.l_name}}
+                                        {% endif %}
+                                    </td>
+                                    <td class="font-size-16">
+                                        {% if user.is_student %}
+                                            {{user.student.father_name}}
+                                        {% else %}
+                                            {{user.employee.father_name}}
+                                        {% endif %}
+                                    </td>
+                                    <td class="font-size-16">
+                                        {% if user.is_student %}
+                                            <span class="badge badge-dark badge-pill">شاگرد</span>
+                                        {% else %}
+                                        <span class="badge badge-dark badge-pill">کارمند</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="font-size-16">
+                                        <button class="btn btn-outline-primary btn-md add-to-group"
+                                                type="submit"
+                                                data-id="{{user.pk}}">
+                                                    <i class="bx bx-plus font-size-18 align-middle"></i>
+                                                </button>
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+
+                        
+                    </table>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- add member to group modal end -->
+<div class="row">
+    <div class="col-lg-10 m-auto">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h3 class="card-title">جزییات گروپ "{{group}}"</h3>
+                    </div>
+                    <div class="col-lg-6">
+                        <button
+                        data-target="#add-member"
+                        data-toggle="modal"
+                        class="btn btn-dark btn-md float-right">اضافه کردن عضو جدید
+                        <i class="bx bx-plus font-size-18 align-middle"></i>
+                    </button>
+                    <button
+                data-target=".bs-example-modal-xl"
+                data-toggle="modal"
+                data-id=""
+                class="btn mr-3 btn-success btn-md float-right">
+                صلاحیت به گروپ
+                <i class="bx bx-plus align-middle font-size-18"></i>
+                </button>
+                    </div>
+                </div>
+                <hr>
+                <h3 class="mb-3">لیست اعضای این گروپ</h3>
+                <table id="datatable" class="table table-bordered dt-responsive nowrap"
+                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th class="font-size-18">شماره</th>
+                            <th class="font-size-18">نام کامل</th>
+                            <th class="font-size-18">جنسیت</th>
+                            <th class="font-size-18">حالت</th>
+                            <th class="font-size-18">تاریخ عضو شدن</th>
+                            <th class="font-size-18">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in members %}
+                            <tr>
+                                <td class="font-size-17">{{forloop.counter}}</td>
+                                <td class="font-size-17">
+                                    {% if member.is_student %}
+                                    {{member.student.f_name}} - {{member.student.l_name}}
+                                    {% else %}
+                                    {{member.employee.f_name}} - {{member.employee.l_name}}
+                                    {% endif %}
+                                </td>
+                                <td class="font-size-17">
+                                    {% if member.is_student %}
+                                    {{member.student.gender}} 
+                                    {% else %}
+                                    {{member.employee.gender}} 
+                                    {% endif %}
+                                </td>
+                                <td class="font-size-17">
+                                    {% if member.is_student %}
+                                    {{member.student.status}} 
+                                    {% else %}
+                                    {{member.employee.status}} 
+                                    {% endif %}
+                                </td>
+                                <td class="font-size-17">
+                                    {{member.date_joined|date:"Y-M-d"}}
+                                </td>
+                                <td class="font-size-17">
+                                    <button
+                                    data-target="#remove-from-group"
+                                    data-toggle="modal"
+                                    data-id="{{member.id}}"
+                                    class="btn btn-outline-danger btn-sm remove-btns">
+                                        <i class="bx bx-trash font-size-18 align-middle"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const removeBtns = [...document.getElementsByClassName("remove-btns")]
+    const memberID = document.getElementById("member-id")
+    removeBtns.forEach(btn => btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id")
+
+        memberID.value = id
+
+    }))
+    const myID = document.getElementById("group-user-id")
+    const addToBtns = [...document.getElementsByClassName("add-to-group")]
+    
+    addToBtns.forEach(btn => btn.addEventListener("click", ()=>{
+        const userID = btn.getAttribute("data-id")
+        myID.value=userID
+    }))
+</script>
+
+
+{% endblock content %}

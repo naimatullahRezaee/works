@@ -1,0 +1,357 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title %} ماجول {% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">معلومات کورس</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'list-course' 1 %}">لیست کورس ها</a></li>
+                    <li class="breadcrumb-item active">معلومات</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+<style>
+    label{
+        cursor: pointer;
+    }
+#upload-photo {
+   opacity: 0;
+   position: absolute;
+   z-index: -1;
+}
+#upload-file {
+   opacity: 0;
+   position: absolute;
+   z-index: -1;
+}
+#upload-video {
+   opacity: 0;
+   position: absolute;
+   z-index: -1;
+}
+</style>
+
+
+<!-- create content form -->
+<div class="modal fade" id="create-content" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myLargeModalLabel">درج معلومات جدید</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                    <input type="hidden" name="content-module" value="{{module.pk}}">
+                    <div class="col">
+                        <label class="font-size-18" for="">عنوان</label>
+                        <input type="text" name="content-title" class="form-control font-size-18" placeholder="عنوان معلومات را وارد کنید.">
+                    </div>
+                    <div class="col mt-2">
+                        <label class="font-size-18" for="">توضیحات</label>
+                        <textarea name="content-desc" class="form-control font-size-18" id="" cols="30" rows="10" placeholder="لطفا توضیحات در مورد معلومات را اینجا درج نمایید" ></textarea>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-1">
+                            <label for="upload-photo">
+                                <i class="bx bx-image-add ml-3 font-size-24 text-primary"></i>
+                            </label>
+                            <input type="file" id="upload-photo" name="content-image">
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="upload-file">
+                                <i class="bx bx-file-blank ml-2 mb-1 font-size-24 text-muted"></i>
+                            </label>
+                            <input type="file" id="upload-file" name="content-file">
+                        </div>
+                        <div class="col-lg-1">
+                            <label for="upload-video">
+                                <i class="bx bx-video-plus font-size-24 text-success "></i>
+                            </label>
+                            <input type="file" id="upload-video" name="content-video">
+                        </div>
+                    </div>
+                
+                    <button class="btn btn-primary btn-md">ذخیره کردن</button>
+            </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- end create content form -->
+
+
+<link rel="stylesheet" href="{% static 'assets/css/custom_tabs.css' %}">
+<script src="{% static 'assets/js/custom_tabs.js' %}" defer></script>
+<div class="row" dir="ltr">
+    <div class="col-lg-12" dir="ltr">
+        <div class="card">
+            <div class="card-body">
+                <div class="pt-3">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-8">
+                            <div class="span11" style="overflow: auto">
+                                <div class="row-fluid" dir="ltr">
+                                    {% for m in course.module_set.all %}
+                                        <a href="{% url 'course-content' course.slug m.pk %}">
+                                            <div {% if m == module %} id="selected-pointer" {% else %} id="pointer" {% endif %} class="col-lg-2 float-right module p-3 mx-3 my-2">
+                                                <p class="font-size-20 text-muted pr-4" style="text-align: left;" dir="ltr">{{m.title|truncatechars:15}}</p>
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="text-center mt-4">
+                                    <div class="mb-4">
+                                        <a href="#" class="badge badge-light font-size-17">
+                                            {{course.subject}}
+                                            <i class="bx bx-purchase-tag-alt align-middle text-muted mr-1"></i> 
+                                        </a>
+                                    </div>
+                                    <h1>{{module.title}}</h1>
+                                    <p class="text-muted mb-4 font-size-18"><i class="mdi mdi-calendar mr-1 font-size-22 align-middle ml-2"></i> {{course.created_at|date:"m M, Y"}}</p>
+                                </div>
+
+                                <hr>
+                                <div class="text-center">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <div>
+                                                <p class="text-muted mb-2 font-size-18">مقدار معلومات</p>
+                                                <h5 class="font-size-18">{{module.contents.all.count}}</h5>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="mt-4 mt-sm-0">
+                                                <p class="text-muted mb-2 font-size-18">تاریخ درج آخرین معلومات</p>
+                                                <h5 class="font-size-18">
+                                                    {{module.contents.last.created_at|date:"m M, Y"}}
+                                                    </h5>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="mt-4 mt-sm-0">
+                                                <p class="text-muted mb-2 font-size-18 ">استاد</p>
+                                                <h5 class="font-size-18">{{course.owner.employee.f_name}} - {{course.owner.employee.l_name}}</h5>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="mt-4 mt-sm-0">
+                                                <p class="text-muted mb-2 font-size-18">کارخانگی</p>
+                                                <h5 class="font-size-18">{{course.owner.assignment_set.all.count}}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+
+                                
+                                <div class="col">
+                                    {% for content in module.contents.all %}
+                                        <div class="row">
+                                            <div class="col-lg-9">
+                                                <h1 class="mt-3">{{content.title}}</h1>
+                                            <p class="font-size-17">
+                                                {{content.created_at|timesince}} ago </p>
+                                            <p class="font-size-18">{{content.text}}</p>
+                                            
+                                            <!-- render different type of files -->
+                                            {% if content.image %}
+                                                <img src="{{content.image.url}}" style="width: 100%;" alt="">
+                                            {% elif content.video %}
+                                            <video width="100%" height="auto" controls>
+                                                <source src="{{ content.video.url }}" type="video/mp4" />
+                                                Your browser doesn't support the mp4 video format.
+                                            </video>
+                                            {% elif content.file %}
+                                            <object data="{{content.file.url}}" type="application/pdf" width="100%" height="100%">
+                                                <div class="row">
+                                                    <div class="col-lg-6"></div>
+                                                    <div class="border shadow-sm col-lg-6 float-left px-4 py-3 mb-3">
+                                                        <p dir="rtl" class="font-size-16" style="padding: 0px; margin: 0px;">
+                                                            معلومات فوق حاوی فایل می باشد. با کلیک روی دکمه دانلود از محتوای فایل استفاده کنید.
+                                                        </p>
+                                                        <a href="{{content.file.url}}">
+                                                            <i class="bx bx-download align-middle font-size-22"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </object>
+                                            {% endif %}
+                                            <!-- end of rendering different types of file -->
+                                            
+                                            <!-- homework -->
+                                                <div>
+                                                    {% if content.assignment_set.exists %}
+                                                        {% if request.user.employee %}
+                                                        <p dir="rtl" class="text-info font-size-16 mt-3" style="padding: 0px; margin: 0px;">معلومات بالا حاوی فعالیت یا کارخانگی می باشد. برای بازکردن لطفا روی دکمه پیایین کلیک کنید.</p>    
+                                                    <a href="{% url 'open-instructor' content.assignment_set.first.id %}" class="btn btn-primary font-size-18 btn-md my-2">
+                                                        <i class="bx bx-folder-open align-middle font-size-24 ml-2"></i>
+                                                        بازکردن
+                                                    </a>
+                                                    {% elif request.user.student %}
+                                                    <p dir="rtl" class="text-info font-size-16 mt-3" style="padding: 0px; margin: 0px;">معلومات بالا حاوی فعالیت یا کارخانگی می باشد. برای بازکردن لطفا روی دکمه پیایین کلیک کنید.</p>    
+                                                    <a href="{% url 'open-student-assignment' content.assignment_set.first.id %}" class="btn btn-primary font-size-18 btn-md my-2">
+                                                        <i class="bx bx-folder-open align-middle font-size-24 ml-2"></i>
+                                                        بازکردن
+                                                    </a>
+                                                    {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            <!-- end homework -->
+
+                                            <!-- delete content modal -->
+                                            <div id="delete-content" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 dir="ltr" class="modal-title mt-0" id="myModalLabel">حذف معلومات</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="{% url 'delete-content' %}" method="POST">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="content-id" value="{{content.id}}">
+                                                                <p class="alert alert-danger text-center font-size-17">
+                                                                    آیا میخواهید معلومات ذیل را حذف نمایید؟
+                                                                </p>
+                                                                <button class="btn btn-danger btn-md ml-2 font-size-16">بلی</button>
+                                                                <button class="btn btn-primary btn-md font-size-16" type="button" data-dismiss="true">نخیر</button>
+                                                            </form>
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal-dialog -->
+                                            </div>
+                                            <!-- end delete content modal -->
+
+
+                                            <!-- toolbars -->
+                                            <!-- Restrict access to these buttons for students -->
+                                            {% if request.user.employee %}
+                                            <div class="btn-group mr-1 mt-2">
+                                                <button type="button" class="btn btn-light font-size-18">عملیات</button>
+                                                <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="mdi mdi-chevron-down"></i>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    {% if content.assignment_set.exists %}
+                                                        <button class="btn btn-default" disabled>فعالیت یکبار درج شده</button>
+                                                    {% else %}
+                                                    <a class="dropdown-item font-size-16" href="{% url 'create-assignment' content.pk %}">ایجاد فعالیت جدید</a>
+                                                    {% endif %}
+                                                    <a class="dropdown-item font-size-16" href="{% url 'update-content' content.pk %}">ویرایش معلومات</a>
+                                                    
+                                                    <div class="dropdown-divider"></div>
+                                                    <a 
+                                                    class="dropdown-item font-size-16 text-danger"
+                                                    href=""
+                                                    data-toggle="modal"
+                                                    data-target="#delete-content"
+                                                    >جذف معلومات</a>
+                                                </div>
+                                            </div>
+                                            {% elif request.user.student %}
+
+                                            {% endif %}
+                                            <!-- end restrict access theses buttons for students -->
+                                        </div>
+                                            <div class="col-lg-3">
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <button class="btn btn-default">
+                                                            <div><i class="bx bx-heart align-middle font-size-24"></i></div>
+                                                            <div>0</div>
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <button class="btn btn-default">
+                                                            <div><i class="bx bx-bookmarks align-middle font-size-24"></i></div>
+                                                            <div>0</div>
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <button class="btn btn-default">
+                                                            <div><i class="bx bx-chat align-middle font-size-24"></i></div>
+                                                            <div>0</div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            
+                                            
+                                            
+                                            <hr>
+                                        {% empty %}
+                                            <!-- show different message based on user type -->
+                                            {% if request.user.employee %}
+
+                                            <p class="alert alert-info text-center">
+                                                شما هنوز معلوماتی در این ماجول درج نکرده اید.
+                                            </p>
+                                            {% elif request.user.student %}
+                                            <p class="alert alert-info text-center">
+                                                این ماجول فعلا معلوماتی برای نمایش ندارد.
+                                            </p>
+                                            {% endif %}
+                                            <!-- end different message -->
+
+                                        {% endfor %}
+                                    
+                                </div>
+                               
+                                
+                                <!-- restrict this buttons for students users -->
+                                {% if request.user.employee %}
+                                <hr class="mt-4">
+                                <a href="{% url 'create-result' course.subject.slug %}" class="btn btn-light btn-md font-size-16">
+                                    <i class="bx bx-edit align-middle font-size-22 ml-2 "></i>
+                                    نمره دادن
+                                </a>
+                                <a href="{% url 'course-detail' course.slug %}" class="btn btn-light btn-md font-size-16">
+                                    <i class="bx bx-edit-alt align-middle font-size-22 ml-2 "></i>
+                                    ویرایش ماجول
+                                </a>
+                                
+                                <button 
+                                class="btn btn-light btn-md font-size-16"
+                                data-toggle="modal"
+                                data-target="#create-content"
+                                >
+                                    <i class="bx bx-plus align-middle font-size-22 ml-2"></i>
+                                    درج معلومات جدید
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end card body -->
+        </div>
+        <!-- end card -->
+    </div>
+    <!-- end col -->
+</div>
+{% endblock content %}

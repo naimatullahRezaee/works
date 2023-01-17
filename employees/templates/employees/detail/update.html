@@ -1,0 +1,143 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    ویرایش معلومات
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">ویرایش معلومات</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'employee_list' %}">لیست کارمندان</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'employee_detail_route' employee.pk %}">{{employee.f_name}} {{ employee.l_name }}</a></li>
+                    <li class="breadcrumb-item active">ویرایش معلومات</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">ویرایش معلومات</h3>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row mt-4">
+                        <div class="col-lg-9">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-18">آی دی کارمند</label>
+                                    <input type="text" name="emp_id" value="{{employee.emp_unique_id}}" class="form-control form-control-lg" placeholder="آی دی" id="Id" required>
+                                    <span class="icons Id_icon"></span>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-18">نام کارمند</label>
+                                    <input type="text" name="name" value="{{employee.f_name}}" class="form-control form-control-lg" placeholder="نام کارمند" id="username" required>
+                                    <span class="icons username_icon"></span>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-18">تخلص کارمند</label>
+                                    <input type="text" value="{{employee.l_name}}" name="last_name" class="form-control form-control-lg" placeholder="تخلص کارمند" id="l_name" required >
+                                    <span class="icons lname_icon"></span>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-18">نام پدر</label>
+                                    <input type="text" name="father_name" value="{{employee.father_name}}" class="form-control form-control-lg" placeholder="مراد" id="f_name" required >
+                                   <span class="icons fname_icon"></span>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-18">جنسیت</label>
+                                    <select name="gender" class="form-control form-control-lg" id="" required>
+                                        <option value="">لطفا یک گزینه را انتخاب کنید</option>
+                                        <option value="آقا" {% if employee.gender == "آقا" %} selected {% endif %}>مرد</option>
+                                        <option value="خانم" {% if employee.gender == "خانم" %} selected {% endif %}>زن</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-18">تاریخ تولد</label>
+                                    <input type="date" name="dob" value="{{employee.dob}}" class="form-control form-control-lg" id="emp_date" required >
+                                </div>
+                                
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-18">شماره تماس</label>
+                                    <input type="text" name="phone_number" value="{{employee.phone_number}}" class="form-control form-control-lg" placeholder="شماره تماس کارمند " required>
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-18">آدرس</label>
+                                    <input type="text" name="address" value="{{employee.address}}" class="form-control form-control-lg" placeholder="آدرس محل سکونت" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <img src="{{employee.avatar.url}}" class="rounded mb-3" style="float: left;" alt="">
+                            <input type="file" name="avatar" class="form-control form-control-lg mt-5">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-md mt-3">ذخیره</button>
+                </form>
+
+                
+                <div class="mt-3">
+                    <div id="gen-ques-accordion" class="accordion custom-accordion">
+                        <div class="mb-3">
+                            <a href="#general-collapseTwo" class="accordion-list collapsed" data-toggle="collapse"
+                                            aria-expanded="false"
+                                            aria-controls="general-collapseTwo">
+                                <div class="font-size-16">ویرایش معلومات کارت ملی</div>
+                                <i class="mdi mdi-minus accor-plus-icon"></i>
+                            </a>
+                            <div id="general-collapseTwo" class="collapse" data-parent="#gen-ques-accordion">
+                                <div class="card-body">
+                                    <p class="mb-0">If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages. The new common language will be more simple and regular than the existing European languages.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <a href="#general-collapseThree" class="accordion-list collapsed" data-toggle="collapse"
+                                            aria-expanded="false"
+                                            aria-controls="general-collapseThree">
+                                <div class="font-size-16">تحصیلات</div>
+                                <i class="mdi mdi-minus accor-plus-icon"></i>
+                            </a>
+                            <div id="general-collapseThree" class="collapse" data-parent="#gen-ques-accordion">
+                                <div class="card-body">
+                                    <p class="mb-0">It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <a href="#general-collapseFour" class="accordion-list collapsed" data-toggle="collapse"
+                                            aria-expanded="false"
+                                            aria-controls="general-collapseFour">
+                                <div class="font-size-16">سابقه کاری</div>
+                                <i class="mdi mdi-minus accor-plus-icon"></i>
+                            </a>
+                            <div id="general-collapseFour" class="collapse" data-parent="#gen-ques-accordion">
+                                <div class="card-body">
+                                    <p class="mb-0">To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is. The European languages are members of the same family. Their separate existence is a myth.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

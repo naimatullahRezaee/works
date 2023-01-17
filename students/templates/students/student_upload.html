@@ -1,0 +1,72 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    آپلود
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">آپلود لیست شاگردان</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">آپلود لیست شاگردان</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="col alert alert-info">
+                    <h2>راهنما</h2>
+                    <p class="font-size-18">
+                        لطفا فایل تمپلت را از اینجا دانلود کنید. لیست شاگردان را آماده کرده و دوباره آپلود کنید. <span class="text-info">متوجه باشید که سطر اول را تغییر ندهید.</span>     
+                        <br>
+                        <a class="btn btn-outline-primary btn-lg mt-2" href="{% url 'student-download-csv' %}">
+                            دانلود تمپلیت
+                            <i class="bx bx-download font-size-18 align-middle ml-2"></i>
+
+                        </a>
+                        
+                    </p>
+                  </div>
+                
+                  <form id="file_upload" method="POST" class="dropzone" action="{% url 'student-upload' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="fallback">
+                        <input type="file" name="file">
+                    </div>
+
+                    <div class="dz-message needsclick">
+                        <div class="mb-3">
+                            <i class="display-4 text-muted bx bxs-cloud-upload"></i>
+                        </div>
+                        
+                        <h4>فایل مورد نظر را اینجا رها کنید.</h4>
+                    </div>
+                
+                </form>
+                <!-- <div class="text-center mt-4">
+                    <button type="button" onclick="upload_file()" class="btn btn-primary waves-effect waves-light font-size-16 ">ارسال فایل</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("file_upload")
+    const upload_file = () => {
+        form.submit()
+    }
+</script>
+{% endblock content %}

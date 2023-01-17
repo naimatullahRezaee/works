@@ -1,0 +1,321 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    پروفایل
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">صفحه پروفایل "{{student.f_name}} {{student.l_name}}"</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">پروفایل</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xl-4">
+        <div class="card overflow-hidden">
+            <div class="bg-soft-primary">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="text-primary p-3">
+                            <h5 class="text-primary">دوباره خوش آمدید</h5>
+                            <p>صفحه پروفایل</p>
+                        </div>
+                    </div>
+                    <div class="col-5 align-self-end">
+                        <img src="{% static 'assets/images/profile-img.png' %}" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="avatar-md profile-user-wid mb-4">
+                            <img src="{{student.avatar.url}}" alt="" class="img-thumbnail rounded-circle">
+                        </div>
+                        <h5 class="font-size-15 text-truncate">{{student.f_name}} {{student.l_name}}</h5>
+                        <p class="text-muted mb-0 text-truncate">
+                            {% for group in user.groups.all %}
+                                <span class="badge badge-primary font-size-14 ">{{group.name}}</span>
+                            {% endfor %}
+                        </p>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <div class="pt-4">
+                           
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-muted mb-0">سمستر</p>
+                                    <h5 class="font-size-15">{{student.semester}}</h5>
+                                </div>
+                                <div class="col-6">
+                                    <p class="text-muted mb-0">سکشن</p>
+                                    <h5 class="font-size-15">{{student.section}}</h5>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <a href="{% url 'profile-detail' student.pk %}" class="btn btn-primary font-size-15 waves-effect float-right waves-light btn-sm"> 
+                                    <i class="mdi mdi-arrow-right mr-2 font-size-18 align-middle "></i>
+                                    ویرایش
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end card -->
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">معلومات شخصی</h4>
+
+                <p class="text-muted mb-4"></p>
+                <div class="table-responsive">
+                    <table class="table table-nowrap mb-0">
+                        <tbody>
+                            <tr>
+                                <th scope="row">نام کامل :</th>
+                                <td>{{student.f_name}} {{student.l_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">شماره تماس :</th>
+                                <td>
+                                    {% if student.rel_phone1 %}
+                                    {{student.rel_phone1}}
+                                    {% else %}
+                                    درج نشده
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ایمیل آدرس</th>
+                                <td>{{user.email}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">آدرس :</th>
+                                <td>{{student.province}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- end card -->
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-5">موضوعات مورد علاقه</h4>
+                <div class="">
+                    <ul class="verti-timeline list-unstyled">
+                        <!-- <li class="event-list active">
+                            <div class="event-timeline-dot">
+                                <i class="bx bx-right-arrow-circle bx-fade-right"></i>
+                            </div>
+                            <div class="media">
+                                <div class="mr-3">
+                                    <i class="bx bx-server h4 text-primary"></i>
+                                </div>
+                                <div class="media-body">
+                                    <div>
+                                        <h5 class="font-size-15"><a href="#" class="text-dark">Back end Developer</a></h5>
+                                        <span class="text-primary">2016 - 19</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li> -->
+                        <p class="alert alert-info text-center font-size-16">
+                            شما هنوز درین مورد تصمیم نگرفته اید.
+                        </p>
+                    </ul>
+                </div>
+
+            </div>
+        </div>  
+        <!-- end card -->
+    </div>         
+    
+    <div class="col-xl-8">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body">
+                                <p class="text-muted font-weight-medium font-size-16">
+                                    مجموع نمرات
+                                </p>
+                                <h4 class="mb-0">{{total_score|floatformat:"2"}}</h4>
+                            </div>
+
+                            <div class="mini-stat-icon avatar-sm align-self-center rounded-circle bg-primary">
+                                <span class="avatar-title">
+                                    <i class="bx bx-check-circle font-size-24"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body">
+                                <p class="text-muted font-weight-medium font-size-16">
+                                    مجموع کریدیت ها
+                                </p>
+                                <h4 class="mb-0">{{total_credit}}</h4>
+                            </div>
+
+                            <div class="avatar-sm align-self-center mini-stat-icon rounded-circle bg-primary">
+                                <span class="avatar-title">
+                                    <i class="bx bx-hourglass font-size-24"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body">
+                                <p class="text-muted font-weight-medium font-size-16">
+                                    کریدیت های تکمیل شده
+                                </p>
+                                <h4 class="mb-0">0</h4>
+                            </div>
+
+                            <div class="avatar-sm align-self-center mini-stat-icon rounded-circle bg-primary">
+                                <span class="avatar-title">
+                                    <i class="bx bx-package font-size-24"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">کورس ها و نمرات</h4>
+                <canvas id="result-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">لیست کورس ها</h4>
+                <div class="table-responsive">
+                    <table class="table table-nowrap table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th class="font-size-17" scope="col">#</th>
+                                <th class="font-size-17" scope="col">نام کورس</th>
+                                <th class="font-size-17" scope="col">نام مضمون</th>
+                                <th class="font-size-17" scope="col">استاد</th>
+                                <th class="font-size-17" scope="col">مقدار کریدیت</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in my_courses %}
+                                <tr>
+                                    <td class="font-size-15">{{forloop.counter}}</td>
+                                    <td class="font-size-15">{{course.title}}</td>
+                                    <td class="font-size-15">{{course.subject.subject}}</td>
+                                    <td class="font-size-15">{{course.owner.employee.f_name}} - {{course.owner.employee.l_name}}</td>
+                                    <td class="font-size-15">{{course.subject.credit}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+<script>
+
+    var config = {
+      type: 'line',
+      data: {
+        datasets: [{
+          data: {{ scores|safe }},
+          lineTension : 0.3,
+          label : "courses",
+          backgroundColor : "rgba(78, 115, 223, 0.05)",
+          borderColor : "rgba(78, 115, 223, 1)",
+          pointRadius : 3,
+          pointBackgroundColor : "rgba(78, 115, 223, 1)",
+          pointBorderColor : "rgba(78, 115, 223, 1)",
+          pointHaverRadius : 3,
+          pointHoverBackgroundColor : "rgba(78, 115, 223, 1)",
+          pointHOverBorderColor : "rgba(78, 115, 223, 1)",
+          pointHitRadius : 10,
+          pointBorderWidth : 2,
+        }],
+        labels: {{ courses|safe }}
+      },
+      options: {
+        layout: {
+      padding: {
+        left: 10,
+        right: 25,
+        top: 25,
+        bottom: 0
+      }
+    },
+        responsive: true,
+        scales: {
+                    xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Courses'
+                            },
+                            gridLines: {
+          color: "rgb(234, 236, 244)",
+          zeroLineColor: "rgb(234, 236, 244)",
+          drawBorder: false,
+          borderDash: [2],
+          zeroLineBorderDash: [2]
+        }
+                        }],
+                    yAxes: [{
+                            display: true,
+                            ticks: {
+                                beginAtZero: true,
+                                steps: 10,
+                                stepValue: 5,
+                                max: 100
+                            }
+                        }]
+                },
+      }
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('result-chart').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+
+  </script>
+{% endblock content %}

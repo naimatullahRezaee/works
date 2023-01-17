@@ -1,0 +1,149 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    دوره تحصیلی
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">داشبورد</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">دوره های تحصیلی</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<style>
+    .session--card{
+        border: 2px solid #c4c4c4;
+        border-radius: 10px;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-items: center;
+        justify-content: center;
+    }
+    .session--card h3{
+        font-size: 2rem;
+    }
+    .session--card p{
+        font-size: 1.3rem;
+    }
+    .session--add--buton{
+        width: 100%;
+        height: 200px;
+        border: 3px dashed gray;
+        border-radius: 10px;
+        background-color: #f3f3f3;
+        border: 2px dashed #c4c4c4;
+        border-radius: 10px;
+    }
+</style>
+<div id="add-session" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0" id="myModalLabel">ایجاد دوره تحصیلی</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <div class="modal-body">
+                <form action="{% url 'session-create' %}" method="POST" >
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="">سال تحصیلی</label>
+                        <input  class="form-control" placeholder="سال تحصیلی" name="date" id="date_year_t">
+                    </div>
+                    <div class="form-group">
+                        <label for="">دوره تحصیلی</label>
+                        <select name="name" id="" class="form-control">
+                            <option value="">دوره تحصیلی</option>
+                            <optgroup>
+                                <option value="spring">بهاری</option>
+                                <option value="fall">خزانی</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-md mt-2">ذخیره کردن</button>
+                </form>
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h3 class="card-title">دوره های درسی / تحصیلی</h3>
+                    </div>
+                    <div class="col-lg-6">
+                       
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    {% for session in sessions %}
+                        <a href="{{session.get_absolute_url}}" class="session--card col-lg-3 box ml-3">
+                            <div class="ribbon ribbon-top-left"><span>
+                                {% if session.current_session %}
+                                دوره فعلی
+                                {% else %}
+                                دوره قبلی
+                                {% endif %}
+                            </span></div>
+                            <div class="">
+                                <h3 class="card-title mb-3">دوره</h3>
+                                <p class="text-secondary">  
+                                    {{session.session_type}}
+                                    {{session.session|date:"Y"}}
+                                </p>
+                            </div>
+                        </a>
+                    {% endfor %}
+                    <div class="col-lg-3 ml-3">
+                        <button
+                        data-toggle="modal"
+                        data-target="#add-session"
+                        class="btn btn-default session--add--buton">
+                            <i class="bx bx-plus" style="font-size: 4rem;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script
+src="https://code.jquery.com/jquery-3.6.0.min.js"
+integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+crossorigin="anonymous">
+</script>
+
+<script>
+   $(document).ready(function(){
+        $("#date_year_t").pDatepicker({
+            format: 'YYYY-MM-DD',
+            initialValue: false,
+            calender:{
+                persian: {
+                    locale : 'en'
+                }
+            }
+        });
+    });
+    
+</script>
+{% endblock content %}

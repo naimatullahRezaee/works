@@ -1,0 +1,140 @@
+
+{% extends 'main.html' %}
+{% load widget_tweaks %}
+{% block title %}
+ثبت شاگردان
+{% endblock title %}
+
+{% block page_title %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'assets/css/validation/vlidationStudent.css' %}">
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">ثبت شاگرد جدید</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">جزییات دیپارتمنت</a></li>
+                    <li class="breadcrumb-item active">ثبت شاگرد جدید</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">مشخصات شاگرد جدید</h4>
+
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">آی دی کانکور</label>
+                            {% render_field form.kankor_id class="form-control form-control-lg" placeholder="MI203933" id="SId"%}
+                            <span class="icons SId_icon"></span>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">نام</label>
+                            {% render_field form.f_name class="form-control form-control-lg" placeholder="علی" id="Susername"%}
+                            <span class="icon Susername_icon"></span>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">تخلص</label>
+                            {% render_field form.l_name class="form-control form-control-lg" placeholder="علی زاده" id="Sl_name"%}
+                            <span class="icon Slname_icon"></span>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">نام پدر</label>
+                            {% render_field form.father_name class="form-control form-control-lg" placeholder="محمد" id="Sf_name" %}
+                           <span class="icon Sfname_icon"></span>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">ولدیت</label>
+                            {% render_field form.grand_father_name class="form-control form-control-lg" placeholder="حسن" id="SnikName" %}
+                            <span class="icon  SnikName_icon "></span>
+                        
+                            </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">نام مکتب</label>
+                            {% render_field form.school_name class="form-control form-control-lg" placeholder="معرفت" id="Sschool" %}
+                            <span class="icon  Sschool_icon "></span>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">نمره کانکور</label>
+                            {% render_field form.score class="form-control form-control-lg" type="number" %}
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">ولایت</label>
+                            {% render_field form.province class="form-control form-control-lg" placeholder="مزار شریف" id="Sprovince_name"%}
+                            <span class="icon  Sprovince_name_icon "></span>
+                        </div>
+                        
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">دیپارتمنت</label>
+                            {% render_field form.department class="form-control form-control-lg" %}
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">جنسیت</label>
+                            {% render_field form.gender class="form-control form-control-lg" %}
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">سمستر</label>
+                            {% render_field form.semester class="form-control form-control-lg" %}
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">سکشن</label>
+                            {% render_field form.section class="form-control form-control-lg" %}
+                        </div>
+                    </div>
+                    <h4 class="mt-5">مشخصات حساب شاگردان</h3>
+
+                    <div class="row mt-3">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">ایمیل</label>
+                            {% render_field form.email type="email" class="form-control form-control-lg" placeholder="ali@email.com" id="Semail"%}
+                            <span class="icon Semail_icon"></span>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">نام کاربری</label>
+                            {% render_field form.username class="form-control form-control-lg" placeholder="ali_2022" id="SEn_username" %}
+                            <span class="icon SenUName_icon"></span>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">رمز ورود</label>
+                            {% render_field form.password1 type="password" class="form-control form-control-lg" id="Spassword1" %}
+                            <span
+                            class="icon_pass fas fa-eye-slash p1"
+                            id="Sicon_pass_hide1"
+                          ></span>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <label for="">تکرار رمز ورود</label>
+                            {% render_field form.password2 class="form-control form-control-lg" type="password" id="Spassword2" %}
+                            <span
+                            class="icon_pass fas fa-eye-slash p1"
+                            id="Sicon_pass_hide2"
+                          ></span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-md mt-3">ذخیره کردن</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'assets/js/validation/vlidationStudent.js' %}"></script>
+{% endblock content %}

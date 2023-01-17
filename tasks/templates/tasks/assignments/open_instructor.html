@@ -1,0 +1,198 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title %} فعالیت {% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">ارسال جواب فعالیت</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'list-course' 1 %}">لیست کورس ها</a></li>
+                    <li class="breadcrumb-item"><a href="{{request.META.HTTP.REFERER}}">جزییات کورس</a></li>
+                    <li class="breadcrumb-item active">فعالیت</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h3>گزارش دریافت جواب های شاگردان</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h2>{{assignment.title}}</h2>
+                        <p dir="ltr" class="text-muted font-size-18" style="padding: 0px; margin: 0px;"> from {{assignment.assigned_at|date:"M m"}} to {{assignment.expire_date|date:"M m"}} - {{assignment.expire_time}}</p>
+                        <p dir="ltr" class="font-size-17 mt-3">{{assignment.description}}</p>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="col-lg-12 m-auto">
+                            <ul class="nav nav-tabs nav-tabs-custom nav-justified" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#students" role="tab">
+                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                        <span class="d-none d-sm-block font-size-20">تمام شاگردان</span> 
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#sent" role="tab">
+                                        <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                        <span class="d-none d-sm-block font-size-20">ارسال کرده</span> 
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#not_submitted" role="tab">
+                                        <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+                                        <span class="d-none d-sm-block font-size-20">ارسال نکرده</span>   
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#settings1" role="tab">
+                                        <span class="d-block d-sm-none"><i class="fas fa-cog"></i></span>
+                                        <span class="d-none d-sm-block font-size-20">نمره داده شده</span>    
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content p-3 text-muted">
+                                <div class="tab-pane active" id="students" role="tabpanel">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped mb-0">
+    
+                                            <thead>
+                                                <tr>
+                                                    <th class="font-size-17">شماره مسلسل</th>
+                                                    <th class="font-size-17">آی دی نمبر</th>
+                                                    <th class="font-size-17">نام و تخلص</th>
+                                                    <th class="font-size-17">نام پدر</th>
+                                                    <th class="font-size-17">عکس</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for student in students %}
+                                                <tr>
+                                                    <td class="font-size-16">{{forloop.counter}}</td>
+                                                    <td class="font-size-16">{{student.kankor_id}}</td>
+                                                    <td class="font-size-16">{{student.f_name}} {{student.l_name}}</td>
+                                                    <td class="font-size-16">{{student.father_name}}</td>
+                                                    <td class="font-size-16">
+                                                        <img src="{{student.avatar.url}}" alt="" class="avatar-sm rounded">
+                                                    </td>
+                                                </tr>
+                                                {% empty %}
+
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="sent" role="tabpanel">
+                                    <table class="table table-striped mb-0">
+    
+                                        <thead>
+                                            <tr>
+                                                <th class="font-size-17">شماره مسلسل</th>
+                                                <th class="font-size-17">آی دی نمبر</th>
+                                                <th class="font-size-17">نام و تخلص</th>
+                                                <th class="font-size-17">نام پدر</th>
+                                                <th class="font-size-17">عملیات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for student in submitted_students %}
+                                            <tr>
+                                                <td class="font-size-16">{{forloop.counter}}</td>
+                                                <td class="font-size-16">{{student.kankor_id}}</td>
+                                                <td class="font-size-16">{{student.f_name}} {{student.l_name}}</td>
+                                                <td class="font-size-16">{{student.father_name}}</td>
+                                                <td class="font-size-16">
+                                                    <a href="{% url 'assign-score' assignment.id student.id %}" class="btn btn-outline-primary btn-md">باز کردن جواب</a>
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                                <p class="alert alert-info text-center">
+                                                    هیچ یک از شاگردان هنوز جوابی ارسال نکرده.
+                                                </p>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="not_submitted" role="tabpanel">
+                                    <table class="table table-striped mb-0">
+    
+                                        <thead>
+                                            <tr>
+                                                <th class="font-size-17">شماره مسلسل</th>
+                                                <th class="font-size-17">آی دی نمبر</th>
+                                                <th class="font-size-17">نام و تخلص</th>
+                                                <th class="font-size-17">نام پدر</th>
+                                                <th class="font-size-17">عملیات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for student in unsubmitted_students %}
+                                            <tr>
+                                                <td class="font-size-16">{{forloop.counter}}</td>
+                                                <td class="font-size-16">{{student.kankor_id}}</td>
+                                                <td class="font-size-16">{{student.f_name}} {{student.l_name}}</td>
+                                                <td class="font-size-16">{{student.father_name}}</td>
+                                                <td class="font-size-16">
+                                                    <button class="btn btn-outline-primary btn-md">درخواست مجدد</button>
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                                <p class="alert alert-info text-center">تمام شاگردان جوابی خود ر ا فرستاده</p>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="settings1" role="tabpanel">
+                                    
+                                    <table class="table table-striped mb-0">
+    
+                                        <thead>
+                                            <tr>
+                                                <th class="font-size-17">شماره مسلسل</th>
+                                                <th class="font-size-17">آی دی نمبر</th>
+                                                <th class="font-size-17">نام و تخلص</th>
+                                                <th class="font-size-17">نام پدر</th>
+                                                <th class="font-size-17">نمره</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for student in scored_students %}
+                                            <tr>
+                                                <td class="font-size-16">{{forloop.counter}}</td>
+                                                <td class="font-size-16">{{student.student.kankor_id}}</td>
+                                                <td class="font-size-16">{{student.student.f_name}} {{student.student.l_name}}</td>
+                                                <td class="font-size-16">{{student.student.father_name}}</td>
+                                                <td dir="ltr" class="font-size-16">
+                                                    {{student.score}} / {{assignment.score}}
+                                                </td>
+                                            </tr>
+                                            {% empty %}
+                                                <p class="alert alert-info text-center">تمام شاگردان جوابی خود ر ا فرستاده</p>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

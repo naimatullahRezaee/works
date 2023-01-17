@@ -1,0 +1,112 @@
+{% extends 'main.html' %}
+
+{% load static %}
+
+{% block title %}
+ویرایش معلومات
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">ویرایش معلومات</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="#">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'admin_profile_info' %}">صفحه پرفایل</a></li>
+                    <li class="breadcrumb-item active">ویرایش معلومات</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-10 m-auto">
+            <div class="card shadow-md rounded-md">
+                <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        <h3 class="card-title">معلومات شخصی</h3>
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="" class="font-size-20">نام</label>
+                                    <input type="text" class="form-control font-size-18" name="name" placeholder="نام" value="{{profile.f_name}}">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="" class="font-size-20">تخلص</label>
+                                    <input type="text" class="form-control font-size-18" name="last_name" placeholder="تخلص" value={{profile.l_name}}>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="" class="font-size-20">نام پدر</label>
+                                    <input type="text" class="form-control font-size-18" name="father_name" placeholder="نام پدر" value={{profile.father_name}}>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="" class="font-size-20">جنسیت</label>
+                                    <select name="gender" value={{profile.gender}} class="form-control font-size-18" id="">
+                                        <option value="">جنسیت</option>
+                                        <option value="آقا" {% if profile.gender == "آقا" %} selected {% endif %}>مرد</option>
+                                        <option value="خانم" {% if profile.gender == "خانم" %} selected {% endif %}>زن</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="" class="font-size-20">تاریخ تولد</label>
+                                    <input type="date" value="{{profile.dob}}" class="form-control font-size-18" name="dob">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="" class="font-size-20"> شماره تماس</label>
+                                    <input type="text" value="{{profile.phone_number}}" class="form-control font-size-18" name="phone_number">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="" class="font-size-20">آدرس</label>
+                                    <input type="text" value="{{profile.address}}" class="form-control font-size-18" name="address">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="" class="font-size-20">بیوگرافی</label>
+                                    <textarea name="bio" class="form-control font-size-18" id="" cols="1" rows="3">{{profile.bio}}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-4" id="file_path">
+                                <div class="form-group">
+                                    <label class="font-size-20">عکس پروفایل </label>
+                                    <br>
+                                    <a href={{profile.avatar.url}} class="font-size-18">{{profile.avatar.url}}</a>
+                                    <div class="custom-file">
+                                        <input type="file" name="avatar" value="{{profile.avatar.url}}" class="custom-file-input" id="inputGroupFilwithlabel" aria-describedby="inputGroupFileAddonwithlabel" required>
+                                        <label class="custom-file-label font-size-18" for="inputGroupFilwithlabel">عکس پرفایل</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-lg mt-4">ذخیره</button>
+                    </form>
+                    
+
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+{% endblock content %}

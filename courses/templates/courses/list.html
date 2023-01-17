@@ -1,0 +1,307 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %} لیست کورس ها {% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18"> لیست کورس ها </h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">لیست کورس ها</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+<!-- create course -->
+<div class="modal fade" id="create-course" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myLargeModalLabel">کورس جدید</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'create-course' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="">انتخاب مضمون</label>
+                            <select class="form-control" name="subject">
+                                <option>مضمون</option>
+                                <optgroup>
+                                {% for subject in subjects %}
+                                    <option value="{{subject.pk}}">{{subject.subject}}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="">عنوان کورس</label>
+                            <input type="text" name="course-title" class="form-control" placeholder="کورس شما به چه نام یاد میشود">
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <label for="">سیستم درسی</label>
+                            <select name="system" id="" class="form-control">
+                                <option value="">سیستم درسی</option>
+                                <option value="credit">سیستم کریدیت</option>
+                                <option value="traditional">سیستم قدیمی</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mt-3 mb-2">
+                            <label for="">توضیحات</label>
+                            <textarea name="course-overview" class="form-control" id="" cols="30" rows="10" placeholder="توضیحات در مورد کورس..."></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-md" type="submit">ذخیره کردن</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- end create course -->
+
+
+<div class="row">
+    <div class="col-xl-9 col-lg-8">
+        <div class="card">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs nav-tabs-custom justify-content-center pt-2" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active font-size-17" data-toggle="tab" href="#all-post" role="tab">
+                       تمام کورس ها
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-size-17" data-toggle="tab" href="#archive" role="tab">
+                       غیر فعال  
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content p-4">
+                <div class="tab-pane active" id="all-post" role="tabpanel">
+                    <div>
+                        <div class="row justify-content-center">
+                            <div class="col-xl-8">
+                                <div>
+                                    <div class="row align-items-center">
+                                        <div class="col-6">
+                                            <div class="search-box">
+                                                <div class="position-relative">
+                                                    <form action="{% url 'list-course' 1 %}" method="GET">
+                                                        <input type="text" name="q" class="form-control form-control-lg rounded bg-light border-light" placeholder="جستجو...">
+                                                        <i class="mdi mdi-magnify search-icon align-middle font-size-20 "></i>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+            
+                                        <div class="col-6">
+                                            <div class="float-right">
+                                                <button 
+                                                class="btn btn-outline-primary btn-md"
+                                                data-toggle="modal"
+                                                data-target="#create-course"
+                                                >
+                                                    <i class="bx bx-plus font-size-22 align-middle"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+
+                                    <hr class="mb-4">
+
+                                    <div class="row">
+                                        {% for course in courses %}
+                                        <div class="col-sm-6">
+                                            <div class="card p-1 shadow-sm border" style="background-color: {{course.coursedetail.color}}" >
+                                                <div class="p-3">
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <h5><a href="#" class="text-dark">{{course.title}}</a></h5>
+                                                            <p class="text-muted mb-0">
+                                                                {{course.created_at|date:"d M, Y"}}</p>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="float-right ml-2">
+                                                                <div class="dropdown mb-2">
+                                                                    <a class="font-size-16 text-muted dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true">
+                                                                        <i class="mdi mdi-dots-horizontal font-size-22"></i>
+                                                                    </a>
+                                                                    
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        <a class="dropdown-item" href="{% url 'course-content' course.slug course.module_set.first.pk %}">باز کردن</a>
+                                                                        <a class="dropdown-item" href="{% url 'course-detail' course.slug %}">جزییات کورس</a>
+                                                                        <a class="dropdown-item" href="#">لیست شاگردان</a>
+                                                                        <a class="dropdown-item" href="{% url 'result-start' course.subject.slug %}">بخش نمره دهی</a>
+                                                                        <a class="dropdown-item" href="#">کورس چت سیستم</a>
+                                                                        <div class="dropdown-divider"></div>
+                                                                        <a class="dropdown-item text-danger" href="#">حذف کورس</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="position-relative">
+                                                    <img src="{{course.coursedetail.image.url}}" style="max-height: 250px; width: 100%;" alt="" class="img-thumbnail">
+                                                </div>
+
+                                                <div class="p-3">
+                                                    <ul class="list-inline">
+                                                        <li class="list-inline-item mr-3">
+                                                            <a href="#" class="text-muted">
+                                                                <i class="bx bx-purchase-tag-alt align-middle text-muted mr-1"></i> {{course.subject.subject.title}}
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item mr-3">
+                                                            <a href="#" class="text-muted">
+                                                                <i class="bx bx-comment-dots align-middle text-muted mr-1"></i> {{course.module_set.all.count}} ماجول
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <p dir="ltr" style="font-size: 15px; text-align: left;">{{course.overview|truncatechars:80}}</p>
+
+                                                    <div>
+                                                        <a href="{% url 'course-content' course.slug course.module_set.first.pk %}" class="text-primary"><i class="mdi mdi-arrow-right align-middle mr-1"></i>باز کردن</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% empty %}
+                                        <p class="alert alert-info text-center">
+                                            شما تا هنوز کورسی ایجاد نکرده اید یا کورس شما هنوز تایید نشده.
+                                        </p>
+                                        {% endfor %}
+                                    </div>
+
+                                    
+
+
+                                    <hr class="my-4">
+
+                                    <div class="text-center">
+                                        <ul class="pagination justify-content-center pagination-rounded">
+                                            {% if courses.has_previous %}
+                                                <li class="page-item active">
+                                                    <a href="{% url 'list-course' courses.previous_page_number %}" class="page-link"><i class="mdi mdi-chevron-left font-size-20"></i></a>
+                                                </li>
+                                            {% endif %}
+                                            <span class="mx-2" style="position: relative; top: 6px;">صفحه {{courses.number}} از {{courses.paginator.num_pages}}
+                                                {% if courses.has_next %}</span>
+                                            <li class="page-item active">
+                                                <a href="{% url 'list-course' courses.next_page_number %}" class="page-link align-middle"><i class="mdi mdi-chevron-right font-size-20"></i></a>
+                                            </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="archive" role="tabpanel">
+                    <div>
+                        <div class="row justify-content-center">
+                            <div class="col-xl  -8">
+                                <h5>کورس های تایید نشده</h5>
+
+                                <div class="mt-5">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="mr-2">
+                                            <h4>تمام کورس های غیر فعال</h4>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <span class="badge badge-success float-right ml-1 px-2 py-1 align-middle font-size-12">{{deactive_courses.all.count}}</span>
+                                        </div>
+                                    </div>
+                                    <hr class="mt-2">
+
+                                    <div class="list-group list-group-flush">
+                                        {% for course in deactive_courses %}
+                                            <a href="{% url 'course-detail' course.slug %}" class="list-group-item text-muted font-size-15"><i class="mdi mdi-circle-medium mr-1"></i> {{course.title}}</a>
+                                        {% empty %}
+                                            <span class="alert alert-info text-center">همه کورس های ایجاد شده توسط شما تایید شده است.
+
+                                                اگر با کدام مشکلی روبرو شده اید لطفا <a href="" class="text-primary" style="text-decoration: underline; font-weight: bold;">گزارش</a> دهید.
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-lg-4">
+        <div class="card">
+            <div class="card-body p-4">
+                <h4>پنل مدیریتی</h4>
+
+                <hr class="my-4">
+
+
+
+                <div>
+                    <p class="text-muted mb-2">کورس های اخیرا بازدید شده</p>
+
+                    <div class="list-group list-group-flush">
+                        
+                        {% for course in courses %}
+                        <a href="{% url 'course-detail' course.slug %}" class="list-group-item text-muted py-3 px-2">
+                            <div class="media align-items-center">
+                                <div class="mr-3">
+                                    <img src="{{course.coursedetail.image.url}}" alt="" class="avatar-md h-auto d-block rounded">
+                                </div>
+                                <div class="media-body overflow-hidden">
+                                    <h5 class="font-size-13 text-truncate">{{course.title}}</h5>
+                                    <p dir="ltr" class="mb-0 text-truncate"> قبل {{course.updated_at|timesince}} بازدید</p>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    
+                        
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+
+                <div>
+                    <p class="text-muted mb-1">مضامین</p>
+
+                    <ul class="list-inline widget-tag">
+                        {% for subject in subjects %}
+                        <li class="list-inline-item"><a href="#" class="badge badge-light font-size-12 mt-2">{{subject.subject}}</a></li>
+                        {% endfor %}                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end card -->
+    </div>
+</div>
+
+{% endblock content %}

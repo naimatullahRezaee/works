@@ -1,0 +1,222 @@
+{% load static %}
+
+<style>
+  
+</style>
+
+<style>
+  
+</style>
+
+<div class="vertical-menu">
+
+  <div data-simplebar class="h-100">
+      <div id="sidebar-menu">
+        <!-- Left Menu Start -->
+        {% for group in request.user.groups.all %}
+        {% if group.name == "managers" %}
+        <ul class="metismenu list-unstyled" id="side-menu">
+          <li class="menu-title" key="t-menu">منیو</li>
+
+          <li>
+              <a href="/" class="waves-effect menu">
+                  <i class="bx bx-home-circle"></i>
+                  <span key="t-dashboards">داشبورد</span>
+              </a>
+          </li>
+          <li>
+            <a href="{% url 'department-list' %}" class="waves-effect menu">
+                <i class="bx bx-building"></i>
+                <span key="t-dashboards">دیپارتمنت ها</span>
+            </a>
+          </li>
+          <li>
+              <a href="{% url 'session-list' %}" class="waves-effect menu">
+                  <i class="bx bx-task"></i>
+                  <span key="t-dashboards">سال تحصیلی</span>
+              </a>
+          </li>
+          <li>
+            <a href="{% url 'schedule_list' %}" class="waves-effect menu">
+                <i class="bx bx-calendar"></i>
+                <span key="t-dashboards">تقسیم اوقات</span>
+            </a>
+        </li>
+          <!-- <li class="menu-title" key="t-apps">Apps</li> -->
+
+          
+        </ul>
+        {% elif group.name == "instructors" %}
+        <ul class="metismenu list-unstyled" id="side-menu">
+          <li class="menu-title" key="t-menu">منو</li>
+
+          <li>
+              <a href="/" class="waves-effect menu">
+                  <i class="bx bx-home-circle"></i>
+                  <span key="t-dashboards">داشبورد</span>
+              </a>
+          </li>
+          <li>
+            <a href="{% url 'department-list' %}" class="waves-effect menu">
+                <i class="bx bx-building"></i>
+                <span key="t-dashboards">دیپارتمنت ها</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'subject-list' %}" class="waves-effect menu">
+                <i class="bx bx-book"></i>
+                <span key="t-dashboards">کریکولم درسی</span>
+            </a>
+          </li>
+          
+          
+          <li>
+            <a href="{% url 'list-course' 1 %}" class="waves-effect menu">
+                <i class="bx bx-list-ul"></i>
+                <span key="t-dashboards">کورس ها</span>
+            </a>
+          </li>
+          <!-- <li class="menu-title" key="t-apps">Apps</li> -->
+
+          <li>
+              <a href="{% url 'event-list' %}" class="waves-effect">
+                  <i class="bx bx-calendar"></i>
+                  <span key="t-calendar">تقویم</span>
+              </a>
+          </li>
+        </ul>
+
+        {% elif group.name == "students" %}
+        <ul class="metismenu list-unstyled" id="side-menu">
+          <li class="menu-title" key="t-menu">منو</li>
+
+          <li>
+              <a href="{% url 'student-dashboard' %}" class="waves-effect menu">
+                  <i class="bx bx-home-circle"></i>
+                  <span key="t-dashboards">داشبورد</span>
+              </a>
+          </li>
+          <li>
+            <a href="{% url 'course-start' %}" class="waves-effect menu">
+                <i class="bx bx-list-ul"></i>
+                <span key="t-dashboards">کورس ها</span>
+            </a>
+          </li>
+          <li>
+              <a href="javascript: void(0);" class="has-arrow waves-effect">
+                  <i class="bx bxs-report"></i>
+                  <span key="t-layouts">گزارشات درسی</span>
+              </a>
+              <ul class="sub-menu" aria-expanded="true">
+                  <li>
+                      <a href="{% url 'semester-report' request.user.student.pk %}" class="font-size-15" key="t-vertical">
+                          <i class="bx bx-window"></i>
+                          <span key="t-layouts">گزارش هر سمستر</span>
+                      </a>
+                  </li>
+
+                  <li>
+                      <a href="{% url 'general-report' request.user.student.pk %}" class="font-size-15" key="t-horizontal">
+                          <i class="bx bx-windows"></i>
+                          <span key="t-layouts">گزارش کلی</span>
+                      </a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+              <a href="{% url 'evaluation-list' %}" class="waves-effect menu">
+                  <i class="bx bx-badge-check"></i>
+                  <span key="t-dashboards">ارزیابی استادان</span>
+              </a>
+          </li>
+          <li>
+              <a href="{% url 'my-activity' %}" class="waves-effect menu">
+                  <i class="bx bx-task"></i>
+                  <span key="t-dashboards">فعالیت ها</span>
+              </a>
+          </li>
+          <!-- <li class="menu-title" key="t-apps">Apps</li> -->
+
+          <li>
+              <a href="{% url 'student-event-list' %}" class="waves-effect">
+                  <i class="bx bx-calendar"></i>
+                  <span key="t-calendar">تقویم</span>
+              </a>
+          </li>
+          <li>
+              <a href="{% url 'department-subject' %}" class="waves-effect">
+                  <i class="bx bx-buildings"></i>
+                  <span key="t-calendar">مضامین و دیپارتمنت ها</span>
+              </a>
+          </li>
+        </ul>
+        
+        
+        {% endif %}
+        {% endfor %}
+        {% if request.user.is_staff and request.user.is_superuser %}
+        <ul class="metismenu list-unstyled" id="side-menu">
+          <li class="menu-title" key="t-menu">مینیو</li>
+
+          <li>
+              <a href="{% url 'admin-dashboard' %}" class="waves-effect menu">
+                  <i class="bx bx-home-circle"></i>
+                  <span key="t-dashboards">صفحه اصلی</span>
+              </a>
+          </li>
+          <li>
+              <a href="{% url 'all-groups' %}" class="waves-effect menu">
+                  <i class="bx bx-group"></i>
+                  <span key="t-dashboards">مدیریت گروه ها</span>
+              </a>
+          </li>
+          <li>
+            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                <i class="mdi mdi-account-group-outline"></i>
+                <span key="t-utility">مدیریت کارمندان</span>
+            </a>
+            <ul class="sub-menu" aria-expanded="false">
+                <li>
+                    <a href="{% url 'employee_list' %}" class="waves-effect menu">
+                        <i class="bx bx-list-ul"></i>
+                        <span key="t-dashboards" class="font-size-16"> لیست کارمندان</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'register_employee' %}" class="waves-effect menu">
+                        <i class="bx bx-plus"></i>
+                        <span key="t-dashboards" class="font-size-16"> ثبت کارمند </span>
+                    </a>
+                </li>
+                
+            </ul>
+        </li>
+          <li>
+              <a href="{% url 'department-list' %}" class="waves-effect menu">
+                  <i class="bx bx-building"></i>
+                  <span key="t-dashboards">دیپارتمنت ها</span>
+              </a>
+            </li>
+            <!-- <li>
+                <a href="#" class="waves-effect menu">
+                    <i class="bx bxs-calendar"></i>
+                    <span key="t-dashboards">رویداد ها</span>
+                </a>
+            </li> -->
+            <li>
+                <a href="{% url 'session-list' %}" class="waves-effect menu">
+                    <i class='mdi mdi-school-outline'></i>
+                    <span key="t-dashboards">سال های تحصیلی</span>
+                </a>
+            </li>
+            <!-- <li>
+                <a href="#" class="waves-effect menu">
+                    <i class='bx bx-cog'></i>
+                    <span key="t-dashboards">مدیریت فعالیت ها</span>
+                </a>
+            </li> -->
+        </ul>
+        {% endif %}
+    </div>
+  </div>
+</div>

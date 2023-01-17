@@ -1,0 +1,145 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+    
+<!-- Mirrored from themesbrand.com/skote/layouts/auth-login-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 06 Jan 2021 07:31:35 GMT -->
+<head>
+        
+        <meta charset="utf-8" />
+        <title>سیستم مدیریتی | ورود به سیستم</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'assets/images/favicon.ico' %}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2&family=Tajawal:wght@300&display=swap" rel="stylesheet">
+        <!-- owl.carousel css -->
+        <link rel="stylesheet" href="{% static 'assets/libs/owl.carousel/assets/owl.carousel.min.css' %}">
+
+        <link rel="stylesheet" href="{% static 'assets/libs/owl.carousel/assets/owl.theme.default.min.css' %}">
+
+        <!-- Bootstrap Css -->
+        <link href="{% static 'assets/css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{% static 'assets/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{% static 'assets/css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="{% static 'assets/css/app-rtl.min.css' %}" id="app-style" type="text/css">
+    
+
+        <style>
+            @font-face {
+                font-family: "IranSanse";
+                src: local("IranSanse"), 
+                url("{% static 'assets/fonts/IRANSansWeb.eot' %}") format("eot"),
+                url("{% static 'assets/fonts/IRANSansWeb.ttf' %}") format("ttf"),
+                url("{% static 'assets/fonts/IRANSansWeb.woff' %}") format("woff"),
+                url("{% static 'assets/fonts/IRANSansWeb.woff2' %}") format("woff2");
+            }
+            *{
+                font-family : "IranSanse"
+            }
+        </style>
+
+    </head>
+
+    <body class="auth-body-bg">
+        <div>
+            <div class="container-fluid p-0">
+                <div class="row no-gutters">
+                    
+                    <div class="col-xl-9">
+                        <div class="auth-full-bg pt-lg-5 p-4">
+                            <div class="w-100">
+                                <div class="bg-overlay"></div>
+                                <div class="d-flex h-100 flex-column">
+                                    <div class="p-4 mt-auto">
+                                        <div class="row justify-content-center">
+                                            <div class="col-lg-7">
+                                                <div class="text-center">
+                                                    <img src="{% static 'assets/images/background.png' %}" alt="" style="width: 100%; height: 80vh;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+
+                    <div class="col-xl-3">
+                        <div class="auth-full-page-content p-md-5 p-4">
+                            <div class="w-100">
+
+                                <div class="d-flex flex-column h-100">
+                                    <div class="mb-4 mb-md-5">
+                                        <a href="index.html" class="d-block auth-logo">
+                                            <img src="{% static 'assets/images/custom/kabul.png' %}" alt="" height="64" class="auth-logo-dark">
+                                            <img src="{% static 'assets/images/logo-light.png' %}" alt="" height="18" class="auth-logo-light">
+                                        </a>
+                                    </div>
+                                    <div class="my-auto">
+                                        
+                                        <div>
+                                            <h5 class="text-primary">دوباره خوش آمدید</h5>
+                                            <p class="text-muted">لطفا نام کاربری و رمز ورود خود را وارد نمایید</p>
+                                        </div>
+
+                                        {% for message in messages %}
+                                            {% if message.tags == "error" %}
+                                                <p class="alert alert-danger text-center">{{message}}</p>
+                                            {% else %}
+                                            <p class="alert alert-success text-center">{{message}}</p>
+                                            {% endif %}
+                                        {% endfor %}
+            
+                                        <div class="mt-4">
+                                            {% block content  %}
+
+                                            {% endblock content %}
+                                            <div class="mt-5 text-center">
+                                                <p>آیا هنوز ثبت سیستم نشده اید؟ <a href="auth-register-2.html" class="font-weight-medium text-primary"> درخواست برای ثبت </a> </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 mt-md-5 text-center">
+                                        <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> <i class="mdi mdi-heart text-danger"></i></p>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div>
+            <!-- end container-fluid -->
+        </div>
+
+        <!-- JAVASCRIPT -->
+        <script src="{% static 'assets/libs/jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'assets/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'assets/libs/metismenu/metisMenu.min.js' %}"></script>
+        <script src="{% static 'assets/libs/simplebar/simplebar.min.js' %}"></script>
+        <script src="{% static 'assets/libs/node-waves/waves.min.js' %}"></script>
+
+        <!-- owl.carousel js -->
+        <script src="{% static 'assets/libs/owl.carousel/owl.carousel.min.js' %}"></script>
+
+        <!-- auth-2-carousel init -->
+        <script src="{% static 'assets/js/pages/auth-2-carousel.init.js' %}"></script>
+        
+        <!-- App js -->
+        <script src="{% static 'assets/js/app.js' %}"></script>
+
+    </body>
+
+<!-- Mirrored from themesbrand.com/skote/layouts/auth-login-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 06 Jan 2021 07:31:36 GMT -->
+</html>

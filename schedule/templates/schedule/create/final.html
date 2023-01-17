@@ -1,0 +1,130 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    ایجاد تقسیم اوقات درسی
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">ایجاد تقسیم اوقات درسی</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'schedule_list' %}">لیست تقسیم اوقات</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'create_schedule_step1' %}">{{department.name}}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'create_schedule_step2' department.slug %}">{{semester.semester_name}}</a></li>
+                    <li class="breadcrumb-item active">ایجاد تقسیم اوقات درسی</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">
+                    ساخت تقسیم اوقات درسی برای شاگردان {{semester.semester_name}} دیپارتمنت {{department.name}} دوره تحصیلی {{sessions.session_type}} {{sessions.session|date:"Y"}}
+                </h3>
+
+                <div class="row mt-5">
+                    <div class="col-lg-6">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <label for="" class="font-size-18">مضمون</label>
+                                    <select name="subject" class="form-control select2" style="height: 3rem;">
+                                        <option class="font-size-20">انتخاب مضمون</option>
+                                        <optgroup label="لیست مضامین">
+                                            {% for subject in subjects %}
+                                                <option value="{{subject.slug}}">{{subject.subject}}</option>
+                                            {% endfor %}
+                                        </optgroup> 
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="" class="font-size-18">استاد</label>
+                                    <select name="instructor" class="form-control select2" style="height: 3rem;">
+                                        <option class="font-size-20">انتخاب استاد</option>
+                                        <optgroup label="لیست استادان">
+                                            {% for ins in instructors %}
+                                                <option value="{{ins.id}}">{{ins.f_name}} {{ins.l_name}}</option>
+                                            {% endfor %}
+                                        </optgroup> 
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6">
+                                    <label for="" class="font-size-18">روز</label>
+                                    <select name="days" class="form-control form-control-lg" id="">
+                                        <option value="">روز های درسی</option>
+                                        <option value="شنبه">شنبه</option>
+                                        <option value="یکشنبه">یکشنبه</option>
+                                        <option value="دوشنبه">دوشنبه</option>
+                                        <option value="سه شنبه">سه شنبه</option>
+                                        <option value="چهار شنبه">چهار شنبه</option>
+                                        <option value="پنج شنبه">پنج شنبه</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="" class="font-size-18">ساعت درسی</label>
+                                    <select name="hours" class="form-control form-control-lg" id="">
+                                        <option value="">ساعت های درسی</option>
+                                        <option value="اول">ساعت اول</option>
+                                        <option value="دوم"> ساعت دوم</option>
+                                        <option value="سوم"> ساعت سوم</option>
+                                        <option value="چهارم">ساعت چهارم</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-6">
+                                    <label for="" class="font-size-18">شروع صنف</label>
+                                    <input type="time" class="form-control form-control-lg" name="start">
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="" class="font-size-18">ختم صنف</label>
+                                    <input type="time" class="form-control form-control-lg" name="finish">
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary btn-lg mt-4">ذخیره</button>
+
+                        </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <h3 class="card-title">تقسیم اوقات</h3>
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>روز</th>
+                                <th>مضمون</th>
+                                <th>مدرس</th>
+                                <th>ساعت</th>
+                                <th>عملیات</th>
+                            </tr>
+                            {% for sche in schedules %}
+                            <tr>
+                                
+                                <td>{{sche.days}}</td>
+                                <td>{{sche.subject}}</td>
+                                <td>{{sche.instructor.f_name}} {{sche.instructor.l_name}}</td>
+                                <td style="font-weight: bold;" dir="ltr">{{sche.from_time}} - {{sche.to_time}}</td>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

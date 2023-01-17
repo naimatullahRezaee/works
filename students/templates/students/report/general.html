@@ -1,0 +1,158 @@
+{% extends 'main.html' %}
+{% load result_tags %}
+{% load static %}
+{% block title %}
+    گزارشات عمومی
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">گزارشات کلی</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">گزارشات درسی</a></li>
+                    <li class="breadcrumb-item active">گزارش کلی</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row" dir="ltr">
+    <div class="col-xl-10 col-lg-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="transcript mx-5 mt-3">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <img src="{% static 'assets/images/logos/logo2.jpg' %}" class="float-right" alt="">
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <p class="text-center font-size-20" style="font-family: 'Times New Roman', Times, serif;">
+                                ISLAMIC REPUBLIC OF AFGHANISTAN
+                                <br>
+                                MINISTRY OF HIGHER EDUCATION
+                                <br>
+                                KABUL UNIVERSITY
+                                <br>
+                                <span class="font-size-17" style="font-weight: bold;">OFFICIAL TRANSCRIPT</span>
+                            </p>
+                        </div>
+                        <div class="col-lg-4">
+                            <img class="float-left" src="{% static 'assets/images/logos/logo3.jpg' %}" alt="">
+                        </div>
+                        
+                    </div>
+                    <div class="row info my-2">
+                        <div class="col-lg-5 mt-2">
+                            <table class="table-bordered table table-sm personal-tbl">
+                                <tr>
+                                    <td class="font-size-17">Name</td>
+                                    <td class="font-size-17">{{student.f_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-17">Last Name</td>
+                                    <td class="font-size-17">{{student.l_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-17">Father Name</td>
+                                    <td class="font-size-17">{{student.father_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-17">Gender</td>
+                                    <td class="font-size-17">{{student.gender}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-17">Date of Birth</td>
+                                    <td class="font-size-17">31/2/1990</td>
+                                </tr>
+                                
+                            </table>
+                        </div>
+                        
+                        <div class="col-lg-5 mt-2">
+                            <table class="table-bordered table table-sm personal-tbl">
+                                <tr>
+                                    <td class="font-size-17">Faculty</td>
+                                    <td class="font-size-17">Computer Science</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-17">Department</td>
+                                    <td class="font-size-17">{{student.department}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-17">Admission Date</td>
+                                    <td class="font-size-17">{{student.adminssion_date|date:"Y"}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-17">Degree Awarded</td>
+                                    <td class="font-size-17">B.Cs</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-17">Registration Number</td>
+                                    <td class="font-size-17">{{student.kankor_id}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-17">Graduation Date</td>
+                                    <td class="font-size-17"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-lg-2 mt-2">
+                            <img src="{{student.avatar.url}}" class="rounded" alt="">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="row">
+                            {% for key, result in results.items %}
+                                <div class="col-lg-6">
+                                    <div class="" style="background-color: lightgray;">
+                                        <p class="text-center" style="padding: 0px; margin: 0px; border: 1px solid black;">Semester {{result.semester}}</p>
+                                    </div>
+                                    <table class="table table-bordered table-sm score-tbl">
+                                        <thead>
+                                            <tr>
+                                                <th>Code</th>
+                                                <th>Course</th>
+                                                <th>Credit</th>
+                                                <th>Score</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for subject in result.subjects %}
+                                                <tr>
+                                                    <td>{{subject.subject.code}}</td>
+                                                    <td>{{subject.subject}}</td>
+                                                    <td>{{subject.subject.credit}}</td>
+                                                    <td>{{subject.total_score}}</td>
+                                                    
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot style="font-size: 17px; font-weight: bold;">
+                                            <tr>
+                                                <td colspan="2"></td>
+                                                <td rowspan="">Percentange : {% calculate_percentage student result.semester %}</td>
+                                                <td>Total : {{result.total}}</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

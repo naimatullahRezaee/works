@@ -1,0 +1,129 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title %} ماجول {% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">درج فعالیت جدید</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'list-course' 1 %}">لیست کورس ها</a></li>
+                    <li class="breadcrumb-item"><a href="{{request.META.HTTP.REFERER}}">جزییات کورس</a></li>
+                    <li class="breadcrumb-item active">درج فعالیت جدید</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    {% if obj %}
+                    
+                    {% else %}
+                    <div class="col-lg-6">
+                        <h3>ایجاد فعالیت جدید</h3>
+                        <hr>
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                           <div class="row">
+                               <div class="col-lg-4">
+                                   <label for="">عنوان فعالیت</label>
+                                   {% render_field form.title class="form-control" placeholder="عنوان را اینجا وارد کنید"  %}
+                               </div>
+                               <div class="col-lg-4">
+                                <label for="">تاریخ ختم فعالیت</label>
+                                 {% render_field form.expire_date class="form-control"  id="p_date" placeholder='تاریخ ختم فعالیت' %}
+                            </div>
+
+                               <div class="col-lg-4">
+                                <label for="">زمان ختم فعالیت</label>
+                                 {% render_field form.expire_time class="form-control" type="time"  %}
+                            </div>
+                               
+                           </div>
+                           <div class="row mt-3">
+                            <div class="col-lg-4">
+                                <label for="">نمره فعالیت</label>
+                                {% render_field form.score class="form-control" placeholder="عنوان را اینجا وارد کنید" %}
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="">فایل مربوط به فعالیت</label>
+                                 {% render_field form.file class="form-control" type="file" %}
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="">بسته شدن بعد از زمان ختم</label>
+                                {% render_field form.lock_after_expiration class="form-control form-control-sm" %}
+                            </div>
+                        </div>
+                           <div class="mt-3">
+                                <label for="">توضیحات</label>
+                                {% render_field form.description class="form-control" placeholder="توضیحات در مورد فعالیت فوق..." %}
+                            </div>
+                            <button class="btn btn-primary btn-md mt-2">ذخیره کردن</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                    <div class="col-lg-6">
+                        <h3>لیست فعالیت های ایجاد شده</h3>
+                        <hr>
+                        <ul>
+                            {% for assignment in assignments %}
+                                <li class="ml-3 my-2 py-2 px-2 shadow-sm rounded" style="background-color: lightgray;">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            
+                                             <p class="font-size-17"> <span class='font-size-20 bold'>Content : </span> {{assignment.content}}</p>
+                                            <p class="font-size-17"> <span class='font-size-20 bold'>Title : </span> {{assignment.title}}</p>
+                                        </div>
+                                         <!-- <div class="col-lg-6">
+                                            <button class="float-right btn btn-light btn-sm">
+                                                <i class="bx bx-edit align-middle font-size-22 "></i>
+                                            </button>
+                                            <button class="float-right mr-2 btn btn-danger btn-sm">
+                                                <i class="bx bx-trash align-middle font-size-22 "></i>
+                                            </button>
+                                        </div>  -->
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script
+src="https://code.jquery.com/jquery-3.6.0.min.js"
+integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+crossorigin="anonymous">
+</script>
+<script>
+    $(document).ready(function(){
+        $("#p_date").pDatepicker({
+            format: 'YYYY-MM-DD',
+            initialValue : false,
+            calendar:{
+                persian:{
+                    locale : 'en'
+                }
+            }
+        })
+    })
+</script>
+
+{% endblock content %}

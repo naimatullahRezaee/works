@@ -1,0 +1,23 @@
+<div data-simplebar style="max-height: 230px;">
+    {% for action in actions %}
+        <a href="{% url 'action_detail' action.id %}" class="text-reset notification-item">
+            <div class="media">
+                <img src="{% if action.user.is_employee %} {{action.user.employee.avatar.url}} {% else %} {{action.user.student.avatar.url}} {% endif %}"
+                    class="mr-3 rounded-circle avatar-xs" alt="user-pic">
+                <div class="media-body">
+                    <h6 class="mt-0 mb-1">
+                        {% if action.user.is_employee %}
+                            {{action.user.employee.f_name}} {{action.user.student.l_name}}
+                        {% else %}
+                            {{action.user.student.f_name}} {{action.user.student.l_name}}
+                        {% endif %}
+                    </h6>
+                    <div class="font-size-12 text-muted">
+                        <p class="mb-1" key="t-occidental">{{action.verb}}</p>
+                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-hours-ago">{{action.created|timesince}} پیش</span></p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+</div>

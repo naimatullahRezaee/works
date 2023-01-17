@@ -1,0 +1,47 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    حذف مضمون {{subject.subject}}
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">حذف مضمون {{subject.subject}}</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{%  url 'admin-dashboard' %}">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{%  url 'department-list' %}">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="{%  url 'department-detail' subject.department.slug %}">{{subject.department}}</a></li>
+                    <li class="breadcrumb-item active">حذف مضمون {{subject.subject}}</h4></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-lg-8 m-auto">
+            <div class="card">
+                <div class="card-body rounded" style="border: 1px solid lightgray;">
+                    
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <p class="alert alert-danger text-center font-size-18">
+                            آیا واقعا میخواهید این مضمون را از سیستم حذف کنید. متوجه باشید که این عمل تمام کورس های مربوط به این مضمون ره هم حذف میکند و مضمون حذف شده قابل بازیابی نیست.
+                        </p>
+                        <button class="btn btn-danger btn-lg mt-3">بلی، حذف</button>
+                        <a href="{% url 'department-detail' subject.department.slug %}" class="btn btn-primary btn-lg mt-3">نخیر</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

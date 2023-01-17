@@ -1,0 +1,93 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    لیست مضامین
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18"> مضامین</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department-list' %}">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department-detail' department.slug %}">{{department.name}}</a></li>
+                    <li class="breadcrumb-item active"> مضامین</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+{% block content %}
+<style>
+    .query{
+        padding-right: 2.5rem;
+        height: 3.6rem;
+        border-radius: 30px;
+    }
+    .query--icon{
+        position: absolute;
+        font-size: 2rem;
+        top: 1rem;
+        right: 0.4rem;
+        color: #ccc;
+    }
+    .subject--custom--card{
+        border: 2px solid #ccc;
+        border-radius: 10px;
+    }
+    .subject--custom--card h3{
+        font-weight: bold;
+        text-align: center;
+        margin: 1.3rem 0rem;
+    }
+    .subject--custom--card p{
+        margin: 0;
+        padding: 0;
+    }
+
+</style>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">لیست مضامین دیپارتمنت {{department.name}}</h3>
+                    <div class="row">
+                        <div class="col-lg-6 m-auto">
+                            <form action="" class="my-4" style="position: relative;">
+                                <input type="text" placeholder="جستجو بر اساس نام،‌تعداد کریدت و نوعیت مضمون..." name="query" class="form-control form-control-lg query" >
+                                <i class="bx bx-search query--icon"></i>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        {% for subject in subjects %}
+                            <div class="col-lg-3">
+                                <div class="subject--custom--card">
+                                    <h3>{{subject.subject}}</h3>
+                                    <p class="text-center">
+                                        <b>تعداد کریدت : {{subject.credit}}</b>
+                                    </p>
+                                    <p class="text-center">
+                                        <b> نوعیت : {{subject.subject_type}}</b>
+                                    </p>
+                                    <p class="mb-3 px-2 mt-2">
+                                        {{subject.description}}
+                                    </p>
+                                </div> 
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock content %}

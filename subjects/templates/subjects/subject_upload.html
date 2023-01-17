@@ -1,0 +1,143 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    آپلود
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">آپلود لیست مضامین</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">آپلود لیست مضامین</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<style>
+    
+    .drop-container {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px dashed #555;
+  color: #444;
+  cursor: pointer;
+  transition: background .2s ease-in-out, border .2s ease-in-out;
+}
+
+
+
+.drop-container:hover .drop-title {
+  color: #222;
+}
+
+.drop-title {
+  color: #444;
+  font-size: 20px;
+  height: 2rem;
+  font-weight: bold;
+  text-align: center;
+  transition: color .2s ease-in-out;
+}
+
+.not-visible{
+    display: none;
+}
+
+input[type=file] {
+  width: 350px;
+  max-width: 100%;
+  color: #444;
+  padding: 5px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #555;
+}
+
+input[type=file]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #084cdf;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+  background: #0d45a5;
+}
+
+</style>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="col alert alert-info">
+                            <h2>راهنما</h2>
+                    <p class="font-size-18">
+                        لطفا فایل تمپلت را از اینجا دانلود کنید. لیست شاگردان را آماده کرده و دوباره آپلود کنید. <span class="text-info">متوجه باشید که سطر اول را تغییر ندهید.</span>     
+                        <br>
+                        <a class="btn btn-outline-primary btn-lg mt-2" href="{% url 'subject-download-csv' %}">
+                            دانلود تمپلیت
+                            <i class="bx bx-download font-size-18 align-middle ml-2"></i>
+
+                        </a>
+                        
+                    </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <form method="POST" class="" action="{% url 'subject-upload' %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="images" class="drop-container">
+                                <span class="drop-title">
+                                    <i class="bx bx-upload"></i>
+                                </span>
+                                <input type="file" name="subject_file" id="scv_file" required>
+                                
+                              </label>
+                            <input type="submit" value="ارسال فایل" class="btn btn-primary btn-md font-size-15">
+                        </form>
+                    </div>
+                </div>
+                
+                
+                  
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("file_upload")
+    const upload_file = () => {
+        form.submit()
+    }
+    const input  = document.getElementById("scv_file")
+    const progress = document.getElementById("progress-bar")
+    input.addEventListener('change', () => {
+        progress.classList.remove("not-visible")
+        const data = input.files[0]
+        
+    })
+</script>
+{% endblock content %}

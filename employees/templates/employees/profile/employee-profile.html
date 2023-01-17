@@ -1,0 +1,358 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    پروفایل
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">صفحه پروفایل</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">پروفایل</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xl-4">
+        <div class="card overflow-hidden">
+            <div class="bg-soft-primary">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="text-primary p-3">
+                            <h5 class="text-primary">
+                                دوباره خوش آمدید {{employee.f_name}} - {{employee.l_name}}
+                            </h5>
+                            <p>
+                                {% for group in request.user.groups.all %}
+                                    {% if group.name == "instructors" %}
+                                        استاد
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-5 align-self-end">
+                        <img src="{% static 'assets/images/profile-img.png' %}" alt="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body pt-0">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="avatar-md profile-user-wid mb-4">
+                            <img src="{{employee.avatar.url}}" alt="" class="img-thumbnail rounded-circle">
+                        </div>
+                        <h5 class="font-size-15 text-truncate">{{employee.f_name}} - {{employee.l_name}}</h5>
+                        <p class="text-muted mb-0 text-truncate">
+                            {% for group in request.user.groups.all %}
+                                    {% if group.name == "instructors" %}
+                                        <span class="badge badge-pill font-size-15 badge-primary">
+                                            استاد
+                                        </span>
+                                    {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                    
+
+                    <div class="col-sm-8">
+                        <div class="pt-4">
+                           
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5 class="font-size-15">4+</h5>
+                                    <p class="text-muted mb-0">سابقه کاری</p>
+                                </div>
+                                <div class="col-4">
+                                    <h5 class="font-size-15">{{request.user.course_set.all.count}}</h5>
+                                    <p class="text-muted mb-0">کورس ها</p>
+                                </div>
+                                <div class="col-4">
+                                    <h5 class="font-size-15">ماستر</h5>
+                                    <p class="text-muted mb-0">تحصیلات</p>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'employee-detail' employee.pk %}"  class="btn btn-outline-dark btn-lg btn-block mt-4 mx-5">
+                        جزییات پروفایل
+                    </a>
+                    <a href="{% url 'work-experience' employee.id %}" class="btn btn-outline-secondary btn-lg btn-block mt-2 mx-5">
+                        سابقه کاری
+                    </a>
+                    <a href="{% url 'education-background' employee.id %}" class="btn btn-outline-primary btn-lg btn-block mt-2 mx-5">
+                        تحصیلات
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- end card -->
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">معلومات شخصی</h4>
+
+                <p class="text-muted mb-4">{{employee.bio}}</p>
+                <div class="table-responsive">
+                    <table class="table table-nowrap mb-0">
+                        <tbody>
+                            <tr>
+                                <th scope="row">نام کامل :</th>
+                                <td>{{employee.f_name}} {{employee.l_name}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">شماره تماس :</th>
+                                <td>{{employee.phone_number}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ایمیل آدرس :</th>
+                                <td>{{employee.user.email}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">آدرس :</th>
+                                <td>{{employee.address}}</td>
+                            </tr>
+                        </tbody>
+                    </table> 
+                    
+                </div>
+            </div>
+        </div>
+        <!-- end card -->
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-5">سابقه کاری شما</h4>
+                <div class="">
+                    <ul class="verti-timeline list-unstyled">
+                        {% for exp in experiences %}
+                        <li class="event-list active">
+                            <div class="event-timeline-dot">
+                                <i class="bx bx-left-arrow-circle bx-fade-left"></i>
+                            </div>
+                            <div class="media">
+                                <div class="mr-3">
+                                    <i class="bx bx-server h4 text-primary"></i>
+                                </div>
+                                <div class="media-body">
+                                    <div>
+                                        <h5 class="font-size-15"><a href="#" class="text-dark">{{exp.position}}</a></h5>
+                                        <span class="text-primary">{{exp.from_date|date:"Y"}} - {{exp.finish_date|date:"Y"}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% empty %}
+                        <p class="alert alert-warning text-center">
+                            لطفا فورم در رابطه به سابقه کاری تانرا تکمیل نمایید.
+                        </p>
+                        {% endfor %}
+                        
+                    </ul>
+                </div>
+
+            </div>
+        </div>  
+        <!-- end card -->
+        <!-- education -->
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-5">سابقه تحصیلی</h4>
+                <div class="">
+                    <ul class="verti-timeline list-unstyled">
+                        {% for edu in educations %}
+                        <li class="event-list active">
+                            <div class="event-timeline-dot">
+                                <i class="bx bx-left-arrow-circle bx-fade-left"></i>
+                            </div>
+                            <div class="media">
+                                <div class="mr-3">
+                                    <i class="bx bx-server h4 text-primary"></i>
+                                </div>
+                                <div class="media-body">
+                                    <div>
+                                        <h5 class="font-size-15"><a href="#" class="text-dark">{{edu.title}}</a></h5>
+                                        <span class="text-primary">{{edu.start_date|date:"Y"}} - {{edu.finish_date|date:"Y"}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% empty %}
+                        <p class="alert alert-warning text-center">
+                            لطفا فورم در رابطه به سابقه کاری تانرا تکمیل نمایید.
+                        </p>
+                        {% endfor %}
+                        
+                    </ul>
+                </div>
+
+            </div>
+        </div> 
+        <!-- end education -->
+    </div>         
+    
+    <div class="col-xl-8">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body">
+                                <p class="text-muted font-weight-medium">تمام کورس ها</p>
+                                <h4 class="mb-0">{{request.user.course_set.all.count}}</h4>
+                            </div>
+
+                            <div class="mini-stat-icon avatar-sm align-self-center rounded-circle bg-primary">
+                                <span class="avatar-title">
+                                    <i class="bx bx-book font-size-24"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body">
+                                <p class="text-muted font-weight-medium">تعداد رویدادهای این ماه</p>
+                                <h4 class="mb-0">12</h4>
+                            </div>
+
+                            <div class="avatar-sm align-self-center mini-stat-icon rounded-circle bg-primary">
+                                <span class="avatar-title">
+                                    <i class="bx bx-calendar font-size-24"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body">
+                                <p class="text-muted font-weight-medium">تعداد کل شاگردان</p>
+                                <h4 class="mb-0">30</h4>
+                            </div>
+
+                            <div class="avatar-sm align-self-center mini-stat-icon rounded-circle bg-primary">
+                                <span class="avatar-title">
+                                    <i class="bx bx-group font-size-24"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">تقسیم اوقات درسی</h4>
+                <div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ایام هفته</th>
+                                <th>شنبه</th>
+                                <th>یکشنبه</th>
+                                <th>دوشنبه</th>
+                                <th>سه شنبه</th>
+                                <th>چهار شنبه</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>پ ظ IS - A (1)</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td></td>
+                                <td></td>
+                                <td>پ ظ IS - A (1)</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>پ ظ IS - A (1)</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>پ ظ IS - A (1)</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td></td>
+                                <td>پ ظ IS - A (1)</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">کورس های من</h4>
+                <div class="table-responsive">
+                    <table class="table table-nowrap table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">نام کورس</th>
+                                <th scope="col">سیژن</th>
+                                <th scope="col">مضمون</th>
+                                <th scope="col">تعداد ماجول ها</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in courses %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{course.title}}</td>
+                                    <td>{{course.session.session|date:"Y"}} {{course.session.session_type}} </td>
+                                    <td>{{course.subject.subject}}</td>
+                                    <td>{{course.module_set.all.count}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

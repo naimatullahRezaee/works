@@ -1,0 +1,193 @@
+{% extends 'main.html' %}
+{% load widget_tweaks %}
+{% block title %} {% endblock title %}
+{% load static %}
+{% block page_title %}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">ثبت کارمند جدید</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">ثبت کارمند جدید</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<style>
+    .hidden {
+        position: absolute;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    input[type=checkbox]+label {
+        border: 2px solid rgb(77, 75, 75);
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    input[type=checkbox]:checked+label {
+        border: 3px solid darkblue;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">مشخصات کارمند</h4>
+
+                <form action="{% url 'register_employee' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">آی دی کارمند</label>
+                            <input type="text" name="emp_id" class="form-control form-control-lg" placeholder="آی دی"
+                                id="Id" required>
+                            <span class="icons Id_icon"></span>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">نام کارمند</label>
+                            <input type="text" name="name" class="form-control form-control-lg" placeholder="نام کارمند"
+                                id="username" required>
+                            <span class="icons username_icon"></span>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">تخلص کارمند</label>
+                            <input type="text" name="last_name" class="form-control form-control-lg"
+                                placeholder="تخلص کارمند" id="l_name" required>
+                            <span class="icons lname_icon"></span>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">نام پدر</label>
+                            <input type="text" name="father_name" class="form-control form-control-lg"
+                                placeholder="مراد" id="f_name" required>
+                            <span class="icons fname_icon"></span>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">جنسیت</label>
+                            <select name="gender" class="form-control form-control-lg" id="" required>
+                                <option value="">لطفا یک گزینه را انتخاب کنید</option>
+                                <option value="آقا">مرد</option>
+                                <option value="خانم">زن</option>    
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">تاریخ تولد</label>
+                            <input  name="dob" class="form-control form-control-lg" placeholder="تاریخ تولد" id="emp_date"> 
+                            <span  class="icons font-size-22 float-right far fa-calendar-alt"></span>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">شماره تماس</label>
+                            <input type="text" name="phone_number" class="form-control form-control-lg" id="phone_number"
+                                placeholder="شماره تماس کارمند " >
+                            <span class="icons phone_number_icon"></span>
+
+                        </div>
+
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">آدرس</label>
+                            <input type="text" name="address" class="form-control form-control-lg" id="address"
+                                placeholder="آدرس محل سکونت" >
+                            <span class="icons address_icon"></span>
+
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-lg-6">
+                            <span class="mb-4 font-size-17" style="color: green;">لطفا گروپ های مربوطه را مشخص کنید.
+                            </span>
+                            <br>
+
+                        {% for group in groups %}
+                            <input type="checkbox" value="{{group.name}}" class="hidden mt-2" name="group" id="{{group.id}}">
+                            <label for="{{group.id}}" class="mt-2">
+                                {{group.name}}
+                            </label>
+                            {% empty %}
+                            <p>هیچ گروپ فعلا موجود نیست. </p>
+                        {% endfor %}
+                        </div>
+                    </div>
+
+                    <h4 class="mt-5 mb-2">مشخصات حساب کارمند جدید</h4>
+                    <div class="row my-3">
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">ایمیل آدرس</label>
+                            <input type="email" name="email" class="form-control form-control-lg"
+                                placeholder="آدرس ایمیل" id="email" required>
+                            <span class="icons email_icon"></span>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">نام کاربری</label>
+                            <input type="text" name="username" class="form-control form-control-lg"
+                                placeholder="نام کاربری" id="En_username" required>
+                            <span class="icons enUName_icon"></span>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">رمز ورود</label>
+                            <input type="password" name="password" class="form-control form-control-lg"
+                                placeholder="رمز ورود" id="password1" required>
+                            <span class="icons_pass fas fa-eye-slash p1" id="icon_pass_hide1"></span>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="font-size-18">تکرار رمز ورود</label>
+
+                            <input type="password" name="passwordConfirm" class="form-control form-control-lg"
+                                placeholder="تکرار رمز ورود" id="password2" required>
+                            <span class="icons_pass fas fa-eye-slash p1" id="icon_pass_hide2"></span>
+
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg mt-2">ذخیره کردن
+                        <i class="bx bx-save font-size-22 align-middle ml-1"></i>
+                    </button>
+                    <button class="btn btn-success btn-lg mt-2">ذخیره و ثبت کارمند دیگر
+                        <i class="bx bx-save font-size-22 align-middle ml-1"></i>
+                    </button>
+                    <button class="btn btn-dark btn-lg mt-2">
+                        آپلود لیست کارمندان
+                        <i class="bx bx-upload font-size-22 align-middle ml-1"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="{% static 'assets/css/validation.css' %}">
+<script src="{% static 'assets/js/validation/validationEmp1.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+
+        $(document).ready(function () {
+            $("#emp_date").pDatepicker({
+                format: 'YYYY-MM-DD',
+                initialValue: false,
+                calendar: {
+                    persian: {
+                        locale: 'en'
+                    }
+                }
+            });
+        })
+
+    </script>
+
+
+{% endblock content  %}

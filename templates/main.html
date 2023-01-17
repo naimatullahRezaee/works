@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    
+<!-- Mirrored from themesbrand.com/skote/layouts/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 06 Jan 2021 07:30:11 GMT -->
+<head>
+        
+        <meta charset="utf-8" />
+        <title>
+            {% if title %}
+                {% block title %} {% endblock title %}
+            {% else %}
+                سیستم مدیریتی فاکولته کمپیوتر ساینس
+            {% endif %}
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesbrand" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'assets/images/favicon.ico' %}">
+        
+        <style>
+            @font-face {
+                font-family: "IranSanse";
+                src: local("IranSanse"), 
+                url("{% static 'assets/fonts/IRANSansWeb.eot' %}") format("eot"),
+                url("{% static 'assets/fonts/IRANSansWeb.ttf' %}") format("ttf"),
+                url("{% static 'assets/fonts/IRANSansWeb.woff' %}") format("woff"),
+                url("{% static 'assets/fonts/IRANSansWeb.woff2' %}") format("woff2");
+            }
+        </style>
+
+        {% include 'links/css.html' %}
+
+        
+        
+    </head>
+
+    
+    <body data-sidebar="dark">
+      
+
+    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            
+            {% include 'components/navbar.html' %}
+
+            <!-- ========== Left Sidebar Start ========== -->
+            {% include 'components/sidebar.html' %}
+            <!-- Left Sidebar End -->
+
+            
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        {% block page_title %}
+
+                        {% endblock page_title %}
+{% comment %} 
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.tags == "success" %}
+                                    <div class="row">
+                                        <div class="col-lg-6 m-auto">
+                                            <div class="alert alert-primary alert-dismissible font-size-18 fade show" role="alert">
+                                                <i class="mdi mdi-bullseye-arrow mr-2"></i>
+                                                {{message}}
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    # kkkk {% endcomment %}
+                                    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+                        
+                                    <script>
+                                        {% if messages %}
+                            document.addEventListener("DOMContentLoaded", function(event) {
+                                toastr.options = { "closeButton": true, "debug": false, "newestOnTop": true,
+                                    "progressBar": true, "positionClass": "toast-top-center", "preventDuplicates": true,
+                                    "onclick": null, "showDuration": "300", "hideDuration": "1000", "timeOut": "5000",
+                                    "extendedTimeOut": "1000", "showEasing": "swing", "hideEasing": "linear",
+                                    "showMethod": "fadeIn", "hideMethod": "fadeOut" };
+                                {% autoescape off %}
+                                    {% for msg in messages %}
+                                        {% if msg.tags == "success" %}
+                                        toastr.{{ msg.level_tag }}("{{ msg }}");
+                                        {% else %}
+                                        toastr.{{ msg.level_tag }}("{{ msg }}");
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endautoescape %}
+                            });
+                        {% endif %}
+                                    </script>
+
+{% comment %} 
+                                {% elif message.tags == "warning" %}
+                                <div class="row">
+                                    <div class="col-lg-6 m-auto">
+                                        <div class="alert alert-warning alert-dismissible font-size-18 fade show" role="alert">
+                                            <i class="mdi mdi-alert-outline mr-2"></i>
+                                            {{message}}
+                                            <button type="button" class="close font-size-20" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% elif message.tags == "error" %}
+                                <div class="row">
+                                    <div class="col-lg-6 m-auto">
+                                        <div class="alert alert-danger alert-dismissible font-size-18  fade show" role="alert">
+                                            <i class="mdi mdi-block-helper mr-2"></i>
+                                            {{message}}
+                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %} {% endcomment %}
+                       
+                        {% block content %}
+
+                        {% endblock content %}
+                    </div>
+                    <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+
+                <!-- Modal -->
+                
+                <!-- end modal -->
+
+            {% include 'components/footer.html' %}
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+    
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        {% include 'links/js.html' %}
+    </body>
+
+</html>

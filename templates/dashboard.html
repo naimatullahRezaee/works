@@ -1,0 +1,774 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    داشبورد
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">صفحه اصلی</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">صفحه اصلی</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  
+{% for group in request.user.groups.all %}
+    {% if group.name == "instructors" %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="media">
+                                <div class="mr-3">
+                                    <img src="{{request.user.employee.avatar.url}}" alt="" class="avatar-md rounded-circle img-thumbnail">
+                                </div>
+                                <div class="media-body align-self-center">
+                                    <div class="text-muted">
+                                        <p class="mb-2">به داشبورد خوش آمدید</p>
+                                        <h5 class="mb-1">{{request.user.employee.f_name}} - {{request.user.employee.l_name}} </h5>
+                                        <p class="mb-0">
+                                            {% for group in request.user.groups.all %}
+                                            <li class="list-inline-item"><a href="#" class="badge badge-dark font-size-14 mt-2">{{group.name}}</a></li>
+                                            {% endfor %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="col-lg-4 align-self-center">
+                            <div class="text-lg-center mt-4 mt-lg-0">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div>
+                                            <p class="text-muted text-truncate mb-2 font-size-17">سابقه کاری</p>
+                                            <h5 class="mb-0 font-size-16">+{{years_of_exp}}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div>
+                                            <p class="text-muted text-truncate mb-2 font-size-17">تعداد کورس ها</p>
+                                            <h5 class="mb-0 font-size-16">{{request.user.course_set.all.count}}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div>
+                                            <p class="text-muted text-truncate mb-2 font-size-17 ">رویدادها</p>
+                                            <h5 class="mb-0">0</h5>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div>
+                                            <p class="text-muted text-truncate mb-2 font-size-17 ">شاگردان</p>
+                                            <h5 class="mb-0">0</h5>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="col-lg-4 d-none d-lg-block">
+                            <div class="clearfix  mt-4 mt-lg-0">
+                                <div class="dropdown float-right">
+                                    <button class="btn btn-primary dropdown-toggle font-size-16" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="bx bxs-cog align-middle mr-1"></i> تنظیمات
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right font-size-16">
+                                        <a class="dropdown-item" href="{% url 'employee-profile' %}">پرفایل</a>
+                                        <a class="dropdown-item" href="#">تغییر رمز ورود</a>
+                                        <a class="dropdown-item" href="#">تایید ایمیل</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="clearfix">
+                        
+                        <h4 class="mb-4">لیست کورس ها</h4>
+                    </div>
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        
+                        <ol class="carousel-indicators">
+                            {% for course in courses %}
+                                {% if forloop.counter == 1 %}
+                                <li data-target="#carouselExampleIndicators" data-slide-to="1" class="active"></li>
+                                {% else %}
+                                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ol>
+                        <div class="carousel-inner" role="listbox">
+                            {% for course in courses %}
+                                {% if forloop.counter == 1 %}
+                                <div class="row carousel-item active">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="text-muted">
+                                                <div class="mb-4">
+                                                    <h3>{{course.title}}</h3>
+                                                    <h6>
+                                                        شاگردان : 
+                                                        {{course.students.all.count}}</h6>
+                                                    <div>
+                                                        ماجول ها : 
+                                                        <span class="badge badge-soft-success font-size-12 mr-1"> {{course.module_set.all.count}} </span>
+                                                        </div>
+                                                </div>
+                    
+                                                <div>
+                                                    <a href="{% url 'course-content' course.slug course.module_set.first.pk  %}" class="btn btn-primary font-size-16 waves-effect waves-light btn-sm">
+                                                        <i class="mdi mdi-chevron-right mr-1 font-size-18 align-middle"></i>
+                                                         جزییات کورس 
+                                                    </a>
+                                                </div>
+                                                
+                                                
+                                                
+                                            </div>
+                                        </div>
+                    
+                                        <div class="col-lg-8">
+                                            <img src="{{course.coursedetail.image.url}}" style="width: 100%;" alt="">
+                                            <!-- <div id="line-chart" class="apex-charts" dir="ltr"></div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="row carousel-item">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="text-muted">
+                                                <div class="mb-4">
+                                                    <h3>{{course.title}}</h3>
+                                                    <h6>
+                                                        شاگردان : 
+                                                        {{course.students.all.count}}</h6>
+                                                    <div>
+                                                        ماجول ها : 
+                                                        <span class="badge badge-soft-success font-size-12 mr-1"> {{course.module_set.all.count}} </span>
+                                                        </div>
+                                                </div>
+                    
+                                                <div>
+                                                    <a href="{% url 'course-content' course.slug course.module_set.first.pk %}" class="btn btn-primary font-size-16 waves-effect waves-light btn-sm">
+                                                        <i class="mdi mdi-chevron-right mr-1 font-size-18 align-middle"></i>
+                                                        جزییات کورس 
+                                                    </a>
+                                                </div>
+                                                
+                                                
+                                                
+                                            </div>
+                                        </div>
+                    
+                                        <div class="col-lg-8">
+                                            <img src="{{course.coursedetail.image.url}}" style="width: 100%;" alt="">
+                                            <!-- <div id="line-chart" class="apex-charts" dir="ltr"></div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% empty %}
+                                <p class="alert alert-info text-center font-size-18">شما تا هنوز کدام کورسی ایجاد نکرده اید.
+
+                                    <br>
+                                    <span class="text-small font-size-14">
+                                        برای ایجاد کورس جدید لطفا به بخش کورس ها مراجعه نمایید.
+                                    </span>
+                                </p>
+                                
+                            {% endfor %}
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">وضعیت کورس ها</h4>
+                    <div>
+                        <canvas id="course_status" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="clearfix">
+                        <h4 class="card-title mb-4">کورس های اخیرا بازدید شده</h4>
+                    </div>
+    
+                    
+    
+                    <div class="table-responsive mt-4">
+                        <table class="table table-centered mb-0">
+                            <tbody>
+                                
+                                {% for course in courses %}
+                                <tr>
+                                    <td>
+                                        <h5 class="font-size-16 mb-1">{{course.title}}</h5>
+                                        <p class="text-muted mb-0">{{course.subject.subject}}</p>
+                                    </td>
+    
+                                    <td>
+                                        <div id="radialchart-1" class="apex-charts"></div>
+                                    </td>
+                                    <td>
+                                        <p class="text-muted mb-1">وضعیت</p>
+                                        <h5 class="mb-0">37 %</h5>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">رویدادها</h4>
+    
+                    <ul class="nav nav-pills bg-light rounded">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">در جریان</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">نزدیک</a>
+                        </li>
+                    </ul>
+    
+                    <div class="mt-4">
+                        <div data-simplebar style="max-height: 250px;">
+                        
+                            <div class="table-responsive">
+                                <table class="table table-nowrap table-centered table-hover mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck1" checked>
+                                                    <label class="custom-control-label" for="customCheck1"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h5 class="text-truncate font-size-14 mb-1"><a href="#" class="text-dark">Skote Saas Dashboard</a></h5>
+                                                <p class="text-muted mb-0">Assigned to Mark</p>
+                                            </td>
+                                            <td style="width: 90px;">
+                                                <div>
+                                                    <ul class="list-inline mb-0 font-size-16">
+                                                        <li class="list-inline-item">
+                                                            <a href="#" class="text-success p-1"><i class="bx bxs-edit-alt"></i></a>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <a href="#" class="text-danger p-1"><i class="bx bxs-trash"></i></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="card-footer bg-transparent border-top">
+                    <div class="text-center">
+                        <a href="javascript: void(0);" class="btn btn-primary waves-effect waves-light"> ایجاد رویداد جدید</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body border-bottom">
+                    <h2 class="card-title mb-4">لیست پیام ها</h2>
+                    <div class="chat-leftsidebar-nav">
+                        <ul class="nav nav-pills nav-justified">
+                            <li class="nav-item">
+                                <a href="#chat" data-toggle="tab" aria-expanded="true" class="nav-link active">
+                                    <i class="bx bx-chat font-size-20 d-sm-none"></i>
+                                    <span class="d-none d-sm-block">چت</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#group" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                    <i class="bx bx-group font-size-20 d-sm-none"></i>
+                                    <span class="d-none d-sm-block">گروپ ها</span>
+                                </a>
+                            </li>
+                            
+                        </ul>
+                        <div class="tab-content py-4">
+                            <div class="tab-pane show active" id="chat">
+                                <div>
+                                    <h5 class="font-size-14 mb-3">Recent</h5>
+                                    <ul class="list-unstyled chat-list" data-simplebar style="max-height: 410px;">
+                                        <li class="active">
+                                            <a href="#">
+                                                <div class="media">
+                                                    <div class="align-self-center mr-3">
+                                                        <i class="mdi mdi-circle font-size-10"></i>
+                                                    </div>
+                                                    <div class="align-self-center mr-3">
+                                                        <img src="{% static 'assets/images/users/avatar-2.jpg' %}" class="rounded-circle avatar-xs" alt="">
+                                                    </div>
+                                                    
+                                                    <div class="media-body overflow-hidden">
+                                                        <h5 class="text-truncate font-size-14 mb-1">محمد شعیب زرین خیل</h5>
+                                                        <p class="text-truncate mb-0">Hey! there I'm available</p>
+                                                    </div>
+                                                    <div class="font-size-11">05 min</div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+    
+                            <div class="tab-pane" id="group">
+                                <h5 class="font-size-14 mb-3">گروپ</h5>
+                                <ul class="list-unstyled chat-list" data-simplebar style="max-height: 410px;">
+                                    <li>
+                                        <a href="#">
+                                            <div class="media align-items-center">
+                                                <div class="avatar-xs mr-3">
+                                                    <span class="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                        G
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="media-body">
+                                                    <h5 class="font-size-14 mb-0">General</h5>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+    
+                                    <li>
+                                        <a href="#">
+                                            <div class="media align-items-center">
+                                                <div class="avatar-xs mr-3">
+                                                    <span class="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                        R
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="media-body">
+                                                    <h5 class="font-size-14 mb-0">Reporting</h5>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+    
+                                    <li>
+                                        <a href="#">
+                                            <div class="media align-items-center">
+                                                <div class="avatar-xs mr-3">
+                                                    <span class="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                        M
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="media-body">
+                                                    <h5 class="font-size-14 mb-0">Meeting</h5>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+    
+                                    <li>
+                                        <a href="#">
+                                            <div class="media align-items-center">
+                                                <div class="avatar-xs mr-3">
+                                                    <span class="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                        A
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="media-body">
+                                                    <h5 class="font-size-14 mb-0">Project A</h5>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+    
+                                    <li>
+                                        <a href="#">
+                                            <div class="media align-items-center">
+                                                <div class="avatar-xs mr-3">
+                                                    <span class="avatar-title rounded-circle bg-soft-primary text-primary">
+                                                        B
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="media-body">
+                                                    <h5 class="font-size-14 mb-0">Project B</h5>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+    {% elif group.name == "managers" %}
+    
+
+    <div class="row">
+        <div class="col-lg-10 m-auto">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="media">
+                                <div class="mr-3">
+                                    <img src="{{request.user.employee.avatar.url}}" alt="" class="avatar-md rounded-circle img-thumbnail">
+                                </div>
+                                <div class="media-body align-self-center">
+                                    <div class="text-muted">
+                                        <p class="mb-2">به پنل مدیریتی خوش آمدید</p>
+                                        <h5 class="mb-1">{{request.user.employee.f_name}} - {{request.user.employee.l_name}}</h5>
+                                        <p class="mb-0">
+                                            {% for group in request.user.groups.all %}
+                                                {% if group.name == "managers" %}
+                                                    <span class="badge badge-primary px-2 py-1 font-size-16">مدیر</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 align-self-center">
+                            <div class="text-lg-center mt-4 mt-lg-0">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div>
+                                            <p class="text-muted text-truncate mb-2">سطح تحصیلی</p>
+                                            <h5 class="mb-0">ماستر</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div>
+                                            <p class="text-muted text-truncate mb-2">تجربه کاری</p>
+                                            <h5 class="mb-0">0</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div>
+                                            <p class="text-muted text-truncate mb-2">دیپارتمنت</p>
+                                            <h5 class="mb-0">سیستم های معلوماتی</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 d-none d-lg-block">
+                            <div class="clearfix  mt-4 mt-lg-0">
+                                <div class="dropdown float-right">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="bx bxs-cog align-middle mr-1"></i> تنظیمات
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">تغییر رمز ورود</a>
+                                        <a class="dropdown-item" href="#">پروفایل</a>
+                                        <!-- <a class="dropdown-item" href="#"></a> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-10 m-auto">
+        <div class="row">
+            <div class="col-lg-3">
+                <a href="#">
+                    <div class="card border border-secondary">
+                        <div class="card-header bg-transparent border-secondary">
+                            <h4 class="my-0 text-dark">
+                                <i class="bx bx-group font-size-20 mr-3"></i>لیست شاگردان</h4>
+                        </div>
+                        <div class="card-body">
+                            <h2 class="mt-0" style="padding: 0px; margin: 0px;">{{all_students}}</h2>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3">
+                <a href="#" class="box">
+                    <div class="card border border-secondary">
+                        <div class="card-header bg-transparent border-secondary">
+                            <h4 class="my-0 text-dark">
+                                <i class="bx bx-sad font-size-20 mr-3"></i>لیست محرومین</h4>
+                        </div>
+                        <div class="card-body">
+                            <h2 class="mt-0" style="padding: 0px; margin: 0px;">{{failed}}</h2>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3">
+                <a href="#">
+                    <div class="card border border-secondary">
+                        <div class="card-header bg-transparent border-secondary">
+                            <h4 class="my-0 text-dark">
+                                <i class="mdi mdi-bullseye-arrow font-size-20 mr-3"></i>لیست چانس ها</h4>
+                        </div>
+                        <div class="card-body">
+                            <h2 class="mt-0" style="padding: 0px; margin: 0px;">{{chance}}</h2>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3">
+                <a href="#">
+                    <div class="card border border-secondary">
+                        <div class="card-header bg-transparent border-secondary">
+                            <h4 class="my-0 text-dark">
+                                <i class="mdi mdi-human-female-female font-size-20 mr-3"></i>لیست شاگردان اناث</h4>
+                        </div>
+                        <div class="card-body">
+                            <h2 class="mt-0" style="padding: 0px; margin: 0px;">{{women}}</h2>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-10 m-auto">
+        <div class="row">
+            <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title my-2">لیست شاگردان</h3>
+                            <table class="table table-md table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>شماره</th>
+                                        <th>نام کامل</th>
+                                        <th>نام پدر</th>
+                                        <th>دیپارتمنت</th>
+                                        <th>سمستر</th>
+                                        <th>جنسیت</th>
+                                        <th>عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for student in students %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{student.f_name}} {{student.l_name}}</td>
+                                        <td>{{student.father_name}}</td>
+                                        <td>{{student.department}}</td>
+                                        <td>{{student.semester}}</td>
+                                        <td>{{student.gender}}</td>
+                                        <td>
+                                            <button class="btn btn-outline-primary btn-sm">
+                                                <i class="bx bx-edit font-size-18 align-middle "></i>
+                                            </button>
+                                            <button class="btn btn-outline-info btn-sm">
+                                                <i class='bx bx-dots-horizontal-rounded font-size-18 align-middle' ></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="text-center " dir="ltr">
+                                <ul class="pagination justify-content-center pagination-rounded">
+                                    <li class="page-item disabled">
+                                        <a href="#" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">1</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a href="#" class="page-link">2</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">3</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">...</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">10</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title my-3">لیست مضامین</h3>
+                        <table class="table table-md table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>شماره</th>
+                                    <th>نام مضمون</th>
+                                    <th>مقدار کریدیت</th>
+                                    <th>نوعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subject in subjects %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{subject.subject}}</td>
+                                    <td>{{subject.credit}}</td>
+                                    <td>{{subject.subject_type}}</td>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm">
+                                            <i class="bx bx-edit font-size-18 align-middle "></i>
+                                        </button>
+                                        <button class="btn btn-outline-info btn-sm">
+                                            <i class='bx bx-dots-horizontal-rounded font-size-18 align-middle' ></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="text-center " dir="ltr">
+                            <ul class="pagination justify-content-center pagination-rounded">
+                                <li class="page-item disabled">
+                                    <a href="#" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link">1</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a href="#" class="page-link">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link">...</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link">10</a>
+                                </li>
+                                <li class="page-item">
+                                    <a href="#" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% endif %}
+{% endfor %}
+
+
+<script>
+    var config = {
+      type: 'bar',
+      data: {
+        datasets: [{
+          data: {{ data|safe }},
+          backgroundColor:  [
+            '#005e7c', '#001242', '#0094c6', '#000932', '#023749'
+          ],
+          label: 'Course Status'
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            },
+            scaleLabel: {
+        display: true,
+        labelString: 'نمبر هفته'
+      },
+      
+            
+        }]
+    }
+  },
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('course_status').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+</script>
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    جزییات کارمند {{employee.f_name}} {{employee.l_name}}
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">جزییات کارمند {{employee.f_name}} {{employee.l_name}}</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{%  url 'admin-dashboard' %}">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{%  url 'department-list' %}">لیست دیپارتمنت ها</a></li>
+                    
+                    <li class="breadcrumb-item active">جزییات کارمند {{employee.f_name}} {{employee.l_name}}</h4></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-lg-12 m-auto">
+            <div class="card">
+                <div class="card-body rounded shadow-lg" style="border: 1px solid darkgray;">
+                    <div class="row mx-3">
+                        <div class="col-lg-6">
+                            <h3 class="card-title">مشخصات شخصی</h3>
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="font-size-18">آی دی کارت : </th>
+                                        <td class="font-size-17">{{employee.cart_number}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="font-size-18">نام : </th>
+                                        <td class="font-size-17">{{employee.f_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="font-size-18">تخلص : </th>
+                                        <td class="font-size-17">{{employee.l_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="font-size-18">نام پدر : </th>
+                                        <td class="font-size-17">{{employee.father_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="font-size-18">موقعیت : </th>
+                                        <td class="font-size-17">
+                                        {% for group in employee.user.groups.all %}
+                                            <span class="badge badge-light badge-pill font-size-17">{{group.name}}</span>
+                                        {% endfor %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="font-size-18">آدرس : </th>
+                                        <td class="font-size-17">{{employee.address}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="font-size-18">شماره تماس : </th>
+                                        <td class="font-size-17">{{employee.phone_number}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="font-size-18">ایمیل آدرس : </th>
+                                        <td class="font-size-17">{{employee.user.email}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="font-size-18">حالت : </th>
+                                        <td class="font-size-17">
+                                            <span class="badge badge-success badge-pill font-size-17">{{employee.status}}</span>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="col-lg-6">
+                            <img src="{{employee.avatar.url}}" style="width: 200px; height: 200px;" class="rounded-lg avatar-xl float-right" alt="">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row mx-3">
+                        <div class="col-lg-4 border">
+                            <h3 class="card-title my-2">سابقه کاری کارمند</h3>
+                            <table class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>شماره</th>
+                                        <th>شرکت / کمپنی</th>
+                                        <th>عنوان وظیفه</th>
+                                        <th>مدت کاری</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for exp in employee.user.experience_set.all %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{exp.org}}</td>
+                                        <td>{{exp.position}}</td>
+                                        <td>{{exp.years}} سال</td>
+                                    </tr>
+                                    {% empty %}
+                                    <p class="alert alert-info text-center font-size-18">هیچ موردی یافت نشد.</p>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-lg-4 border ">
+                            <h3 class="card-title my-2 ">سوابق تحصیلی کارمند</h3>
+                            <table class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>شماره</th>
+                                        <th>مقطع تحصیلی</th>
+                                        <th>دانشگاه</th>
+                                        <th>تاریخ ختم</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for edu in employee.user.education_set.all %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{edu.title}}</td>
+                                        <td>{{edu.university}}</td>
+                                        <td>{{edu.finish_date}} سال</td>
+                                    </tr>
+                                    {% empty %}
+                                    <p class="alert alert-info text-center font-size-18">هیچ موردی یافت نشد.</p>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-lg-4 border">
+                            <h3 class="card-title my-2">لیست کورس ها</h3>
+                            <table class="table-sm table-bordered table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>شماره</th>
+                                        <th>نام کورس</th>
+                                        <th>مضمون</th>
+                                        <th>سمستر</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for course in employee.user.course_set.all %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{course.title}}</td>
+                                        <td>{{course.subject.subject}}</td>
+                                        <td>{{course.subject.semester}}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <p class="alert alert-info text-center font-size-18">هیچ موردی یافت نشد.</p>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <br>
+                    <button class="btn btn-success btn-lg mt-3">دانلود
+                        <i class="bx bx-download font-size-20 align-middle ml-2"></i>
+                    </button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

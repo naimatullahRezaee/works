@@ -1,0 +1,486 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    داشبورد
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">داشبورد</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">داشبورد</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="media">
+                            <div class="mr-3">
+                                <img src="{{student.avatar.url}}" alt="" class="avatar-md rounded-circle img-thumbnail">
+                            </div>
+                            <div class="media-body align-self-center">
+                                <div class="text-muted">
+                                    <p class="mb-2">به پنل مدیریتی خود خوش آمدید</p>
+                                    <h5 class="mb-1">{{student.f_name}} {{student.l_name}}</h5>
+                                    <p class="mb-0">
+                                        {% for group in request.user.groups.all %}
+                                            <span class="badge badge-primary font-size-14 mt-2">{{group.name}}</span>
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 align-self-center">
+                        <div class="text-lg-center mt-4 mt-lg-0">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div>
+                                        <p class="text-muted text-truncate mb-2">دیپارتمنت</p>
+                                        <h5 class="mb-0">{{student.department}}</h5>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div>
+                                        <p class="text-muted text-truncate mb-2">سمستر</p>
+                                        <h5 class="mb-0">{{student.semester}}</h5>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div>
+                                        <p class="text-muted text-truncate mb-2">سکشن</p>
+                                        <h5 class="mb-0">{{student.section}}</h5>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 d-none d-lg-block">
+                        <div class="clearfix  mt-4 mt-lg-0">
+                            <div class="dropdown float-right">
+                                <button class="btn btn-primary dropdown-toggle font-size-18" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bx bxs-cog align-middle mr-1"></i> تنظیمات
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item font-size-16" href="{% url 'student-profile' %}">پروفایل</a>
+                                    <a class="dropdown-item font-size-16" href="{% url 'verify_email' %}">تایید ایمیل آدرس</a>
+                                    <a class="dropdown-item font-size-16" href="{% url 'change-password' %}">تغییر رمز ورود</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-sm-3">
+                <a href="{% url 'my-courses' 1 %}">
+                    <div class="card dashboard-badges">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="avatar-xs mr-3">
+                                    <span class="avatar-title rounded-circle bg-soft-primary text-primary font-size-18">
+                                        <i class="bx bx-copy-alt"></i>
+                                    </span>
+                                </div>
+                                <h5 class="font-size-17 mb-0">تعداد کورس ها</h5>
+                            </div>
+                            <div class="text-muted mt-4">
+                                <h4>{{courses}} <i class="mdi mdi-chevron-up ml-1 text-success"></i></h4>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+
+            <div class="col-sm-3">
+                <a href="{% url 'semester-report' request.user.student.pk %}">
+                    <div class="card dashboard-badges">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="avatar-xs mr-3">
+                                    <span class="avatar-title rounded-circle bg-soft-primary text-primary font-size-18">
+                                        <i class="bx bx-archive-in"></i>
+                                    </span>
+                                </div>
+                                <h5 class="font-size-14 mb-0">مجموع نمرات</h5>
+                            </div>
+                            <div class="text-muted mt-4">
+                                <h4>{{total_score}} <i class="mdi mdi-chevron-up ml-1 text-success"></i></h4>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-sm-3">
+                <a href="{% url 'semester-report' request.user.student.pk %}">
+                    <div class="card dashboard-badges">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="avatar-xs mr-3">
+                                    <span class="avatar-title rounded-circle bg-soft-primary text-primary font-size-18">
+                                        <i class="bx bx-purchase-tag-alt"></i>
+                                    </span>
+                                </div>
+                                <h5 class="font-size-14 mb-0">فیصدی نمرات</h5>
+                            </div>
+                            <div class="text-muted mt-4">
+                                <h4> % {{percentage|floatformat:"2"}}<i class="mdi mdi-chevron-up ml-1 text-success"></i></h4>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-3">
+                <a href="{% url 'semester-report' request.user.student.pk %}">
+                    <div class="card dashboard-badges">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="avatar-xs mr-3">
+                                    <span class="avatar-title rounded-circle bg-soft-primary text-primary font-size-18">
+                                        <i class="bx bx-plus"></i>
+                                    </span>
+                                </div>
+                                <h5 class="font-size-14 mb-0">مجموع کریدیت ها</h5>
+                            </div>
+                            <div class="text-muted mt-4">
+                                <h4>{{total_credits}}<i class="mdi mdi-chevron-up ml-1 text-success"></i></h4>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!-- end row -->
+    </div>
+</div>
+
+<!-- list of courses and scores -->
+<div class="row">
+    <div class="col-xl-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="clearfix">
+                    
+                    <h4 class="mb-4">لیست کورس ها</h4>
+                </div>
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    
+                    <ol class="carousel-indicators">
+                        {% for course in my_courses %}
+                            {% if forloop.counter == 1 %}
+                            <li data-target="#carouselExampleIndicators" data-slide-to="1" class="active"></li>
+                            {% else %}
+                            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ol>
+                    <div class="carousel-inner" role="listbox">
+                        {% for course in my_courses %}
+                            {% if forloop.counter == 1 %}
+                            <div class="row carousel-item active">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="text-muted">
+                                            <div class="mb-4">
+                                                <h3>{{course.title}}</h3>
+                                                <h6>
+                                                    شاگردان : 
+                                                    {{course.students.all.count}}</h6>
+                                                <div>
+                                                    ماجول ها : 
+                                                    <span class="badge badge-soft-success font-size-12 mr-1"> {{course.module_set.all.count}} </span>
+                                                    </div>
+                                            </div>
+                
+                                            <div>
+                                                <a href="{% url 'course-content' course.slug course.module_set.first.pk %}" class="btn btn-primary font-size-16 waves-effect waves-light btn-sm">
+                                                    <i class="mdi mdi-chevron-right mr-1 font-size-18 align-middle"></i>
+                                                    جزییات کورس 
+                                                </a>
+                                            </div>
+                                            
+                                            
+                                            
+                                        </div>
+                                    </div>
+                
+                                    <div class="col-lg-8">
+                                        <img src="{{course.coursedetail.image.url}}" style="width: 100%;" alt="">
+                                        <!-- <div id="line-chart" class="apex-charts" dir="ltr"></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="row carousel-item">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="text-muted">
+                                            <div class="mb-4">
+                                                <h3>{{course.title}}</h3>
+                                                <h6>
+                                                    شاگردان : 
+                                                    {{course.students.all.count}}</h6>
+                                                <div>
+                                                    ماجول ها : 
+                                                    <span class="badge badge-soft-success font-size-12 mr-1"> {{course.module_set.all.count}} </span>
+                                                    </div>
+                                            </div>
+                
+                                            <div>
+                                                <a href="{% url 'course-content' course.slug course.module_set.first.pk %}" class="btn btn-primary font-size-16 waves-effect waves-light btn-sm">
+                                                    <i class="mdi mdi-chevron-right mr-1 font-size-18 align-middle"></i>
+                                                    جزییات کورس 
+                                                </a>
+                                            </div>
+                                            
+                                            
+                                            
+                                        </div>
+                                    </div>
+                
+                                    <div class="col-lg-8">
+                                        <img src="{{course.coursedetail.image.url}}" style="width: 100%;" alt="">
+                                        <!-- <div id="line-chart" class="apex-charts" dir="ltr"></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% empty %}
+                            <p class="alert alert-info text-center font-size-18">
+                                شما در حال حاضر عضو کدام کورس نیستید. برای عضویت به لیست کورس ها مراجعه کنید.
+                                <a href="{% url 'relevant-course' %}">لیست کورس ها</a>
+                            </p>
+                        {% endfor %}
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">نمرات</h4>
+
+                <canvas id="result-radar-chart" height="300px"></canvas>
+
+            
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end of courses and scores -->
+
+
+<div class="row">
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="clearfix">
+                    <h4 class="card-title mb-4">لیست کورس های خوانده شده</h4>
+                </div>
+
+                
+
+                <div class="table-responsive mt-4">
+                    <table class="table table-centered table-sm table-striped table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>نام کورس</th>
+                                <th>مقدار کریدیت</th>
+                                <th>سمستر</th>
+                                <th>چانس</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in passed_courses %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{course.subject}}</td>
+                                    <td>{{course.subject.credit}}</td>
+                                    <td>{{course.subject.semester.semester_name}}</td>
+                                    <td>{{course.chances}}</td>
+                                </tr>
+                            {% empty %}
+                                <p class="alert alert-info text-center font-size-16">
+                                    شما هنوز کورسی را تمام نکرده اید.
+                                </p>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-4">رویدادها</h4>
+
+                <ul class="nav nav-pills bg-light rounded">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">جاری</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">به زودی</a>
+                    </li>
+                </ul>
+
+                <div class="mt-4">
+                    <div data-simplebar style="max-height: 250px;">
+                    
+                        <div class="table-responsive">
+                            <table class="table table-nowrap table-centered table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>شماره</th>
+                                        <th>عنوان رویداد</th>
+                                        <th>تاریخ ایجاد</th>
+                                        <th>تاریخ ختم</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for event in events %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{event.title}}</td>
+                                            <td>{{event.start_date|date:"Y m, l"}}</td>
+                                            <td>{{event.end_date|date:"Y m, l"}}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <p class="alert alert-info text-center font-size-16">
+                                            هنوز رویدادی ندارید
+                                        </p>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer bg-transparent border-top">
+                <div class="text-center">
+                    <a href="javascript: void(0);" class="btn btn-primary waves-effect waves-light"> رویداد جدید</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="clearfix">
+                    <h4 class="card-title mb-4">لیست پیام ها</h4>
+                </div>
+
+                
+
+                <div class="table-responsive mt-4">
+                    <table class="table table-centered mb-0">
+                        <p class="alert alert-info text-center font-size-15">
+                            صندوق دریافت شما خالی است.
+                        </p>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+<script>
+
+    var config = {
+      type: 'bar',
+      data: {
+        datasets: [{
+          data: {{ data|safe }},
+          lineTension : 0.3,
+          label : "subjects",
+          backgroundColor:  [
+            '#005e7c', '#001242', '#0094c6', '#000932', '#023749'
+          ],
+        }],
+        labels: {{ label|safe }}
+      },
+      options: {
+        layout: {
+      padding: {
+        left: 10,
+        right: 25,
+        top: 25,
+        bottom: 0
+      }
+    },
+        responsive: true,
+        scales: {
+                    xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Subjects'
+                            },
+                            gridLines: {
+          color: "rgb(234, 236, 244)",
+          zeroLineColor: "rgb(234, 236, 244)",
+          drawBorder: false,
+          borderDash: [2],
+          zeroLineBorderDash: [2]
+        }
+                        }],
+                    yAxes: [{
+                            display: true,
+                            ticks: {
+                                beginAtZero: true,
+                                steps: 10,
+                                stepValue: 5,
+                                max: 100
+                            }
+                        }]
+                },
+      }
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('result-radar-chart').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+
+  </script>
+{% endblock content %}

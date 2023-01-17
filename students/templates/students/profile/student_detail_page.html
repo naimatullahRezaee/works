@@ -1,0 +1,252 @@
+{% extends 'main.html' %}
+{% load widget_tweaks %}
+{% block title %}
+    پروفایل
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">جزییات صفحه پروفایل</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'student-profile' %}">صفحه پروفایل</a></li>
+                    <li class="breadcrumb-item active">جزییات پروفایل</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="basic-pills-wizard" class="twitter-bs-wizard">
+                    <ul class="twitter-bs-wizard-nav">
+                        <li class="nav-item">
+                            <a href="#personal" class="nav-link" data-toggle="tab">
+                                <span class="step-number mr-2">01</span>
+                                معلومات شخصی
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#family" class="nav-link" data-toggle="tab">
+                                <span class="step-number mr-2">02</span>
+                                <span>معلومات فامیل</span>
+                            </a>
+                        </li>
+                        
+                        
+                        <li class="nav-item">
+                            <a href="#confirm" class="nav-link" data-toggle="tab">
+                                <span class="step-number mr-2">03</span>
+                                تایید و ارسال معلومات
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content twitter-bs-wizard-tab-content">
+                        <div class="tab-pane" id="personal">
+                                <form action="" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="basicpill-lastname-input"> تذکره</label>
+                                            <select name="cart" id="id_cart" class="form-control form-control-md">
+                                                
+                                                <option value="tazkira_el" id="tazkira_el">تذکره برقی</option>
+                                                <option value="tazkira_k" id="tazkira_k">تذکره کاغذی</option>
+                                            </select>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="basicpill-lastname-input">نمبر تذکره</label>
+                                            {% render_field p_form.cart_number class="form-control" %}
+                                        </div>
+                                    </div>
+                                        <div class="row" id="tazkira" style="display: none;">
+                                            
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="basicpill-phoneno-input">نمبر صفحه</label>
+                                                    {% render_field p_form.page_number class="form-control" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="basicpill-email-input">نمبر ثبت</label>
+                                                    {% render_field p_form.register_number class="form-control" %}
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label for="basicpill-phoneno-input">نمبر جلد</label>
+                                                    {% render_field p_form.volume_number class="form-control" %}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="basicpill-email-input">عکس تذکره</label>
+                                            {% render_field p_form.cart_image class="form-control" type="file" %}
+                                        </div>
+                                    </div>
+<!-- 
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="basicpill-phoneno-input">لیلیه</label>
+                                            {% render_field p_form.hostel class="form-control" %}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="basicpill-email-input">شماره وینگ</label>
+                                            {% render_field p_form.wing_number class="form-control" %}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="basicpill-phoneno-input">شماره اتاق</label>
+                                            {% render_field p_form.room_number class="form-control" %}
+                                        </div>
+                                    </div> -->
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="basicpill-email-input">سال فراغت از مکتب</label>
+                                            {% render_field p_form.graduated_from_school class="form-control" id="graduation_date" placeholder='سال فراغت از مکتب' %}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="basicpill-email-input">عکس</label>
+                                            {% render_field p_form.avatar class="form-control" type="file" %}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="basicpill-email-input">ایمیل آدرس</label>
+                                            {% render_field u_form.email class="form-control" type="email" %}
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="basicpill-email-input">حساب کاربری</label>
+                                            {% render_field u_form.username class="form-control" type="text" %}
+                                        </div>
+                                    </div>
+                                </div>        
+                        </div>
+                    
+                        <div class="tab-pane" id="family">
+                          <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="basicpill-phoneno-input">اقارب</label>
+                                    {% render_field p_form.rel_with_std class="form-control" %}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="basicpill-email-input">نام اقارب</label>
+                                    {% render_field p_form.rel_name class="form-control" %}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="basicpill-phoneno-input">وظیفه</label>
+                                    {% render_field p_form.rel_job class="form-control" %}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="basicpill-email-input">شماره تماس اول</label>
+                                    {% render_field p_form.rel_phone1 class="form-control" %}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="basicpill-phoneno-input">شماره تماس دوم</label>
+                                    {% render_field p_form.rel_phone2 class="form-control" %}
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="basicpill-email-input">آدرس فعلی</label>
+                                    {% render_field p_form.rel_current_address class="form-control" %}
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                            
+                            <div class="tab-pane" id="confirm">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-6">
+                                        <div class="text-center">
+                                            <div class="mb-4">
+                                                <i class="mdi mdi-check-circle-outline text-success display-4"></i>
+                                            </div>
+                                            <div>
+                                                <h5>لطفا معلومات تان را دقیق ذخیره نمایید</h5>
+                                                <p class="text-muted">ممکن است بعدا به این فورم دست رسی نداشته باشید</p>
+                                                <button class="btn btn-outline-dark btn-lg">ذخیره کردن</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            </div>
+                        
+                    </div>
+                    <ul class="pager wizard twitter-bs-wizard-pager-link">
+                        <li class="previous"><a href="javascript: void(0);">قبلی</a></li>
+                        <li class="next"><a href="javascript: void(0);">بعدی</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script
+src="https://code.jquery.com/jquery-3.6.0.min.js"
+integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+crossorigin="anonymous">
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#graduation_date").pDatepicker({
+          format: 'YYYY-MM-DD',
+          initialValue : false,
+          calendar:{
+              persian: {
+                  locale: 'en'
+              }
+          }
+        });
+      })
+
+   $(document).ready(function(){
+        $("#id_cart").change(function(){
+            var val = $(this).val()
+            if(val == "tazkira_el"){
+                $("#tazkira").hide()
+            }
+           
+            else{
+                $("#tazkira").show()
+            }
+        })
+    })
+</script>
+
+{% endblock content %}

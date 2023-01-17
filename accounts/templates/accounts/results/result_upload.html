@@ -1,0 +1,62 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    آپلود
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">آپلود جدول نمرات</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">آپلود جدول نمرات</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xl-10 m-auto">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="col alert alert-info">
+                    <h2>راهنما</h2>
+                    <p class="font-size-18">
+                        لطفا فایل تمپلت را از اینجا دانلود کنید. جدول نمرات را آماده کرده و دوباره آپلود کنید. <span class="text-danger">متوجه باشید که سطر اول را تغییر ندهید.</span>     
+                        <br>
+                        <a class="btn btn-outline-primary btn-lg mt-2" href="{% url 'result-download-csv' %}">
+                            دانلود تمپلیت
+                            <i class="bx bx-download font-size-18 align-middle ml-2"></i>
+
+                        </a>
+                        
+                    </p>
+                  </div>
+                
+                  <form method="POST" class="" action="{% url 'student-upload-file' student.pk %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <input type="file" name="result_file">
+
+                    <input type="submit" value="ارسال فایل" class="btn btn-primary btn-md font-size-15">
+                
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("file_upload")
+    const upload_file = () => {
+        form.submit()
+    }
+</script>
+{% endblock content %}

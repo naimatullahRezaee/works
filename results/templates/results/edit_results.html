@@ -1,0 +1,96 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title %} ویرایش نمرات {% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">ویرایش نمرات</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'list-course' 1 %}">لیست کورس ها</a></li>
+                    <li class="breadcrumb-item active">ویرایش نمرات</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ formset.management_form}}
+                  
+                    <table id="studenttable" class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th class="font-size-16">شماره</th>
+                          <th class="font-size-16">نام کامل</th>
+                          <th class="font-size-16">کورس</th>
+                          <th class="font-size-16">نمره 20 فیصد</th>
+                          <th class="font-size-16">نمره نهایی</th>
+                          <th class="font-size-16">نمره فعالیت</th>
+                          <th class="font-size-16">نمره پروژه</th>
+                          <th class="font-size-16">نمره کارخانگی</th>
+                          <th class="font-size-16">چانس</th>
+                          <th class="font-size-16">مجموع</th>
+                          <th class="font-size-16">حذف</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for form in formset %}
+                        {{ form.id}}
+                          <tr>
+                            <td class="font-size-16">{{forloop.counter}}</td>
+                            <td class="font-size-16">{{form.instance.student.f_name }} {{form.instance.student.l_name}}</td>
+                            <td class="font-size-16">{{form.instance.subject.subject.title}}</td>
+                            <td style="width: 10%;">{{form.mid_term | add_class:"form-control form-control-md font-size-16"}}</td>
+                            <td style="width: 10%;">{{form.final | add_class:"form-control form-control-md font-size-16"}}</td>
+                            <td style="width: 10%;" class="disabled">{{form.class_activity | add_class:"form-control disabled form-control-md font-size-16"}}</td>
+                            <td style="width: 10%; cursor: not-allowed;">{{form.project | add_class:"form-control form-control-md font-size-16"}}</td>
+                            <td style="width: 10%;">{{form.assignment | add_class:"form-control form-control-md font-size-16"}}</td>
+                            <td style="width: 10%;">{{form.chances | add_class:"form-control form-control-md font-size-16"}}</td>
+                            <td class="font-size-16">{{form.instance.total_score }}</td>
+                            <td>{{form.DELETE}}</td>
+                            <!-- <td>{{form.instance.current_class}}</td> -->
+                  
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <button class="btn btn-primary btn-md font-size-18">ذخیره کردن</button>
+                      {% comment %} <a href="{% url 'result-pdf' subject.slug %}" target="_blank" class="btn btn-success btn-md font-size-18">چاپ شوقه</a> {% endcomment %}
+                      
+                      </div>
+                      <div class="col-lg-6">
+                        <a href="{% url 'create-result' subject.slug %}" class="btn btn-dark btn-md float-right font-size-18">برگشتن
+                          <i class='bx bx-chevron-left align-middle font-size-22 ml-2'></i>
+                        </a>
+                      </div>
+                    </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

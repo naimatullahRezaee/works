@@ -1,0 +1,86 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    جزییات کورس {{course.title}}
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">جزییات کورس {{course.title}}</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{%  url 'admin-dashboard' %}">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{%  url 'department-list' %}">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="{%  url 'department-detail' course.subject.department.slug %}">{{course.subject.department}}</a></li>
+                    <li class="breadcrumb-item active">جزییات کورس {{course.title}}</h4></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-lg-10 m-auto">
+            <div class="card">
+                <div class="card-body rounded">
+                    <div class="col-lg-9">
+                        <h3 class="card-title">جزییات کورس {{course.title}}</h3>
+                    <table class="table table-lg table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="font-size-18">عنوان کورس</th>
+                                <td class="font-size-17">{{course.title}}</td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">نام مضمون</th>
+                                <td class="font-size-17">{{course.subject.subject}}</td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">استاد</th>
+                                <td class="font-size-17">{{course.owner.employee.f_name}} {{course.owner.employee.l_name}}</td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">سال تحصیلی</th>
+                                <td class="font-size-17">{{course.session.session|date:"Y"}} {{course.session.session_type}}</td>
+                            </tr>
+                            
+                            <tr>
+                                <th class="font-size-18">حالت</th>
+                                <td class="font-size-17">
+                                    <span class="badge badge-light badge-pill font-size-17">
+                                        {% if course.status %}
+                                        فعال
+                                        {% else %}
+                                        غیر فعال
+                                        {% endif %}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">تعداد شاگردان</th>
+                                <td class="font-size-17">
+                                    <span class="badge badge-light badge-pill font-size-17">
+                                        {{course.students.all.count}}
+                                    </span>
+                                </td>
+                            </tr>
+
+                        </thead>
+                    </table>
+                    <button class="btn btn-success btn-lg mt-3">دانلود لیست شاگردان
+                        <i class="bx bx-download font-size-20 align-middle ml-2 "></i>
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

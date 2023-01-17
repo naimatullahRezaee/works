@@ -1,0 +1,194 @@
+body{
+    font-family: "IranSanse" !important;
+}
+
+#sidebar-menu ul li{
+    font-size: 20px;
+}
+
+#sidebar-menu ul li a.waves-effect{
+    font-size:  20px !important;
+}
+
+#sidebar-menu ul li a.waves-effect .sub-menu{
+    font-size: 24px !important;
+}
+
+#sidebar-menu ul li .bx{
+    font-size: 24px !important;
+    margin-left: 5px;
+}
+
+.tab-title{
+    font-size: 18px;
+}
+
+.vertical-tabar{
+    font-size: 16px;
+}
+
+.student-card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    text-align: center;
+    
+  }
+  
+  .student-title {
+    color: grey;
+    font-size: 18px;
+    padding: 0px;
+    margin: 0px;
+  }
+  
+  
+  
+  .student-link {
+    text-decoration: none;
+    font-size: 22px;
+    color: black;
+  }
+  
+  .student-button:hover, .student-link:hover {
+    opacity: 0.7;
+  }
+
+.emp-datatable{
+    font-size: 17px;
+}
+.emp-data{
+    font-size: 16px;
+}
+
+.custom-badge{
+    width: 170px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    transform: rotate(-45deg);
+}
+
+
+.teacher-card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    
+    text-align: center;
+  }
+  
+  .evaluate-title {
+    color: grey;
+    font-size: 18px;
+  }
+  
+  .evaluate-button {
+    border: none;
+    outline: 0;
+    display: inline-block;
+    padding: 8px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+  }
+  
+  
+  
+  .evaluate-button:hover, a:hover {
+    opacity: 0.7;
+  }
+
+
+.dashboard-badges:hover{
+  box-shadow: 0 0 3px #515151;
+}
+
+
+.box {
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  height: 400px;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(0,0,0,.1);
+}
+.ribbon {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  position: absolute;
+}
+.ribbon::before,
+.ribbon::after {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  display: block;
+  border: 5px solid #2980b9;
+}
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 170px;
+  padding: 5px 0;
+  background-color: #3498db;
+  box-shadow: 0 5px 10px rgba(0,0,0,.1);
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0,0,0,.2);
+  text-transform: uppercase;
+  text-align: center;
+}
+.ribbon-top-left {
+  top: -10px;
+  left: -10px;
+}
+.ribbon-top-left::before,
+.ribbon-top-left::after {
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
+.ribbon-top-left::before {
+  top: 0;
+  right: 0;
+}
+.ribbon-top-left::after {
+  bottom: 0;
+  left: 0;
+}
+.ribbon-top-left span {
+  right: -25px;
+  top: 30px;
+  transform: rotate(-45deg);
+}
+
+
+
+.transcript{
+  font-family: 'Times New Roman', Times, serif !important;
+  text-align: left;
+  color: black;
+}
+
+.personal-tbl  tr  td {
+  border: 1px solid black !important;
+  color: black;
+}
+
+.score-tbl thead tr  th {
+  border: 1px solid black !important;
+  font-size: 17px;
+  font-weight: bold;
+  color: black;
+}
+.score-tbl tbody tr  td {
+  border: 1px solid black !important;
+  color: black;
+}
+.score-tbl tfoot tr  td {
+  border: 1px solid black !important;
+  color: black;
+}
+

@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title %} نمره دهی {% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">صفحه نمره دهی به شاگردان</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'list-course' 1 %}">لیست کورس ها</a></li>
+                    <li class="breadcrumb-item"><a href="{{request.META.HTTP.REFERER}}">نمره دهی</a></li>
+                    <li class="breadcrumb-item active">شروع کردن</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="content pt-5 pl-5">
+                                <h2 class="text-dark" style="font-size: 45px;">ایجاد نمرات جدید
+                                    ✍️</h2>
+                                <p class="font-size-15 text-info">شما میتوانید شاگردان را به صورت گروهی و یا هم فردی انتخاب نموده و نمره دهید. همچنان شما تا دو روز میتوانید نمره ایجاد شده را تغییرو یا هم حذف  نمایید بعد از آن شما قادر به آوردن تغییرات نخواهید بود.</p>
+                                <a href="{% url 'create-result' subject.slug %}" class="btn btn-outline-dark py-3 px-3 btn-lg mt-3">نمره دادن گروهی</a>
+                                <button class="btn btn-outline-primary py-3 px-3 btn-lg mt-3 mx-2">نمره دادن فردی</button>
+                                <a href="{% url 'edit-results' subject.slug %}" class="btn btn-outline-secondary py-3 px-3 btn-lg mt-3">ویرایش نمرات</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <img src="{% static 'assets/images/custom/grade.png' %}" style="width: 100%;" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

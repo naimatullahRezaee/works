@@ -1,0 +1,320 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    جزییات 
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18"> شاگردان</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department-list' %}">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department-detail' department.slug %}">{{department.name}}</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department_student' department.slug %}">شاگردان</a></li>
+                    <li class="breadcrumb-item active"> {{student.f_name}} {{ student.l_name }}</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<style>
+    .student--info{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        border-top: 1px solid lightgray;
+        margin: 0 1.2rem;
+    }
+    .student--info div{
+        margin-top: 4px;
+    }
+    .form--label{
+        font-size: 16px;
+        font-weight: bold;
+    }
+</style>
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">حذف شاگرد</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{student.id}}" name="student_id">
+                    <p class="alert alert-danger text-center font-size-16">
+                        آیا حذف شاگرد {{student.f_name}} {{student.l_name}} از سیستم اجرا شود؟ 
+                    </p>
+                    <button class="btn btn-danger btn-md">حذف</button>
+                    <button class="btn btn-light btn-md ml-1" data-dismiss="modal" aria-label="Close" type="button">خیر</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myExtraLargeModalLabel">ویرایش معلومات</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >آی دی کانکور</label>
+                            <input type="text" name="kankor_id" value="{{student.kankor_id}}" class="form-control form-control-lg" placeholder="M12343333" required>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >نام</label>
+                            <input type="text" name="f_name" value="{{student.f_name}}" class="form-control form-control-lg" placeholder="نام محصیل" required>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >تخلص</label>
+                            <input type="text" name="l_name" value="{{student.l_name}}" class="form-control form-control-lg" placeholder="تخلص محصیل" required>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >نام پدر</label>
+                            <input type="text" name="father_name" value="{{student.father_name}}" class="form-control form-control-lg" placeholder="نام پدر" required>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >ولدیت</label>
+                            <input type="text" name="grand_father_name" value="{{student.grand_father_name}}" class="form-control form-control-lg" placeholder="ولدیت" required>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >مکتب</label>
+                            <input type="text" name="school_name" value="{{student.school_name}}" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >نمره کانکور</label>
+                            <input type="number" name="score" value="{{student.score}}" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >جنسیت</label>
+                            <select name="gender" class="form-control form-control-lg" id="">
+                                <option value="">جنسیت</option>
+                                <option value="آقا" {% if student.gender == "آقا" %} selected {% endif %}>مرد</option>
+                                <option value="خانم" {% if student.gender == "خانم" %} selected {% endif %} >زن</option>
+                            </select>
+                        </div>
+                        
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >ولایت</label>
+                            <input type="text" name="province" value="{{student.province}}" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >دیپارتمنت</label>
+                            <select name="department" id="" class="form-control form-control-lg">
+                                <option value="">دیپارتمنت</option>
+                                {% for dep in departments %}
+                                    <option {% if student.department == dep %} selected {% endif %} value="{{dep.slug}}">{{dep.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >سمستر</label>
+                            <select name="semester" id="" class="form-control form-control-lg">
+                                <option value="">سمستر</option>
+                                {% for semester in semesters %}
+                                    <option {% if student.semester.semester_number == semester.semester_number %} selected {% endif %} value="{{semester.id}}">{{semester.semester_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >سکشن</label>
+                            <select name="section" id="" class="form-control form-control-lg">
+                                <option value="">سکشن</option>
+                                <option value="A" {% if student.section == "A" %} selected {% endif %}>A</option>
+                                <option value="B" {% if student.section == "B" %} selected {% endif %} >B</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-3">
+                            <label for="" class="form--label" >وضعیت</label>
+                            <select name="status" id="" class="form-control form-control-lg">
+                                <option value="">وضعیت</option>
+                                <option value="فعال" {% if student.status == "فعال" %} selected {% endif %}>فعال</option>
+                                <option value="تعجیل" {% if student.section == "تعجیل" %} selected {% endif %} >تعجیل</option>
+                                <option value="چانس" {% if student.section == "چانس" %} selected {% endif %} >چانس</option>
+                                <option value="محروم" {% if student.section == "محروم" %} selected {% endif %} >محروم</option>
+                                <option value="ناکام" {% if student.section == "ناکام" %} selected {% endif %} >ناکام</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-md mt-3">ذخیره</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h3 class="card-title">{{student.f_name}} {{student.l_name}} - <b>{{student.kankor_id}}</b></h3>
+                        </div>
+                        <div class="col-lg-6">
+                            {% if perms.students.change_student or request.user.is_staff %}
+                            <button 
+                            class="btn btn-light btn-md font-size-15" 
+                            style="float:left"
+                            data-toggle="modal" data-target=".bs-example-modal-xl"
+                            >
+                                ویرایش معلومات
+                                <i class="bx bx-pencil"></i>
+                            </button>
+
+                            <button 
+                            class="btn btn-primary btn-md mx-2 font-size-15"
+                            style="float:left"
+                            
+                            >
+                                چاپ معلومات
+                                <i class="bx bx-printer"></i>
+                            </button>
+                            {% endif %}
+                            {% if request.user.can_delete_student or request.user.is_staff %}
+                            <button 
+                            class="btn btn-danger btn-md font-size-15" 
+                            style="float:left"
+                            data-toggle="modal" data-target="#myModal"
+                            >
+                                حذف شاگرد
+                                <i class="bx bx-trash"></i>
+                            </button>
+                            <a class="btn btn-success btn-md font-size-15" href="{% url 'general-report' student.id %}">گزارشات درسی</a>
+                            {% endif %}
+                            <a href="{% url 'student-score-all' student.id %}" class="btn btn-primary btn-lg mt-3">آپلود نمرات</a>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <img src="{{student.avatar.url}}" class="my-3" style="width: 20%; margin:auto; border-radius: 50%;" alt="">
+
+                                <div class="student--info">
+                                    <div>
+                                        <h3 class="card-title">آی دی کانکور</h3>
+                                    </div>
+                                    <div>
+                                        <b>{{student.kankor_id}}</b>
+                                    </div>
+                                </div>
+                                <div class="student--info">
+                                    <div>
+                                        <h3 class="card-title">نام کامل</h3>
+                                    </div>
+                                    <div>
+                                        <b>{{student.f_name}} {{student.l_name}}</b>
+                                    </div>
+                                </div>
+                                <div class="student--info">
+                                    <div>
+                                        <h3 class="card-title">نام پدر</h3>
+                                    </div>
+                                    <div>
+                                        <b>{{student.father_name}}</b>
+                                    </div>
+                                </div>
+                                <div class="student--info">
+                                    <div>
+                                        <h3 class="card-title">ولدیت</h3>
+                                    </div>
+                                    <div>
+                                        <b>{{student.grand_father_name}}</b>
+                                    </div>
+                                </div>
+                                <div class="student--info">
+                                    <div>
+                                        <h3 class="card-title">جنسیت</h3>
+                                    </div>
+                                    <div>
+                                        <b>{{student.gender}}</b>
+                                    </div>
+                                </div>
+                                <div class="student--info">
+                                    <div>
+                                        <h3 class="card-title">مکتب دوره لیسه</h3>
+                                    </div>
+                                    <div>
+                                        <b>{{student.school_name}}</b>
+                                    </div>
+                                </div>
+                                <div class="student--info">
+                                    <div>
+                                        <h3 class="card-title">نمره کانکور</h3>
+                                    </div>
+                                    <div>
+                                        <b>{{student.score}}</b>
+                                    </div>
+                                </div>
+
+                                <div class="student--info">
+                                    <div>
+                                        <h3 class="card-title">ولایت</h3>
+                                    </div>
+                                    <div>
+                                        <b>{{student.province}}</b>
+                                    </div>
+                                </div>
+
+                                <div class="student--info">
+                                    <div>
+                                        <h3 class="card-title">سمستر</h3>
+                                    </div>
+                                    <div>
+                                        <b>{{student.semester.semester_name}}</b>
+                                    </div>
+                                </div>
+
+                                <div class="student--info">
+                                    <div>
+                                        <h3 class="card-title">وضعیت</h3>
+                                    </div>
+                                    <div>
+                                        <b>
+                                            <span class="badge badge-primary font-size-14">{{student.status}}</span>
+                                        </b>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <h3 class="card-title">گزارشات درسی</h3>
+                            <p class="alert alert-info text-center font-size-17">گزارش درسی فعلا موجود نیست. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

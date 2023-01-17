@@ -1,0 +1,382 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    جزییات
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">جزییات کارمندان</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'employee_list' %}">لیست کارمندان</a></li>
+                    <li class="breadcrumb-item active">{{employee.f_name}} {{ employee.l_name }}</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<style>
+    .hidden {
+      position: absolute;
+      visibility: hidden;
+      opacity: 0;
+    }
+    
+    input[type=checkbox]+label {
+        border: 1px solid #222;
+        width : 200px;
+        padding: 0.4rem;
+        border-radius: 4px;
+        font-size: 1.2rem;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+    input[type=checkbox]:checked+label {
+        border: 1px solid #222;
+        width : 200px;
+        padding: 0.4rem;
+        border-radius: 4px;
+        font-size: 1.2rem;
+        background-color: #222;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+</style>
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">حذف کارمند</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'delete_employee' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="employee_id" value="{{employee.id}}">
+                    <p class="alert alert-danger text center font-size-17">حذف کارمند {{employee.f_name}} {{employee.l_name}}؟ </p>
+                    
+                    <button class="btn btn-danger btn-md" type="submit">حذف</button>
+                    <button class="btn btn-light btn-md" data-dismiss="modal" type="button" aria-label="Close">خیر</button>
+                </form>
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myExtraLargeModalLabel">صلاحیت ها</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'employee_create_permission' employee.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="">
+                       
+                        <div class="">
+                            <div class="">
+                                <h3 class="text-muted">صلاحیت های انتخاب شده</h3>
+                                <div class="row" >
+                                    
+                                    {% for permission in custom_permissions.selected %}
+
+                                    <div  id="" class="col-lg-3">
+                                        <input type="checkbox" class="hidden checkbox" value={{permission.id}} name="permission" id="{{permission.id}}" checked>
+                                        <label for={{permission.id}}>{{permission.name}}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <br>
+                                <hr>
+                                <h3 class="text-muted">صلاحیت های موجود</h3>
+                                <div class="row">
+                                    {% for per in custom_permissions.others %}
+                                    <div  id="" class="col-lg-3">
+                                        <input type="checkbox" class="hidden checkbox" value={{per.id}} name="permission" id="{{per.id}}">
+                                        <label for={{per.id}}>{{per.name}}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 <button class="btn btn-primary" type="submit">ذخیره کردن</button>
+                </form>
+                
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<div class="checkout-tabs">
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-gen-ques-tab" data-toggle="pill" href="#v-pills-gen-ques" role="tab" aria-controls="v-pills-gen-ques" aria-selected="true">
+                    <i class= "bx bx-user d-block check-nav-icon mt-4 mb-2"></i>
+                    <p class="font-weight-bold mb-4">مشخصات شخصی</p>
+                </a>
+                <a class="nav-link" id="v-pills-privacy-tab" data-toggle="pill" href="#v-pills-privacy" role="tab" aria-controls="v-pills-privacy" aria-selected="false"> 
+                    <i class= "bx bx-task d-block check-nav-icon mt-4 mb-2"></i>
+                    <p class="font-weight-bold mb-4">فعالیت ها</p>
+                </a>
+                <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-support" role="tab" aria-controls="v-pills-support" aria-selected="false">
+                    <i class= "bx bxs-graduation d-block check-nav-icon mt-4 mb-2"></i>
+                    <p class="font-weight-bold mb-4">تحصیلات</p>
+                </a>
+                <a class="nav-link" id="v-pills-support-tab" data-toggle="pill" href="#v-pills-experience" role="tab" aria-controls="v-pills-experience" aria-selected="false">
+                    <i class= "bx bx-support d-block check-nav-icon mt-4 mb-2"></i>
+                    <p class="font-weight-bold mb-4">سابقه کاری</p>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <div class="card">
+                <div class="card-body">
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-gen-ques" role="tabpanel" aria-labelledby="v-pills-gen-ques-tab">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                <h4 class="card-title mb-5">{{employee.f_name}} {{employee.l_name}}</h4>
+                                </div>
+                                <div class="col-lg-10">
+                                    <a href="{% url 'update_employee_info' employee.pk %}" class="btn btn-light btn-md" style="float:left;">
+                                        ویرایش معلومات
+                                        <i class="bx bx-pencil font-size-18"></i>
+                                    </a>
+                                    <button
+                                     style="float: left;" 
+                                     class="btn btn-danger btn-md mr-1"
+                                     data-toggle="modal" data-target="#myModal"
+                                     >
+                                        حذف کارمند
+                                        <i class="bx bx-trash font-size-18"></i>
+                                    </button>
+                                    <button class="btn btn-info btn-md mr-1" style="float:left">
+                                        دانلود معلومات
+                                        <i class="bx bx-download font-size-18"></i>
+                                    </button>
+                                    <button 
+                                    class="btn btn-primary btn-md mr-1" 
+                                    style="float:left"
+                                    data-toggle="modal"
+                                    data-target=".bs-example-modal-xl"
+                                    >
+                                        مدیریت صلاحیت ها
+                                        <i class="bx bx-cog font-size-18"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-lg-9">
+                                    <div>
+                                        <div id="gen-ques-accordion" class="accordion custom-accordion">
+                                            <div class="mb-3">
+                                                <a href="#general-collapseOne" class="accordion-list" data-toggle="collapse"
+                                                                                aria-expanded="true"
+                                                                                aria-controls="general-collapseOne">
+                                                    
+                                                    <div>مشخصات شخصی</div>
+                                                    <i class="mdi mdi-minus accor-plus-icon"></i>
+                                                    
+                                                </a>
+                        
+                                                <div id="general-collapseOne" class="collapse show" data-parent="#gen-ques-accordion">
+                                                    <div class="card-body">
+                                                        <table class="table table-bordered">
+                                                            <tr>
+                                                                <th>آی دی</th>
+                                                                <td>{{employee.emp_unique_id}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>نام کامل</th>
+                                                                <td>{{employee.f_name}} {{employee.l_name}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>نام پدر</th>
+                                                                <td>{{employee.father_name}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>آدرس ایمیل</th>
+                                                                <td>{{employee.user.email}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>شماره تماس</th>
+                                                                <td>{{employee.phone_number}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>آدرس</th>
+                                                                <td>{{employee.address}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>وضعیت</th>
+                                                                <td>
+                                                                    <span class="badge badge-primary font-size-16">
+                                                                        {{employee.status}}
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>گروه ها</th>
+                                                                <td>
+                                                                    {% for group in employee.user.groups.all %}
+                                                                        <span class="badge badge-light font-size-16">{{group.name}}</span>
+                                                                    {% endfor %}
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <th>صلاحیت ها</th>
+                                                                <td>
+                                                                    {% for perm in employee.user.user_permissions.all %}
+                                                                        {% if not perm %}
+                                                                            صلاحیت ندارد
+                                                                        {% else %}
+                                                                            <span class="badge badge-light font-size-16">{{perm.name}}</span>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <a href="#general-collapseTwo" class="accordion-list collapsed" data-toggle="collapse"
+                                                                aria-expanded="false"
+                                                                aria-controls="general-collapseTwo">
+                                                    <div>معلومات کارت ملی</div>
+                                                    <i class="mdi mdi-minus accor-plus-icon"></i>
+                                                </a>
+                                                <div id="general-collapseTwo" class="collapse" data-parent="#gen-ques-accordion">
+                                                    <div class="card-body">
+                                                        <h3 class="card-title">
+                                                            <b>نوعیت کارت : </b> {{employee.employeenationalitycart.cart_type}}
+                                                        </h3>
+                                                        <div class="row mt-3">
+                                                            {% if employee.employeenationalitycart.cart_type == "تذکره" %}
+                                                            <div class="col-lg-6">
+                                                                <img src="{{employee.employeenationalitycart.nationality_back.url}}" class="rounded" alt="">
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <img src="{{employee.employeenationalitycart.nationality_front.url}}" class="rounded" alt="">
+                                                            </div>
+                                                            {% else %}
+                                                            <div class="col-lg-6">
+                                                                <img src="{{employee.employeenationalitycart.passport_back.url}}" class="rounded" alt="">
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <img src="{{employee.employeenationalitycart.passport_front.url}}" class="rounded" alt="">
+                                                            </div>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <img src="{{employee.avatar.url}}" style="float:left; margin-left:20px; width: 220px;" class="rounded" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-privacy" role="tabpanel" aria-labelledby="v-pills-privacy-tab">
+                            <h4 class="card-title mb-5">فعالیت ها</h4>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-support" role="tabpanel" aria-labelledby="v-pills-support-tab">
+                            <h4 class="card-title mb-5">تحصیلات</h4>
+                            {% if employee.education.all.count > 0 %}
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>عنوان</th>
+                                        <th>دانشگاه / پوهنتون</th>
+                                        <th>سال شروع و ختم</th>
+                                        <th>عکس</th>
+                                        <th>توضیحات</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for edu in employee.education.all %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{edu.title}}</td>
+                                            <td>{{edu.university}}</td>
+                                            <td>{{edu.start_date|date:"Y"}} - {{edu.finish_date|date:"Y"}}</td>
+                                            <td>
+                                                <img src="{{edu.diploma.url}}" class="rounded" alt="">
+                                            </td>
+                                            <td>{{edu.description|truncatechars:"100"}}</td>
+                                            <td></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <p class="alert alert-info text-center font-size-18">کارمند مذکور هیج سابقه تحصیلی ثبت شده در سیستم ندارد. </p>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-experience" role="tabpanel" aria-labelledby="v-pills-support-tab">
+                            <h4 class="card-title mb-5">سابقه کاری</h4>
+                            {% if employee.experience.all.count > 0 %}
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>عنوان وظیفه</th>
+                                            <th>کمپنی / شرکت</th>
+                                            <th>مدت زمان اشتغال</th>
+                                            <th>عکس</th>
+                                            <th>توضیحات</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for exp in employee.experience.all %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td>{{exp.position}}</td>
+                                            <td>{{exp.org}}</td>
+                                            <td>{{exp.from_date|date:"Y"}} - {{exp.to_date|date:"Y"}}</td>
+                                            <td>
+                                                <img src="{{exp.document.url}}" class="rounded" alt="">
+                                            </td>
+                                            <td>{{exp.description|truncatechars:"100"}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                            <p class="alert alert-info text-center font-size-18">کارمند مذکور هیج سابقه کاری ثبت شده در سیستم ندارد. </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

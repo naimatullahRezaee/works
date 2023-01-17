@@ -1,0 +1,206 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    شاگردان
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18"> شاگردان</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department-list' %}">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department-detail' department.slug %}">{{department.name}}</a></li>
+                    <li class="breadcrumb-item active"> شاگردان</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<style>
+    .student--list--tools{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .student--card{
+        width: 100%;
+        border: 2px solid #c4c4c4;
+        border-radius: 10px;
+    }
+    .student--card img{
+        width: 40%;
+        margin: auto;
+        border-radius: 50%;
+    }
+    .student--info{
+        text-align: center;
+        margin-bottom: 5px;
+    }
+    .query{
+        padding-right: 2.5rem;
+        height: 3.6rem;
+        border-radius: 30px;
+    }
+    .query--icon{
+        position: absolute;
+        font-size: 2rem;
+        top: 1rem;
+        right: 0.4rem;
+        color: #ccc;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="student--list--tools">
+                    <div>
+                        <h4 class="card-title">لیست شاگردان</h4>
+                    </div>
+                    {% if perms.students.add_student %}
+                    <div style="display: flex; ">
+                        <a href="{% url 'register-student' %}" class="btn btn-primary mr-3" style="display: flex; align-items:center">
+                           <span> ثبت شاگرد</span>
+                            <i class="bx bx-plus font-size-18 ml-2"></i>
+                        </a>
+                        <a href="{% url 'student-upload' %}" class="btn btn-light" style="display: flex; align-items:center">
+                            <span> آپلود لیست شاگردان</span>
+                             <i class="bx bx-upload font-size-18 ml-2"></i>
+                         </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 m-auto">
+                        <form action="" class="my-4" style="position: relative;">
+                            <input type="text" placeholder="جستجو بر اساس نام،‌تخلص،‌وضعیت ..." name="query" class="form-control form-control-lg query" >
+                            <i class="bx bx-search query--icon"></i>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-lg-9">
+                       <div class="row">
+                        {% for student in students %}
+                        <div class="col-lg-4">
+                            <div class="student--card card">
+                                <img src="{{student.avatar.url}}" class="my-3" alt="">
+
+                                <div class="student--info">
+                                    
+                                    <b>نام :‌</b> {{student.f_name}} - {{student.l_name}}
+                                    <br>
+                                    <b>نام پدر : </b> {{student.father_name}}
+                                    <br>
+                                    <b> سمستر : </b> {{student.semester.semester_name}}
+                                    <br>
+                                    <b>وضعیت : </b>
+                                    {% if student.status == "فعال" %}
+                                        <span class="badge badge-soft-success font-size-14">{{student.status}}</span>
+                                    {% endif %}
+                                </div>
+                                {% if perms.students.view_student %}
+                                <a href="{% url 'student_detail_actions' student.pk %}" class="btn btn-light my-2 mx-3 font-size-16" style="border: 2px solid #ccc;">جزییات</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="alert alert-info text-center font-size-16">مشخصات هیچ محصیلی یافت نشد. </p>
+                    {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <h3 class="card-title">فلتر کردن شاگردان</h3>
+                    <form action="">
+
+                        <select name="with_semester" class="form-control form-control-lg" onchange="onChangeHandler()">
+                            <option value="">بر اساس سمستر</option>
+                            <option value="1">سمستر اول</option>
+                            <option value="2">سمستر دوم</option>
+                            <option value="3">سمستر سوم</option>
+                            <option value="4">سمستر چهارم</option>
+                            <option value="5">سمستر پنجم</option>
+                            <option value="6">سمستر ششم</option>
+                            <option value="7">سمستر هفتم</option>
+                            <option value="8">سمستر هشتم</option>
+                        </select>
+    
+                        <select name="with_gender" id="" class="form-control form-control-lg mt-3">
+                            <option value="">بر اساس جنسیت</option>
+                            
+                            <option value="آقا">
+                                مرد
+                            </option>
+                            <option value="خانم">
+                                زن
+                            </option>
+                        </select>
+    
+                        <select name="with_status" class="form-control form-control-lg mt-3" id="">
+                            <option value="">بر اساس وضعیت</option>
+                            <option value="فعال">فعال</option>
+                            <option value="تعجیل">تعجیل</option>
+                            <option value="چانس">چانس</option>
+                            <option value="محروم">محروم</option>
+                            <option value="ناکام">ناکام</option>
+                        </select>
+                        <div class="mt-3">
+                            <h3 class="card-title">نمایش</h3>
+                            <select name="qty" class="form-control form-control-lg" id="">
+                                <option value="10" selected>10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="75">75</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-light btn-md mt-3 btn-block font-size-16">ارسال دستور</button>
+                        <a href="{% url 'department_student' department.slug %}" class="btn btn-primary btn-md mt-1 btn-block font-size-16"> پاک کردن دستورات</a>
+                    </form>
+
+                </div>
+                </div>
+                {% if students.has_other_pages %}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination pagination-lg">
+                        {% if students.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{students.previous_page_number}}">قبلی</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" role="link" aria-disabled="true" href="">قبلی</a></li>
+                        {% endif %}
+                        {% for std in students.paginator.page_range %}
+                            {% if students.number == std %}
+                            <li class="page-item"><a class="page-link" href="#">{{std}}</a></li>
+                            {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{std}}">{{std}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if students.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{students.next_page_number}}">بعدی</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" role="link" aria-disabled="true" href="">بعدی</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const onChangeHandler = () => {
+        console.log("hello");
+    }
+</script>
+{% endblock content %}

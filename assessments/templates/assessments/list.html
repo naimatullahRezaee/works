@@ -1,0 +1,72 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    ارزیابی استادان
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">لیست استادان که این هفته ارزیابی میشود</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">ارزیابی استادان</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-dark btn-lg float-right">برگشت
+                                <i class='bx bx-left-arrow-alt align-middle font-size-18'></i>
+                            </a>
+                            <div class="row">
+                                <h1 class="pt-5 pb-2 ml-5"> ارزیابی استادان 📆 </h1>
+                            </div>
+                            <p class="ml-5 font-size-16">لطفا در بهتر کردن سیستم تحصیلی که یک نوع آن ارزیابی و بهتر کردن سطح تدریس استاد است به خود و دیگردان کمک نمایید.</p>
+
+                            <div class="row ml-5">
+                                {% for eva in evaluations %}
+                                    <div class="col-lg-4">
+                                        <div class="card teacher-card border shadow-sm px-2">
+                                            <img src="{{eva.teacher.avatar.url}}" class="mt-2" style="width:50%; margin: auto; border-radius: 50%;"  alt="">
+                                            <h3 class="mt-3">{{eva.teacher.f_name}} {{eva.teacher.l_name}}</h3>
+                                            <p class="evaluate-title">
+                                                {% for group in eva.teacher.user.groups.all %}
+                                                   <div class="">
+                                                    <span class="badge badge-primary font-size-14 mt-2">{{group.name}}</span>
+                                                   </div>
+                                                {% endfor %}
+                                            </p>
+                                            <p>
+                                                <a href="{% url 'evaluate-detail' eva.teacher.pk eva.pk %}" class="evaluate-button btn-block">ارزیابی کردن</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% empty %}
+                                    <p class="alert alert-info text-center font-size-16">
+                                        استادی برای ارزیابی فعلا موجود نیست.
+                                    </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <img src="{% static 'assets/images/custom/evaluation.png' %}" style="width: 100%;" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

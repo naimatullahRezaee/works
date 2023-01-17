@@ -1,0 +1,169 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    فعالیت ها
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">فعالیت های من</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">فعالیت های من</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xl-10 col-lg-10 m-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a href="{{request.META.HTTP_REFERER}}" class="btn btn-dark btn-lg float-right">برگشت
+                            <i class='bx bx-left-arrow-alt align-middle font-size-18'></i>
+                        </a>
+                        <div class="vertical-nav">
+                            <div class="row">
+                                <div class="col-lg-2 col-sm-4">
+                                    <div class="nav flex-column nav-pills" role="tablist">
+                                        <a class="nav-link active" id="v-pills-gen-ques-tab" data-toggle="pill" href="#v-pills-gen-ques" role="tab">
+                                            <i class= "bx bx-task nav-icon d-block mb-2"></i>
+                                            <p class="font-weight-bold mb-0 font-size-18">کارخانگی ها</p>
+                                        </a>
+                                        <a class="nav-link" id="v-pills-token-sale-tab" data-toggle="pill" href="#v-pills-token-sale" role="tab"> 
+                                            <i class= "bx bx-calendar-event nav-icon d-block mb-2"></i>
+                                            <p class="font-weight-bold mb-0 font-size-18">رویداد ها</p>
+                                        </a>
+                                        <a class="nav-link" id="v-pills-roadmap-tab" data-toggle="pill" href="#v-pills-roadmap" role="tab">
+                                            <i class= "bx bx-file d-block nav-icon mb-2"></i>
+                                            <p class="font-weight-bold mb-0 font-size-18">فایل ها</p>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 col-sm-8">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade show active" id="v-pills-gen-ques" role="tabpanel">
+                                                    <h4 class="card-title mb-4">لیست کارخانگی ها</h4>
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>کورس</th>
+                                                                <th>عنوان کارخانگی</th>
+                                                                <th>تاریخ ایجاد</th>
+                                                                <th>نمره</th>
+                                                                <th>ارسال شده</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for assignment in assignments %}
+                                                                <tr>
+                                                                    <td>{{forloop.counter}}</td>
+                                                                    <td>{{assignment.content.module.course.title}}</td>
+                                                                    <td>{{assignment.title}}</td>
+                                                                    <td>{{assignment.assigned_at|date:"Y, M m"}}</td>
+                                                                    <td>{{assignment.score}}</td>
+                                                                    <td>
+                                                                        {% for submit in assignment.is_submitted.all %}
+                                                                            {% if submit == request.user.student %}
+                                                                                <span class="badge badge-primary font-size-15">بلی</span>
+                                                                            {% else %}
+                                                                                <span class="badge badge-danger font-size-15">نخیر</span>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                    
+                                                </div>
+
+                                                <div class="tab-pane fade" id="v-pills-token-sale" role="tabpanel">
+                                                    <h4 class="card-title mb-4">لیست رویداد ها</h4>
+                                                        
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="font-size-16">#</th>
+                                                                <th class="font-size-16">عنوان رویداد</th>
+                                                                <th class="font-size-16">کورس</th>
+                                                                <th class="font-size-16">تاریخ ایجاد</th>
+                                                                <th class="font-size-16">تاریخ ختم</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for event in my_events %}
+                                                                <tr>
+                                                                    <td class="font-size-15">{{forloop.counter}}</td>
+                                                                    <td class="font-size-15">{{event.title}}</td>
+                                                                    <td class="font-size-15">{{event.course}}</td>
+                                                                    <td class="font-size-15">{{event.start_date|date:"Y, M m"}}</td>
+                                                                    <td class="font-size-15">{{event.end_date|date:"Y, M m"}}</td>
+                                                                </tr>
+                                                            {% empty %}
+                                                            <p class="alert alert-info text-center font-size-16">
+                                                                شما رویداد در لیست خود ندارید.
+                                                            </p>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                    
+                                                </div>
+
+                                                <div class="tab-pane fade" id="v-pills-roadmap" role="tabpanel">
+                                                    <h4 class="card-title mb-4">فایل های آپلود شده</h4>
+                                                        
+                                                    <div class="table-responsive">
+                                                        <table class="table table-nowrap table-centered table-hover mb-0">
+                                                            <tbody>
+                                                                {% for respond in responds %}
+                                                                <tr>
+                                                                    <td style="width: 45px;">
+                                                                        <div class="avatar-sm">
+                                                                            <span class="avatar-title rounded-circle bg-soft-primary text-primary font-size-24">
+                                                                                <i class="bx bxs-file-doc"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <h5 class="font-size-14 mb-1"><a href="#" class="text-dark">{{respond.title.title}}</a></h5>
+                                                                        <small>Size : {{respond.file.size}} Kb</small>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="text-center">
+                                                                            <a href="{{respond.file.url}}" class="text-dark"><i class="bx bx-download h3 m-0"></i></a>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end vertical nav -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

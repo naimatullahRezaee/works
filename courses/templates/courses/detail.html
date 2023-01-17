@@ -1,0 +1,116 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title %} {% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">جزییات کورس</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'list-course' 1 %}">لیست کورس ها</a></li>
+                    <li class="breadcrumb-item active">جزییات کورس</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<!-- update course modal -->
+<div class="modal fade" id="update-course" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myLargeModalLabel">تغییر {{course.title}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{cd_form|crispy}}
+                    {{c_form|crispy}}
+
+                    <button class="btn btn-primary btn-md" type="submit">ذخیره تغییرات</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- end update course modal -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-8 border-left">
+                        <h4 class="mt-3 mb-2">جزییات کورس {{course.title}}</h4>
+                        <hr>
+                        {% if course.status %}
+                        {% else %}
+                            <div class="col-lg-6 m-auto">
+                                <p class="alert alert-warning text-center">
+                                    لطفا منتظیر بمانید کورس ایجاد شده باید از طرف آمریت محترم تدریسی بررسی و تایید شود.
+                                </p>
+                            </div>
+                        {% endif %}
+
+                        <div class="card shadow-sm" style="background-color: {{course.coursedetail.color}};">
+                            <img src="{{course.coursedetail.image.url}}" height="600px" class="card-img-top border" alt="...">
+                            <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h5 class="card-title font-size-18">{{course.title}}</h5>
+                                </div>
+                                <div class="col-lg-6 col-sm-6">
+                                    <button
+                                    data-toggle="modal"
+                                    data-target="#update-course"
+                                    class="float-right btn btn-outline-dark">
+                                        تغییرات
+                                        <i class="bx bx-edit-alt align-middle font-size-18"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p dir="ltr" class="card-text font-size-18">{{course.overview}}</p>
+                            <p class="card-text"><small class="text-muted font-size-15">
+                                Last updated {{course.updated_at|timesince}} ago    
+                            </small></p>
+                            </div>
+                            
+                        </div>
+
+                        
+                    </div>
+                    <div class="col-lg-4 border-right">
+                        <h4 class="mt-3 mb-2">بخش ماجول های کورس {{course.title}}</h4>
+                        <hr>
+                        {% if not course.status %}
+                            <div class="col m-auto">
+                                <p class="alert alert-warning text-center">این بخش فعلا غیر فعال می باشد</p>
+                            </div>
+                        {% else %}
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            {{formset|crispy}}
+                            <button class="btn btn-primary btn-md">ذخیره کردن</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

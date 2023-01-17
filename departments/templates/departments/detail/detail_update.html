@@ -1,0 +1,200 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+{% endblock title %}
+
+{% block page_title %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">جزییات دیپارتمنت</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department-list' %}">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department-detail' department.slug %}">{{department.name}}</a></li>
+                    <li class="breadcrumb-item active"> جزییات دیپارتمنت</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">ویرایش دیپارتمنت</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div>
+                        <label for="" class="font-size-18">نام دیپارتمنت</label>
+                        <input type="text" value="{{department.name}}" class="form-control form-control-lg" name="name">
+                    </div>
+                    <div class="mt-3">
+                        <label for="" class="font-size-18">تاریخ ایجاد</label>
+                        <input type="date" value="{{department.publish_date}}" class="form-control form-control-lg" name="publish" required>
+                    </div>
+                    <div class="mt-3">
+                        <label for="" class="font-size-18">توضیحات</label>
+                        <textarea name="about" class="form-control form-control-lg" id="" cols="30" rows="10">{{department.about}}</textarea>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg mt-2">ذخیره</button>
+                </form>
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div id="delete_department" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">حذف دیپارتمنت</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'department_delete_view' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="slug" value="{{department.slug}}">
+                    <p class="alert alert-danger text-center font-size-18">حذف دیپارتمنت {{department.name}}؟ با حذف دیپارتمنت تمام شاگردان و اساتید مرتبط با دیپارتمنت حذف میگردد. </p>
+
+                    <button class="btn btn-danger btn-lg mt-2">حذف</button>
+                </form>
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<div id="department_chief_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myModalLabel">مدیریت ریاست دیپارتمنت</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="" class="font-size-18">استادان</label>
+                            <select name="chief" class="form-control form-control-lg" id="">
+                                <option value="">انتخاب ریس</option>
+                                {% for user in users %}
+                                    <option {% if departmentChief.user.id == user.id %} selected {% endif %} value="{{user.id}}">{{user.employee.f_name}} {{user.employee.l_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="" class="font-size-18">از تاریخ</label>
+                            <input type="date" class="form-control form-control-lg" name="from_date">
+                        </div>
+
+                        <div class="col-lg-6 mt-3">
+                            <label for="" class="font-size-18">تا تاریخ</label>
+                            <input type="date" class="form-control form-control-lg" name="to_date">
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary btn-lg mt-3">ذخیره</button>
+                </form>
+            </div>
+            
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+   
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <h3 class="card-title">{{department.name}}</h3>
+                    </h3>
+                    <section class="section-padding time-journey">
+                        <div class="container entry-content">
+                            <div class="row">
+                                <div class="col-lg-6 border-left">
+                                    <p class="font-size-17">{{department.about}}
+                                        این دیپارتمنت رسما به تاریخ {{department.publish_date}} به فعالیت آغاز کرد. 
+                                    </p>
+                                    {% if perms.departments.add_department or request.user.is_staff %}
+                                    <button
+                                    data-toggle="modal" 
+                                    data-target="#myModal"
+                                    class="btn btn-primary btn-md font-size-16">ویرایش دیپارتمنت</button>
+                                    {% endif %}
+
+                                    {% if perms.departments.delete_department or request.user.is_staff %}
+                                    <button
+                                    data-toggle="modal"
+                                    data-target="#delete_department"
+                                    class="btn btn-danger btn-md font-size-16">حذف دیپارتمنت</button>
+                                    {% endif %}
+
+                                    <button
+                                    data-toggle="modal"
+                                    data-target="#department_chief_modal"
+                                    class="btn btn-info btn-md font-size-16">ریاست دیپارتمنت</button>
+                                </div>
+                                <div class="col-lg-6">
+                                    <ul class="timeline clearfix" id="timeline" aria-multiselectable="true">
+                                    
+                                        {% for head in department.departmentchief_set.all %}
+                                        <li class="panel panel-decor--top panel-decor--draw panel-decor--left">
+                                            <h2 class="journey-year">
+                                                <a data-toggle="collapse" data-parent="#timeline" href="#journey-1" role="button"
+                                                    aria-expanded="false" aria-controls="journey-1" class="collapsed">
+                                                    {{head.from_date|date:"Y M"}}</a>
+                                            </h2>
+                                            <div class="row justify-content-start">
+                                                <div id="journey-1" class="col-md-6 journey-year__group collapse show">
+                                                    <ul class="journey-group">
+                                                        <li class="journey-content">
+                                                            <h3>
+                                                                <img alt="" src="{{head.user.employee.avatar.url}}" class="avatar-lg rounded"></h3>
+                            
+                                                            <h3>{{head.user.employee.f_name}} {{head.user.employee.l_name}}</h3>
+                                                            
+                                                            {% if head.to_date %}
+                                                                <p>از تاریخ {{head.from_date}} تا {{head.to_date}}</p>
+                                                            {% else %}
+                                                            <p>رییس دیپارتمنت {{department.name}} محترم {{head.user.employee.f_name}} {{head.user.employee.l_name}} می باشد.  </p>
+                                                            {% endif %}
+                            
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                        
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

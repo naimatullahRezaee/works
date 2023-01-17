@@ -1,0 +1,73 @@
+    {% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title %} ماجول {% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">درج رویداد جدید</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="#">تقویم</a></li>
+                    <!-- <li class="breadcrumb-item"><a href="{{request.META.HTTP.REFERER}}">جزییات کورس</a></li> -->
+                    <li class="breadcrumb-item active">درج رویداد جدید</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <h1 class="pt-4 pl-4"> ایجاد رویداد جدید 📅 </h1>
+                        <p class="text-info pl-4 font-size-16">با مشخص کردن نام کورس رویداد فوق را فقط شاگردان مربوط به همان کورس میتواند بیبیند.</p>
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-15">عنوان رویداد</label>
+                                    {% render_field form.title %}
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-15">تاریخ ایجاد</label>
+                                    {% render_field form.start_date %}
+                                </div>
+                                <div class="col-lg-4">
+                                    <label for="" class="font-size-15">تاریخ ختم</label>
+                                    {% render_field form.end_date %}
+                                </div>
+                                
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-lg-8">
+                                    <label for="" class="font-size-15">توضیحات</label>
+                                    {% render_field form.description %}
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-md mt-2">ذخیره کردن</button>
+                        </form>
+                    </div>
+                    <div class="col-lg-5">
+                        <img src="{% static 'assets/images/custom/calendar.png' %}" style="width: 100%;" alt="">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

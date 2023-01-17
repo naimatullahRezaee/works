@@ -1,0 +1,112 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    استادان
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18"> استادان</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department-list' %}">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'department-detail' department.slug %}">{{department.name}}</a></li>
+                    <li class="breadcrumb-item active"> استادان</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<style>
+    .student--card{
+        width: 100%;
+        border: 2px solid #c4c4c4;
+        border-radius: 10px;
+    }
+    .student--card img{
+        width: 40%;
+        margin: auto;
+        border-radius: 50%;
+    }
+    .student--info{
+        text-align: center;
+        margin-bottom: 5px;
+    }
+    .query{
+        padding-right: 2.5rem;
+        height: 3.6rem;
+        border-radius: 30px;
+    }
+    .query--icon{
+        position: absolute;
+        font-size: 2rem;
+        top: 1rem;
+        right: 0.4rem;
+        color: #ccc;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card-title">لیست استادان</div>
+                    </div>
+                    <div class="col-lg-6">
+                        {% if request.user.can_add_employee or request.user.is_staff %}
+                            <a href="{% url 'department_create_instructor' department.slug %}" class="btn btn-light btn-md font-size-16" style="float: left;">
+                                ثبت استاد جدید
+                                <i class="bx bx-plus font-size-18"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 m-auto">
+                        <form action="" class="my-4" style="position: relative;">
+                            <input type="text" placeholder="جستجو بر اساس نام،‌تخلص،‌وضعیت ..." name="query" class="form-control form-control-lg query" >
+                            <i class="bx bx-search query--icon"></i>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    {% for ins in instructors %}
+                    <div class="col-lg-3">
+                        <div class="student--card card">
+                            <img src="{{ins.avatar.url}}" class="my-3" alt="">
+                            <div class="student--info font-size-16 mb-3 px-3">
+                                <b>نام :‌</b> {{ins.f_name}} - {{ins.l_name}}
+                                <br>
+                                <b>شماره تماس: </b> {{ins.phone_number}}
+                                <br>
+                                <b> ایمیل آدرس : </b> {{ins.user.email}}
+                                <br>
+                                <b>موقعیت : </b>
+                                {% if ins.user == department.departmentchief_set.last.user %}
+                                    <span class="badge badge-success font-size-14">ریس دیپارتمنت</span>
+                                {% else %}
+                                    <span class="badge badge-info font-size-14">استاد</span>
+                                {% endif %}
+                                {% if request.user.can_view_employee or request.user.is_staff %}
+                                    <a href="{% url 'employee_detail_route' ins.id %}" class="btn btn-light btn-md mt-4 btn-block font-size-15">جرییات استاد</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,40 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    تقسیم اوقات درسی
+{% endblock title %}
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">تقسیم اوقات درسی</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">تقسیم اوقات درسی</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h3 class="card-title">لیست تقسیم اوقات درسی</h3>
+                    </div>
+                    <div class="col-lg-6">
+                        <a href="{% url 'create_schedule_step1' %}" class="btn btn-light btn-lg " style="float:left">ایجاد تقسیم اوقات</a>
+                    </div>
+                </div>
+                <p class="alert alert-info text-center font-size-20 mt-3">ایجاد تقسیم اوقات درسی برای دیپارتمنت ها و سمستر های مختلف</p> 
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

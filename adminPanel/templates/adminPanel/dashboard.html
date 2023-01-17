@@ -1,0 +1,189 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    داشبورد
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">داشبورد</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="#">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">داشبورد</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="media">
+                            <div class="mr-3">
+                                <img src="{{request.user.employee.avatar.url}}" alt="dsjfksjfdl" class="avatar-md rounded-circle img-thumbnail">
+                            </div>
+                            <div class="media-body align-self-center">
+                                <div class="text-muted">
+                                    <p class="mb-2">به پنل مدیریتی خوش آمدید</p>
+                                    <h5 class="mb-1">{{request.user.first_name}} {{request.user.last_name}} </h5>
+                                    <p class="mb-0">
+                                        <span class="badge badge-dark px-2 py-1 font-size-16">آدمین</span>
+                                    
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 align-self-center">
+                        <div class="text-lg-center mt-4 mt-lg-0">
+                            <div class="row">
+                            
+                
+                                <div class="col-4">
+                                    <div>
+                                        <p class="text-muted text-truncate mb-2 font-size-18">موقعیت</p>
+                                        <h5 class="mb-0">رییس فاکولته</h5>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div>
+                                        <p class="text-muted text-truncate mb-2 font-size-18">تحصیلات</p>
+                                        <h5 class="mb-0"></h5>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div>
+                                        <p class="text-muted text-truncate mb-2 font-size-18">سابقه کاری</p>
+                                        <h5 class="mb-0"></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 d-none d-lg-block">
+                        <div class="clearfix  mt-4 mt-lg-0">
+                            <div class="dropdown float-right">
+                                <button class="btn btn-primary dropdown-toggle btn-lg" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bx bxs-cog align-middle mr-1"></i> تنظیمات
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="{% url 'admin_profile_info' %}">پرفایل</a>
+                                    <a class="dropdown-item" href="#">تغییر رمز ورود</a>
+                                    <a class="dropdown-item" href="#">بازیابی ایمیل</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-3">
+        <a href="{% url 'all-groups' %}">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar-xs mr-3">
+                            <span class="avatar-title rounded-circle bg-soft-primary text-primary font-size-18">
+                                <i class="bx bx-group"></i>
+                            </span>
+                        </div>
+                        <h5 class="font-size-14 mb-0">گروپ های کاربری</h5>
+                    </div>
+                    <div class="text-muted mt-4">
+                        <h4>{{groups.count}} گروه <i class="mdi mdi-chevron-up ml-1 text-success"></i></h4>
+                        <div class="d-flex">
+                            <span class="badge badge-soft-success font-size-12"> {{groups.count}} </span> <span class="ml-2 text-truncate">گروپ کاربر موجود است.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a href="{% url 'department-list' %}">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar-xs mr-3">
+                            <span class="avatar-title rounded-circle bg-soft-primary text-primary font-size-18">
+                                <i class="bx bx-list-plus"></i>
+                            </span>
+                        </div>
+                        <h5 class="font-size-14 mb-0">لیست شاگردان</h5>
+                    </div>
+                    <div class="text-muted mt-4">
+                        <h4>{{students}} شاگرد <i class="mdi mdi-chevron-up ml-1 text-success"></i></h4>
+                        <div class="d-flex">
+                            <span class="badge badge-soft-success font-size-12"> {{students}}+ </span> <span class="ml-2 text-truncate">محصل برحال</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a href="{% url 'department-list' %}">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar-xs mr-3">
+                            <span class="avatar-title rounded-circle bg-soft-primary text-primary font-size-18">
+                                <i class="bx bx-user"></i>
+                            </span>
+                        </div>
+                        <h5 class="font-size-14 mb-0">لیست کارمندان</h5>
+                    </div>
+                    <div class="text-muted mt-4">
+                        <h4>{{employees}} کارمند <i class="mdi mdi-chevron-up ml-1 text-success"></i></h4>
+                        <div class="d-flex">
+                            <span class="badge badge-soft-success font-size-12"> {{employees}} </span> <span class="ml-2 text-truncate">کارمندان فعال</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a href="{% url 'department-list' %}">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="avatar-xs mr-3">
+                            <span class="avatar-title rounded-circle bg-soft-primary text-primary font-size-18">
+                                <i class="bx bx-book"></i>
+                            </span>
+                        </div>
+                        <h5 class="font-size-14 mb-0">تعداد کورس</h5>
+                    </div>
+                    <div class="text-muted mt-4">
+                        <h4>{{courses}} کورس <i class="mdi mdi-chevron-up ml-1 text-success"></i></h4>
+                        <div class="d-flex">
+                            <span class="badge badge-soft-success font-size-12"> {{courses}} </span> <span class="ml-2 text-truncate">کورس فعال</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+{% endblock content %}

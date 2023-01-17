@@ -1,0 +1,79 @@
+{% extends 'main.html' %}
+{% load widget_tweaks %}
+{% block title %}
+{% load static %}
+    سابقه کاری
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">سابقه کاری استاد</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'employee-profile' %}">پروفایل</a></li>
+                    <li class="breadcrumb-item active">سابقه کاری</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="" class="font-size-17">شرکت / کمپنی / پوهنتون</label>
+                                {% render_field form.org class="form-control font-size-16" placeholder="Golden Block"  id="select_education"%}
+                            <span class="iconp select_education_icon"></span>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="" class="font-size-17">عنوان وظیفه</label>
+                                {% render_field form.position class="form-control font-size-16" placeholder="Developer" id="job_expreince" %}
+                            <span class="iconp job_expreince_icon"></span>
+
+                            </div>
+                            
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="" class="font-size-17">تاریخ شروع</label>
+                                {% render_field form.from_date  class="form-control" id="date_start_exp" value="تاریخ شروع" %}
+                                <span class="iconp fas fa-calendar-alt" style="padding-bottom:6px ; font-size:18px;"></span>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="height:70px">
+                                <label for="" class="font-size-17">تاریخ ختم</label>
+                                {% render_field form.finish_date  class="form-control" id="date_End_exp" value="تاریخ ختم" %}
+                                <span class="iconp fas fa-calendar-alt" style="padding-bottom:6px ; font-size:18px;"></span>
+                            </div>
+                            
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">عکس </label>
+                                {% render_field form.document type="file" class="form-control" %}
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                                <label for="">توضیحات</label>
+                                {% render_field form.description class="form-control font-size-16" id="discription_exp"%}
+                            <span class="iconp discription_exp_icon"></span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-md">ذخیره کردن</button>
+                    </form>
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'assets/js/validation/validationpro.js' %}"></script>
+
+{% endblock content %}

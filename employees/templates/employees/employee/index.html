@@ -1,0 +1,95 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    داشبورد
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">صفحه اصلی</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">صفحه اصلی</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="media">
+                            <div class="mr-3">
+                                <img src="{{request.user.employee.avatar.url}}" alt="" class="avatar-md rounded-circle img-thumbnail">
+                            </div>
+                            <div class="media-body align-self-center">
+                                <div class="text-muted">
+                                    <p class="mb-2">به پنل مدیریتی خوش آمدید</p>
+                                    <h5 class="mb-1">{{request.user.employee.f_name}} - {{request.user.employee.l_name}}</h5>
+                                    <p class="mb-0">
+                                        {% for group in request.user.groups.all %}
+                                            {% if group.name == "managers" %}
+                                                <span class="badge badge-primary px-2 py-1 font-size-16">مدیر</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 align-self-center">
+                        <div class="text-lg-center mt-4 mt-lg-0">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div>
+                                        <p class="text-muted text-truncate mb-2">سطح تحصیلی</p>
+                                        <h5 class="mb-0">ماستر</h5>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div>
+                                        <p class="text-muted text-truncate mb-2">تجربه کاری</p>
+                                        <h5 class="mb-0">ندارد</h5>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div>
+                                        <p class="text-muted text-truncate mb-2">دیپارتمنت</p>
+                                        <h5 class="mb-0">سیستم های معلوماتی</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 d-none d-lg-block">
+                        <div class="clearfix  mt-4 mt-lg-0">
+                            <div class="dropdown float-right">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="bx bxs-cog align-middle mr-1"></i> تنظیمات
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#">تغییر رمز ورود</a>
+                                    <a class="dropdown-item" href="#">پروفایل</a>
+                                    <!-- <a class="dropdown-item" href="#"></a> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

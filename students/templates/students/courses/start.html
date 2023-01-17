@@ -1,0 +1,80 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    کورس
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">صفحه آغاز</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">شروع کردن</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<style>
+    .button-container{
+        margin-top: 50px;
+        margin-right: 20px;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6"></div>
+                    <div class="col-lg-6">
+                        <a href="{{request.META.HTTP_REFERER}}" class="btn btn-dark btn-lg float-right">برگشت
+                            <i class='bx bx-left-arrow-alt align-middle font-size-18'></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7">
+                        <h1 class="mt-5 ml-5" style="font-size: 40px;">
+                         با <span class="text-warning">لبخند</span> شروع به یادگیری کنید
+                         😊
+                        </h1>
+                        <p style="padding: 0px; margin: 0px;" class="text-muted mt-2 ml-5 font-size-22" >
+                            شما به تمام کورس های که مربوط به دیپارتمنت و سمستر شما باشد دسترسی دارید.
+                        </p>
+                        <p style="padding: 0px; margin: 0px;" class="ml-5 font-size-16 text-info">
+                            نوت: تمام کورس ها به مدت یک سمستر قابل دسترسی است.
+                        </p>
+                        
+                        <div class="col-lg-6 ">
+                            <div class="row button-container">
+                                <div class="col-lg-6">
+                                    <a href="{% url 'relevant-course' %}"  class="btn-block btn btn-outline-primary btn-lg p-3">تمام کورس ها
+
+                                        <i class="bx bx-list-ul align-middle font-size-24 ml-2"></i>
+                                    </a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <a href="{% url 'my-courses' 1 %}" class="btn-block btn btn-outline-dark btn-lg p-3 ">کورس های من
+                                        <i class="bx bx-edit align-middle font-size-24 ml-2 "></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <img src="{% static 'assets/images/custom/course.png' %}" style="width: 100%;" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

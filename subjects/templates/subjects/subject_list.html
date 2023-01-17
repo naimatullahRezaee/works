@@ -1,0 +1,100 @@
+{% extends 'main.html' %}
+
+{% block title %} لیست کریکولم{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">لیست کریکولم درسی</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">لیست کریکولم</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-lg-3">
+                        <h4>لیست کریکولم های هر سه دیپارتمنت</h4>
+                    </div>
+                    {% for g in request.user.groups.all %}
+                        {% if g.name == "department_head" %}
+                        <div class="col-lg-9">
+                            <a href="{% url 'subject-create' %}" class="btn btn-primary btn-lg float-right ml-2">ثبت کریکولم جدید
+                                <i class="bx bx-plus align-middle font-size-18 ml-2"></i>
+                            </a>
+                            <a href="{% url 'subject-upload' %}" class="btn btn-dark btn-lg float-right ml-2">آپلود لیست کریکولم
+                                <i class="bx bx-upload align-middle font-size-18 ml-2"></i>
+                            </a>
+                            <button class="btn btn-light btn-lg float-right ml-2">دانلود لیست کریکولم
+                                <i class="bx bx-download align-middle font-size-18 ml-2"></i>
+                            </button>
+    
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    
+                </div>
+                <table id="datatable" class="table table-bordered dt-responsive nowrap "
+                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th class="emp-datatable">شماره مسلسل</th>
+                            <th class="emp-datatable">نام مضمون</th>
+                            <th class="emp-datatable">کود مضمون</th>
+                            <th class="emp-datatable">سمستر </th>
+                            <th class="emp-datatable">دیپارتمنت</th>
+                            <th class="emp-datatable">کریدیت</th>
+                            <th class="emp-datatable">نوعیت مضمون</th>
+                            {% for g in request.user.groups.all %}
+                        {% if g.name == "department_head" %}
+
+                        <th class="emp-datatable">عملیات</th>
+                        
+                        {% endif %}
+                    {% endfor %}
+                            
+                        </tr>
+                    </thead>
+                    <body>
+                        {% for subject in subjects %}
+                            <tr>
+                                <td class="emp-data">{{forloop.counter}}</td>
+                                <td class="emp-data">{{subject.subject}}</td>
+                                <td class="emp-data">{{subject.code}}</td>
+                                <td class="emp-data">{{subject.semester}}</td>
+                                <td class="emp-data">{{subject.department}}</td>
+                                <td class="emp-data">{{subject.credit}}</td>
+                                <td class="emp-data">{{subject.subject_type}}</td>
+                                {% for g in request.user.groups.all %}
+                                {% if g.name == "department_head" %}
+                                <td class="emp-data">
+                                    <button class="btn btn-outline-dark mx-1">
+                                        <i class='bx bx-dots-horizontal-rounded font-size-18 align-middle'></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger mx-1">
+                                        <i class='bx bx-trash font-size-18 align-middle'></i>
+                                    </button>
+                                </td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </body>                                     
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

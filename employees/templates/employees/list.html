@@ -1,0 +1,96 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}
+    لیست کارمندان
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">لیست کارمندان</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">لیست کارمندان</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+<style>
+    .search{
+        height: 50px;
+        border-radius: 12px;
+        font-size: 17px;
+        position: relative;
+        padding: 0 35px;
+    }
+    .search--icon{
+        position: absolute;
+        top: 25%;
+        font-size: 25px;
+        right: 18px;
+    }
+    .emp--profile--card{
+        display: flex;
+        border: 2px solid gray;
+        border-radius: 10px;
+    }
+    
+</style>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">لیست کارمندان موجود</h3>
+
+                    <div class="col-lg-6 m-auto">
+                        {% if employees %}
+                        <form action="">
+                            <input type="text" placeholder="جستجو بر اساس نام، تخلص، و محتوا..." name="query" class="form-control search" autocomplete="off">
+                            <i class="bx bx-search search--icon"></i>
+                        </form>
+                        {% else %}
+                        <p class="alert alert-info text-center font-size-17">
+                            هیچ کارمندی در سیستم یافت نشد. 
+                        </p>
+                        {% endif %}
+                    </div>
+
+                <div class="row mt-4">
+                {% for emp in employees %}
+                <div class="col-lg-3">
+                        <a href="{% url 'employee_detail_route' emp.pk %}">
+                            <div class="card shadow-sm student-card emp--profile--card ">
+                                <img src="{{emp.avatar.url}}" class="my-4" style="width:40%; border-radius: 50%; margin:auto" alt="">
+                                <h3 class="my-2 ml-2">{{emp.f_name}} {{emp.l_name}}</h3>
+                                <h5>شماره تماس : {% if emp.phone_number %} {{emp.phone_number}} {% else %} ندارد {% endif %}</h5>
+                                <h5>وضعیت : {{emp.status}}</h5>
+                                <div class="row my-2">
+                                {% for group in emp.user.groups.all %}
+                                        <div class="col-lg-6">
+                                            <span class="badge badge-soft-primary font-size-16">{{group.name}}</span>
+                                        </div>
+                                {% endfor %}
+                                </div>
+                            </div>
+                        </a>
+                </div>
+                {% empty %}
+                {% endfor %}
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

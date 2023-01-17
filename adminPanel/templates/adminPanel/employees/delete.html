@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    حذف کارمند {{employee.f_name}} {{employee.l_name}}
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">حذف کارمند {{employee.f_name}} {{employee.l_name}}</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{%  url 'admin-dashboard' %}">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{%  url 'department-list' %}">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="{%  url 'department-detail' employee.department.slug %}">{{employee.department}}</a></li>
+                    <li class="breadcrumb-item active">حذف کارمند {{employee.f_name}} {{employee.l_name}}</h4></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-lg-8 m-auto">
+            <div class="card">
+                <div class="card-body">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <p class="alert alert-danger text-center font-size-18">
+                            آیا واقعا میخواهید کارمند با نام <b>{{employee.f_name}} {{employee.l_name}}</b> را از سیستم حذف کنید؟ ریکارد حذف شده قابل بازیابی نیست.
+                        </p>
+                        <button class="btn btn-danger btn-lg mt-3">بلی، حذف</button>
+                        <a href="{% url 'department-detail' employee.department.slug %}" class="btn btn-primary btn-lg mt-3">برگشت</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

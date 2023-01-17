@@ -1,0 +1,116 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title %} ماجول {% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">نمره دهی به فعالیت</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'list-course' 1 %}">لیست کورس ها</a></li>
+                    <li class="breadcrumb-item"><a href="{{request.META.HTTP.REFERER}}">جزییات کورس</a></li>
+                    <li class="breadcrumb-item"><a href="{{request.META.HTTP.REFERER}}">درج فعالیت جدید</a></li>
+                    <li class="breadcrumb-item"><a href="{{request.META.HTTP.REFERER}}">صندوق دریافت جواب ها</a></li>
+                    <li class="breadcrumb-item active">نمره دهی</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1>
+                        <i class="bx bx-timer align-middle mr-2"></i>
+                        {{assignment.title}}
+                    </h1>
+                </div>
+                <div class="col-lg-6">
+                    <a href="{% url 'open-instructor' assignment.pk %}" class="btn btn-default float-right font-size-20">
+                        <i class="bx bx-left-arrow-alt font-size-24"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <p class="text-muted font-size-20" style="padding: 0px; margin: 0px;">
+                        <b>نام کورس : </b> {{assignment.content.module.course.title}}
+                    </p>
+                </div>
+                {% comment %} <div class="col-lg-3">
+                    <p class="text-muted font-size-20" style="padding: 0px; margin: 0px;">
+                        <b>تاریخ ایجاد : </b> {{assignment.assigned_at|date:"Y, M m"}}
+                    </p>
+                </div>
+                <div class="col-lg-3">
+                    <p class="text-muted font-size-20" style="padding: 0px; margin: 0px;">
+                        <b>تاریخ ختم : </b> {{assignment.expire_date|date:"M m"}} - {{assignment.expire_time}}
+                    </p>
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-8 m-auto">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 style="padding: 0px; margin: 0px;">{{respond.title}}</h2>
+                    <p class="text-muted font-size-11" style="margin: 0px; padding: 0px;"> ارسال شده : 
+                    <span dir="ltr">{{respond.respond_at|timesince}}</span>
+                    پیش
+                    </p>
+                    <p dir="ltr" class="mt-2 font-size-17">{{respond.description}}</p>
+                    <div class="col">
+                        <a href="{{respond.file.url}}" class="border px-5 font-size-14">
+                            دانلود فایل ارسال شده.
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row border">
+                        <div class="col-lg-2">
+                            <img src="{{student.avatar.url}}" alt="" class="avatar-sm rounded">
+                        </div>
+                        <div class="col-lg-6">
+                            <h5 class="mt-1 ml-2">{{student.f_name}} - {{student.l_name}}</h5>
+                        </div>
+                    </div>
+                    {% if has_score %}
+                        <p class="alert alert-info text-center mt-2">نمره داده شده</p>
+                    {% else %}
+                        <form action="" method="POST" class="mt-2">
+                            {% csrf_token %}
+                            <label for="" class="font-size-18">نمره</label>
+                            <input name="score" type="text" class="form-control font-size-18" placeholder="0/{{assignment.score}}">
+                            <button class="btn btn-light mt-2">ذخیره کردن</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

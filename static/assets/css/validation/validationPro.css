@@ -1,0 +1,54 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    position: flex;
+    background-color: #fffb;
+
+    margin: 0;
+    direction: rtl;
+  }
+  
+  body form .form-control {
+    /* margin: 10px; */
+    width: 100%;
+    text-align: justify;
+  }
+  .form-control label {
+    /* display: block; */
+    margin: 5px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  .form-control input {
+    /* display: block; */
+    width: 10% !important;
+    height: 40px;
+  }
+  
+  form span.iconp {
+    position: absolute;
+    bottom: 9px;
+    right: 88%;
+  }
+  form span.icon_pass {
+    position: absolute;
+    bottom: 15px;
+    left: 25px;
+  }
+  form span.iconp .true_icon {
+    color: rgb(11, 75, 11);
+    font-size: 18px;
+  }
+  form span.iconp .error_icon {
+    color: #a12903;
+    font-size: 18px;
+  }
+  form span.iconp_Date{
+    position: absolute;
+    bottom: 15px;
+    right: 10%;
+  }
+  

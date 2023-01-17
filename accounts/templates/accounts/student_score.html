@@ -1,0 +1,82 @@
+{% extends 'main.html' %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title %}
+ثبت شاگردان
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">جدول نتایج {{student.f_name}} {{student.l_name}}</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">جزییات دیپارتمنت</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">ثبت شاگرد جدید</a></li>
+                    <li class="breadcrumb-item active">نمرات {{student.f_name}}</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-xl-10 col-lg-10 m-auto">
+            <div class="card">
+                <div class="card-body">
+                    <p class="mb-4">
+                        <b>نوت : </b>
+                        لیست نمرات شاگردان موجود در فاکولته از قبل در سیستم موجود نمی باشد. لذا شما باید آنها ره از اینجا ثبت سیستم نمایید.
+                    </p>
+                    {% if student.semester.semester_number == 1 %}
+                        <p class="alert alert-info text-center font-size-17">
+                            محصل {{student.f_name}} - {{student.l_name}} سمستر اول می باشد و جدول نمرات از قبل ندارد.
+                        </p>
+                        <a href="{% url 'department-detail' student.department.slug %}" class="btn btn-primary btn-lg mt-2">برگشتن</a>
+                    {% else %}
+                       <form method="POST">
+                            {% csrf_token %}
+                            {{ formset.management_form }}
+                            <table id="" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                    <th class="font-size-16">شماره</th>
+                                    <th class="font-size-16">کورس</th>
+                                    <th class="font-size-16">نمره 20 فیصد</th>
+                                    <th class="font-size-16">نمره نهایی</th>
+                                    <th class="font-size-16">نمره فعالیت</th>
+                                    <th class="font-size-16">نمره پروژه</th>
+                                    <th class="font-size-16">نمره کارخانگی</th>
+                                    <th class="font-size-16">چانس</th>
+                                    <th class="font-size-16">مجموع</th>
+                                    <th class="font-size-16">حذف</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for form in formset.forms %}
+                                        
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            {% for field in form %}
+                                                <td>{{field|add_class:"form-control"}}</td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                </table>
+                          <button class="btn btn-primary btn-md mt-2">ذخیره کردن</button>
+                          <a href="{% url 'student-upload-file' student.pk %}" class="btn btn-info btn-md mt-2">آپلود جدول نمرات</a>
+                       </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

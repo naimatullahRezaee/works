@@ -1,0 +1,127 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    جزییات مضمون {{subject.subject}}
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18"> جزییات مضمون {{subject.subject}}</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{%  url 'admin-dashboard' %}">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{%  url 'department-list' %}">لیست دیپارتمنت ها</a></li>
+                    <li class="breadcrumb-item"><a href="{%  url 'department-detail' subject.department.slug %}">{{employee.department}}</a></li>
+                    <li class="breadcrumb-item active">جزییات مضمون {{subject.subject}}</h4></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-8 m-auto">
+            <div class="card">
+                <div class="card-body rounded" style="border: 1px solid lightgray;">
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <h3 class="card-title">جزییات مضمون "{{subject.subject.title}}"</h3>
+                        </div>
+                        <div class="col-lg-6">
+                            <a href="{% url 'department-detail' subject.department.slug %}" class="btn btn-dark btn-lg float-right ">برگشت
+                                <i class="bx bx-left-arrow-alt font-size-18 align-middle "></i>
+                            </a>
+                        </div>
+                    </div>
+                    <table class="table table-sm table-bordered mx-2">
+                        <thead>
+                            <tr>
+                                <th class="font-size-18">عنوان مضمون : </th>
+                                <td class="font-size-17">{{subject.subject}}</td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">کود مضمون : </th>
+                                <td class="font-size-17">{{subject.code}}</td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">کریدیت مضمون : </th>
+                                <td class="font-size-17">{{subject.credit}}</td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">سلاگ مضمون : </th>
+                                <td class="font-size-17">{{subject.slug}}</td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">سمستر : </th>
+                                <td class="font-size-17">{{subject.semester}}</td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">نوعیت مضمون : </th>
+                                <td class="font-size-17">
+                                    <span class="badge badge-light badge-pill font-size-17">
+                                        {{subject.subject_type}}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">توضیحات  : </th>
+                                <td class="font-size-17">{{subject.description}}</td>
+                            </tr>
+                            <tr>
+                                <th class="font-size-18">تعداد کورس های ایجاد شده  : </th>
+                                <td class="font-size-17">
+                                    <span class="badge badge-light badge-pill font-size-17">
+                                        {{subject.course_set.all.count}}
+                                    </span>
+                                </td>
+                            </tr>
+                        </thead>
+                    </table>
+                    <br><br>
+                    <h3 class="card-title">
+                        کورس های ایجاد شده برای این مضمون
+                    </h3>
+
+                    <table class="table table-sm table-bordered table-striped mt-4 mx-2">
+                        <thead>
+                            <tr>
+                                <th class="text-center font-size-18">شماره</th>
+                                <th class="text-center font-size-18">نام کورس</th>
+                                <th class="text-center font-size-18">استاد</th>
+                                <th class="text-center font-size-18">سال تحصیلی</th>
+                                <th class="text-center font-size-18">حالت</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for course in courses %}
+                                <tr>
+                                    <td class="text-center font-size-17">{{forloop.counter}}</td>
+                                    <td class="text-center font-size-17">{{course.title}}</td>
+                                    <td class="text-center font-size-17">{{course.owner.employee.f_name}} {{course.owner.employee.l_name}}</td>
+                                    <td class="text-center font-size-17">{{course.session.session|date:"Y"}} {{course.session.session_type}}</td>
+                                    <td class="text-center font-size-17">
+                                        {% if course.status %}
+                                        <span class="badge badge-success badge-pill font-size-17">فعال</span>
+                                        {% else %}
+                                        <span class="badge badge-warning badge-pill font-size-17">غیر فعال</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                            <p class="alert alert-info text-center font-size-18">
+                                تا هنوز کورسی برای این مضمون ایجاد نشده.
+                            </p>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

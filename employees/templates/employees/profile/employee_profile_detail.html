@@ -1,0 +1,103 @@
+{% extends 'main.html' %}
+{% load widget_tweaks %}
+{% block title %}
+    پروفایل
+{% endblock title %}
+{% load static %}
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">جزییات صفحه پروفایل</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'employee-profile' %}">پروفایل</a></li>
+                    <li class="breadcrumb-item active">جزییات پروفایل</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">نام کاربری</label>
+                                {% render_field u_form.username class="form-control" placeholder="" id="profile_username" %}
+                            <span class="iconp profile_username_icon"></span>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">ایمیل آدرس</label>
+                                {% render_field u_form.email class="form-control" id="profile_email" %}
+                            <span class="iconp profile_email_icon"></span>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">تذکره</label>
+                                {% render_field p_form.national_cart class="form-control" %}
+                            <span class="iconp profile_email_icon"></span>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">نمبر تذکره</label>
+                                {% render_field p_form.cart_number class="form-control"  %}
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">نمبر صفحه</label>
+                                {% render_field p_form.page_number class="form-control" placeholder="" type="text" id="profile_tazkira"%}
+                            <span class="iconp profile_tazkira_icon"></span>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">نمبر ثبت</label>
+                                {% render_field p_form.register_number class="form-control" %}
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">نمبر جلد</label>
+                                {% render_field p_form.volume class="form-control" %}
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">شماره تماس</label>
+                                {% render_field p_form.phone_number class="form-control" type="number"%}
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">عکس تذکره</label>
+                                {% render_field p_form.cart_image class="form-control" placeholder="" %}
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"style="height:65px">
+                                <label for="">آدرس</label>
+                                {% render_field p_form.address class="form-control" id="profile_address"%}
+                            <span class="iconp profile_address_icon"></span>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">عکس</label>
+                                {% render_field p_form.avatar class="form-control" %}
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <label for="">بیوگرافی</label>
+                                {% render_field p_form.bio class="form-control" id="job_biographi"%}
+                                <span class="iconp job_biographi_icon"></span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-md">ذخیره کردن</button>
+                    </form>
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'assets/js/validation/validationpro.js' %}"></script>
+
+{% endblock content %}

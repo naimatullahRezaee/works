@@ -1,0 +1,134 @@
+{% extends 'main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block title %} فعالیت {% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">ارسال جواب فعالیت</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="/">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'list-course' 1 %}">لیست کورس ها</a></li>
+                    <li class="breadcrumb-item"><a href="{{request.META.HTTP.REFERER}}">جزییات کورس</a></li>
+                    <li class="breadcrumb-item active">فعالیت</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <h3>فعالیت</h3>
+                        <hr>
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h4>عنوان فعالیت</h4>
+                                </div>
+                                <div class="col-lg-6">
+                                    <h4>{{assignment.title}}</h4>
+                                </div>
+                                <div class="col-lg-6 mt-2">
+                                    <h4>فایل</h4>
+                                </div>
+                                <div class="col-lg-6 mt-2">
+                                    <h4>
+                                     {% if assignment.file %}   
+                                     <object data="{{assignment.file.url}}" type="application/pdf" width="100%" height="100%">
+                                        <div class="row">
+                                            <div class="border shadow-sm col-lg-6 float-left px-4 py-3 mb-3">
+                                                <span class="pr-2">دانلود</span>
+                                                <a href="{{assignment.file.url}}">
+                                                    <i class="bx bx-download align-middle font-size-22"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </object>
+
+                                     {% endif %}
+                                    </h4>
+                                </div>
+                                <div class="col-lg-6 mt-2">
+                                    <h4>نمره</h4>
+                                </div>
+                                <div class="col-lg-6 mt-2">
+                                    <h4 class="badge badge-primary badge-pill px-3 align-middle py-2 font-size-20">
+                                    {{assignment.score}}
+                                    </h4>
+                                </div>
+                                <div class="col-lg-6 mt-2">
+                                    <h4>توضیحات</h4>
+                                </div>
+                                <div class="col-lg-6 mt-2">
+                                    <h4 class="px-2 py-2 font-size-16">
+                                    {{assignment.description}}
+                                    </h4>
+                                </div>
+                                <div class="col-lg-6 mt-2">
+                                    <h4>تاریخ ختم فعالیت</h4>
+                                </div>
+                                <div class="col-lg-6 mt-2">
+                                    <h4 dir="ltr" class="px-2 py-2 font-size-16">
+                                    {{assignment.expire_date|date:"m M, Y"}} - {{assignment.expire_time}}
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <p class="text-danger font-size-16">
+                                    نوت: فعالیت ذیل بعد از تاریخ فوق بسته میشود و شما قادر به ارسال جواب تان نخواهید بود.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <h3>ارسال جواب</h3>
+                        <p class="text-info font-size-16">نوت: ممکن شما چندین جواب را برای این فعالیت ارسال نمایید ولی فقط آخرین جواب شما توسط استاد مربوطه بررسی میشود.</p>
+                        <p>شما تا کنون <span class="badge badge-pill badge-info px-2 py-1 font-size-15">{{submitted.all.count}} </span> مرتبه جواب برای این فعالیت ارسال کرده اید.</p>
+                        <hr>
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="">عنوان</label>
+                                    {% render_field form.title class="form-control font-size-16"  %}
+
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <label for="">فایل</label>
+                                    {% render_field form.file type="file" class="form-control font-size-16"  %}
+                                    
+                                </div>
+                                <div class="col-lg-12 mt-2">
+                                    <label for="">توضیحات</label>
+                                    {% render_field form.description class="form-control font-size-16" %}
+                                </div>
+                                <div class="col mt-2">
+                                    <label for="">سطح </label>
+                                    {% render_field form.difficulties class="form-control font-size-16" %}
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary btn-md mt-2">ارسال جواب</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

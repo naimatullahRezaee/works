@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چاپ شوقه</title>
+    
+    <style>
+       
+    
+    body{
+        font-family: 'Times New Roman', Times, serif;
+        background-color: #fff;
+    }
+    .wrapper{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+    .logo1 .logo2, img{
+        width: 8rem;
+        height : 8rem;
+    }
+        table {
+       border: 1px solid;
+       margin: 0 auto;
+       width: 99%;
+       margin-top: 2rem;
+       border-radius: 0.4rem;
+     }
+
+     td, th {
+       text-align: center;
+       border: 1px solid;
+     }
+     .big, .medium, .small{
+        padding : 0;
+        margin: 0;
+        text-align: center;
+     }
+     .big{
+        font-size: 2rem;
+     }
+     .medium, .small{
+        font-size: 1.6rem;
+     }
+     .main{
+        display: flex;
+        flex-direction: column;
+        float: left;
+     }
+     .desc{
+        direction: ltr;
+        float: left;
+        width: 20rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+     }
+     .desc, h5{
+        text-align: left;
+     }
+     
+    </style>
+</head>
+<body dir="rtl">
+    <div class="wrapper">
+        <div class="logo1">
+            <img src="{% static 'assets/images/logos/logo1.jpg' %}" alt="">
+        </div>
+        <div class="slogan">
+            <p class="big">Islamic Republic of Afghanistan</p>
+            <p class="medium">Ministry of higher education</p>
+            <p class="small">Kabul University, Faculty of Computer Science</p>
+        </div>
+        <div class="logo2">
+            <img src="{% static 'assets/images/logos/logo2.jpg' %}" alt="">
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="desc">
+            <h3>Subject : </h3>
+            <h5 style="text-align: left;">{{subject}}</h5>
+        </div>
+        <div class="desc">
+            <h3>Instructor : </h3>
+            <h5>{{instructor.first_name}} {{instructor.last_name}}</h5>
+        </div>
+    </div>
+    
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>نام کامل</th>
+                <th>نام پدر</th>
+                <th>کورس</th>
+                <th>بیست فیصد</th>
+                <th>فعالیت</th>
+                <th>نهایی</th>
+                <th>مجموع</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for re in result %}
+                <tr>
+                    <td colspan="1">{{forloop.counter}}</td>
+                    <td colspan="">{{re.student.f_name}} {{re.student.l_name}}</td>
+                    <td>{{re.student.father_name}}</td>
+                    <td>{{re.subject}}</td>
+                    <td>{{re.mid_term}}</td>
+                    <td>{{re.activity_score}}</td>
+                    <td>{{re.final}}</td>
+                    <td>{{re.total_score}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

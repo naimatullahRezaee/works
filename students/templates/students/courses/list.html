@@ -1,0 +1,318 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    لیست کورس
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">
+                لیست کورس های من
+            </h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'course-start' %}">صفحه شروع</a></li>
+                    <li class="breadcrumb-item active">لیست کورس های من</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xl-9 col-lg-8">
+        <div class="card">
+            <ul class="nav nav-tabs nav-tabs-custom justify-content-center pt-2" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active font-size-17" data-toggle="tab" href="#all-post" role="tab">
+                       لیست کورس ها
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-size-17" data-toggle="tab" href="#archive" role="tab">
+                       کورس های ختم شده  
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link font-size-17" data-toggle="tab" href="#remained_courses" role="tab">
+                      چانس ها  
+                    </a>
+                </li>
+            </ul>
+            <!-- content -->
+            <div class="tab-content p-4">
+                <div class="tab-pane active" id="all-post" role="tabpanel">
+                    <div>
+                        <div class="row justify-content-center">
+                            <div class="col-xl-8">
+                                <div>
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-6">
+                                            <div class="search-box">
+                                                <div class="position-relative">
+                                                    <form action="{% url 'my-courses' 1 %}" method="GET">
+                                                        <input type="text" name="q" class="form-control form-control-lg rounded bg-light border-light" placeholder="جستجو...">
+                                                        <i class="mdi mdi-magnify search-icon align-middle font-size-20 "></i>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-dark btn-lg float-right">برگشت
+                                                <i class='bx bx-left-arrow-alt align-middle font-size-18'></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- end row -->
+
+                                    <hr class="mb-4">
+
+                                    <div class="row">
+                                        {% for course in courses %}
+                                        <div class="col-sm-6">
+                                            <div class="card p-1 shadow-sm" style="background-color: {{course.coursedetail.color}}" >
+                                                <div class="p-3">
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <h5><a href="#" class="text-dark">{{course.title}}</a></h5>
+                                                            <p class="text-muted mb-0">
+                                                                {{course.created_at|date:"d M, Y"}}</p>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div class="float-right ml-2">
+                                                                <div class="dropdown mb-2">
+                                                                    <a class="font-size-16 text-muted dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true">
+                                                                        <i class="mdi mdi-dots-horizontal font-size-22"></i>
+                                                                    </a>
+                                                                    
+                                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                                        <a class="dropdown-item" href="{% url 'course-content' course.slug course.module_set.first.pk %}">باز کردن</a>
+                                                                        <a class="dropdown-item" href="{% url 'chat:course_discussion' course.slug %}">کورس چت سیستم</a>
+                                                                        <a class="dropdown-item text-danger" href="#">لغو عضویت در کورس</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="position-relative">
+                                                    <img src="{{course.coursedetail.image.url}}" style="height: 250px; width: 100%;" alt="" class="img-thumbnail">
+                                                </div>
+
+                                                <div class="p-3">
+                                                    <ul class="list-inline">
+                                                        <li class="list-inline-item mr-3">
+                                                            <a href="#" class="text-muted">
+                                                                <i class="bx bx-purchase-tag-alt align-middle text-muted mr-1"></i> {{course.subject.subject.title}}
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item mr-3">
+                                                            <a href="#" class="text-muted">
+                                                                <i class="bx bx-comment-dots align-middle text-muted mr-1"></i> {{course.module_set.all.count}} ماجول
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item mr-1">
+                                                            <a href="#" class="text-muted">
+                                                                <span>جدید</span> <span class="badge badge-light px-2 py-1 ml-2 align-middle font-size-16 ">0</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <p dir="ltr" style="font-size: 15px; text-align: left;">{{course.overview|truncatechars:80}}</p>
+
+                                                    <div>
+                                                        <a href="{% url 'course-content' course.slug course.module_set.first.pk %}" class="text-primary"><i class="mdi mdi-arrow-right align-middle mr-1"></i>باز کردن</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% empty %}
+                                        <p class="alert alert-info text-center">
+                                            شما تا هنوز در کدام کورسی عضو نشده اید. لطفا به کورس های مربوطه عضو شوید. <a href="{% url 'relevant-course' %}">لیست کورس ها</a>
+                                        </p>
+                                        {% endfor %}
+                                    </div>
+
+                                    
+
+
+                                    <hr class="my-4">
+
+                                    <div class="text-center">
+                                        <ul dir="ltr" class="pagination justify-content-center pagination-rounded">
+                                            {% if courses.has_previous %}
+                                                <li class="page-item active">
+                                                    <a href="{% url 'my-courses' courses.previous_page_number %}" class="page-link"><i class="mdi mdi-chevron-right font-size-20"></i></a>
+                                                </li>
+                                            {% endif %}
+                                            <span class="mx-2" style="position: relative; top: 6px;">صفحه {{courses.number}} از {{courses.paginator.num_pages}}
+                                                {% if courses.has_next %}</span>
+                                            <li class="page-item active">
+                                                <a href="{% url 'my-courses' courses.next_page_number %}" class="page-link align-middle"><i class="mdi mdi-chevron-left font-size-20"></i></a>
+                                            </li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="archive" role="tabpanel">
+                    <div>
+                        <div class="row justify-content-center">
+                            <div class="col-xl-8">
+                                <div class="mt-5">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="mr-2">
+                                            <h4>لیست کورس های تکمیل شده</h4>
+                                        </div>
+                                        <div class="ml-auto">
+                                        </div>
+                                    </div>
+                                    
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>مضمون</th>
+                                                <th>نام کورس</th>
+                                                <!-- <th>استاد</th> -->
+                                                <th>سمستر</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for course in passed_courses %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>{{course}}</td>
+                                                <td>{{course}}</td>
+                                                <!-- <td>{{course.owner.employee.f_name}}</td> -->
+                                                <td>{{course.semester.semester_name}}</td>
+                                            </tr>
+                                            {% empty %}
+                                            <div class="list-group list-group-flush">
+                                                <span class="alert alert-info text-center font-size-17">
+                                                    شما هنوز کورسی را تکمیل نکرده اید.
+                                                </span>
+                                            </div>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="remained_courses" role="tabpanel">
+                    <div>
+                        <div class="row justify-content-center">
+                            <div class="col-xl-8">
+                                <div class="mt-5">
+                                    <div class="d-flex flex-wrap">
+                                        <div class="mr-2">
+                                            <h4>لیست کورس های باقی مانده</h4>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <span class="badge badge-success float-right ml-1 px-2 py-1 align-middle font-size-12"></span>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>مضمون</th>
+                                                <th>نام کورس</th>
+                                                <!-- <th>استاد</th> -->
+                                                <th>سمستر</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for course in failed_courses %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>{{course}}</td>
+                                                <td>{{course}}</td>
+                                                <!-- <td>{{course.owner.employee.f_name}}</td> -->
+                                                <td>{{course.semester.semester_name}}</td>
+                                            </tr>
+                                            {% empty %}
+                                            <div class="list-group list-group-flush">
+                                                <span class="alert alert-info text-center font-size-17">
+                                                    شما تا هنوز کورسی را از دست نداده اید.
+                                                </span>
+                                            </div>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- end content -->
+        </div>
+        
+    </div>
+    <div class="col-xl-3 col-lg-4">
+        <div class="card">
+            <div class="card-body p-4">
+                <h4>پنل مدیریتی</h4>
+
+                <hr class="my-4">
+
+
+
+                <div>
+                    <p class="text-muted mb-2">کورس های اخیرا بازدید شده</p>
+
+                    <div class="list-group list-group-flush">
+                        
+                        {% for course in courses %}
+                        <a href="#" class="list-group-item text-muted py-3 px-2">
+                            <div class="media align-items-center">
+                                <div class="mr-3">
+                                    <img src="{{course.coursedetail.image.url}}" alt="" class="avatar-md h-auto d-block rounded">
+                                </div>
+                                <div class="media-body overflow-hidden">
+                                    <h5 class="font-size-13 text-truncate">{{course.title}}</h5>
+                                    <p dir="ltr" class="mb-0 text-truncate"> قبل {{course.updated_at|timesince}} بازدید</p>
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    
+                        
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+
+                <div>
+                    <p class="text-muted mb-1">مضامین</p>
+
+                    <ul class="list-inline widget-tag">
+                        {% for subject in subjects %}
+                            <li class="list-inline-item"><a href="#" class="badge badge-light font-size-12 mt-2">{{subject.subject}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end card -->
+    </div>
+</div>
+
+{% endblock %}

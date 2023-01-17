@@ -1,0 +1,68 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    دیپارتمنت و مضامین
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">دیپارتمنت و مضامین</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">دیپارتمنت و مضامین</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-5 border-right">
+                        <h2> دیپارتمنت {{department}} </h2>
+                        <hr>
+                        <p class="font-size-16" style="text-align: justify;">{{department.about}}</p>
+                    </div>
+                    <div class="col-lg-7 border-left">
+                        <h2>لیست مضامین دیپارتمنت</h2>
+                        <hr>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>نام مضمون</th>
+                                    <th>کود</th>
+                                    <th>کریدیت</th>
+                                    <th>سمستر</th>
+                                    <th>نوعیت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subject in subjects %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{subject.subject}}</td>
+                                        <td>{{subject.code}}</td>
+                                        <td>{{subject.credit}}</td>
+                                        <td>{{subject.semester}}</td>
+                                        <td>{{subject.subject_type}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

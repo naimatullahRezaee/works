@@ -1,0 +1,156 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block title %}
+    گروپ ها
+{% endblock title %}
+
+{% block page_title %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">گروپ ها</h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">صفحه اصلی</a></li>
+                    <li class="breadcrumb-item active">گروپ ها</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock page_title %}
+
+{% block content %}
+<!-- modal start -->
+<div class="modal fade" id="create-group" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">ایجاد گروپ جدید</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'create-new-group' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="" class="font-size-18">نام گروپ</label>
+                        <input type="text" name="name" class="form-control form-control-lg" placeholder="admins">
+                    </div>
+                    <button class="btn btn-primary btn-lg" type="submit">ایجاد</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- end modal -->
+<!-- edit modal start -->
+<div class="modal fade" id="update-group" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="group-update-header"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="group-update-body">
+                <form action="{% url 'update-group' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="hidden" name="id" id="group-id">
+                        <label for="" class="font-size-18">نام گروپ</label>
+                        <input type="text" class="form-control form-control-lg" value="" id="group-name" name="name">
+                    </div>
+                    <button class="btn btn-primary btn-lg mt-1">ویرایش</button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- end edit modal -->
+<div class="row">
+    <div class="col-lg-8 m-auto">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h3 class="card-title">لیست گروپ های موجود</h3>
+                    </div>
+                    <div class="col-lg-6">
+                        <button
+                        data-target="#create-group"
+                        data-toggle="modal"
+                        class="btn mb-3 btn-dark btn-md float-right">
+                        ایجاد گروپ جدید
+                        <i class="bx bx-plus align-middle font-size-18"></i>
+                        </button>
+                    </div>
+                </div>
+                <table class="table table-md table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="font-size-18">شماره</th>
+                            <th class="font-size-18">نام گروپ</th>
+                            <th class="font-size-18">تعداد اعضا</th>
+                            <th class="font-size-18">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for group in groups %}
+                        <tr>
+                            <td class="font-size-17">{{forloop.counter}}</td>
+                            <td class="font-size-17">{{group.name}}</td>
+                            <td class="font-size-17">
+                                <span class="badge badge-pill font-size-15 badge-dark">
+                                    {{group.user_set.all.count}}
+                                </span>
+                            </td>
+                            <td class="font-size-17">
+                                <a href="{% url 'group-detail' group.pk %}" class="btn btn-outline-primary btn-sm">
+                                    <i class='bx bx-dots-horizontal-rounded font-size-22 '></i>
+                                </a>
+                                <button
+                                data-target="#update-group"
+                                data-toggle="modal"
+                                data-id="{{group.pk}}"
+                                data-name="{{group.name}}"
+                                class="btn btn-outline-dark btn-sm edit-group-btns">
+                                    <i class='bx bx-edit font-size-22 '></i>
+                                </button>
+                                <a href="{% url 'delete-group' group.pk %}" class="btn btn-outline-danger btn-sm">
+                                    <i class='bx bx-trash font-size-22 '></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <p class="alert alert-warning text-center font-size-17">هنوز گروپ ایجاد نکرده اید.</p>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const button = [...document.getElementsByClassName("edit-group-btns")]
+    const header = document.getElementById("group-update-header")
+    const body = document.getElementById("group-update-body")
+    const groupName = document.getElementById("group-name")
+    const groupID = document.getElementById("group-id")
+    button.forEach(btn => btn.addEventListener("click", () => {
+        const name = btn.getAttribute("data-name")
+        const id = btn.getAttribute("data-id")
+        header.innerHTML = `
+            ویرایش گروپ ${name}
+        `
+        groupName.value = name
+        groupID.value = id
+    }))
+</script>
+
+
+{% endblock content %}
