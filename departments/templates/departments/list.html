@@ -52,6 +52,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div class="col">
                         <div class="form-group">
                             <label for="validationCustom04">توضیحات</label>
@@ -85,7 +86,7 @@
                         <div class="card border border-light shadow-sm">
                             <div class="card-header bg-transparent border-light">
                                 <div class="row">
-                                    <div class="col-lg-8">
+                                    <div class="col-lg-6">
                                         <h5 class="my-0 text-secondary font-size-20"><i class="mdi mdi-check-all mr-3"></i>
                                             {{department.name}}
                                         </h5>   
@@ -93,7 +94,21 @@
                                     <div class="col-lg-4">
                                         <h6 class="text-secondary">سال تاسیس <span class=" badge badge-light text-muted ml-4 font-size-14">{{department.publish_date|date:"Y"}}</span> </h6>
                                     </div>
+                                    <div class="col-lg-2">
+                                        <div class="dropdown ml-auto">
+                                            <a class="text-muted dropdown-toggle font-size-16" role="button" data-toggle="dropdown" aria-haspopup="true">
+                                                <i class="mdi mdi-dots-horizontal"></i>
+                                            </a>
+                                          
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="">ویرایش</a>
+                                                <a class="dropdown-item" href="#"> حذف</a>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title mt-0"> رییس دیپارتمنت <span class="text-muted">&nbsp; &nbsp; 

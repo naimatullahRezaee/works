@@ -65,6 +65,25 @@ def department_detail_view(request, slug):
     context = {"department" : department, "students":students, "employees" : employees, "subjects" : subjects, "deactive_courses" : deactive_courses, "active_courses" : active_courses, "done_courses" : done_courses}
     return render(request, "departments/detail.html", context)
 
+
+def department_update_view(request, pk):
+    department = get_object_or_404(Department, pk=pk)
+    if request.method == "POST":
+        name = request.POST.get('name')
+        publish_date = request.POST.get('publish_date')
+        status = request.POST.get('status')
+
+        department.name =name
+        department.publish_date = publish_date
+        department.status = status
+        department.save()
+    context  = {
+        "departments" : department
+    }
+    return render(request, "department/dep_update.html", context)
+
+
+
 @allowed_groups(groups=["managers", "admins", "instructors"])
 @login_required(login_url="login")
 def department_program(request, slug):
